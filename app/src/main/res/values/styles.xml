@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.Dialog.FixedSize">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="windowFixedWidthMajor">100%</item>
+        <item name="windowFixedWidthMinor">100%</item>
+        <item name="windowFixedHeightMajor">100%</item>
+        <item name="windowFixedHeightMinor">100%</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.75</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">60dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="lineHeight">22sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="fontFamily">@font/proxima_nova_extrabold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="backgroundTint">@color/button_primary_background_selector</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
+    </style>
+
+    <style name="Widget.Button.Red" parent="Widget.Button.Primary">
+        <item name="backgroundTint">@color/button_red_background_selector</item>
+    </style>
+
+    <style name="Comfortly.BodyLarge.Medium" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/proxima_nova_semibold</item>
+    </style>
+
+    <style name="Comfortly.BodyLarge.Bold" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/proxima_nova_bold</item>
+    </style>
+
+    <style name="Comfortly.Toolbar.Title" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="fontFamily">@font/proxima_nova_extrabold</item>
+        <item name="android:textSize">22sp</item>>
+    </style>
+
+</resources>

@@ -1,0 +1,33 @@
+<resources>
+    <string name="question_id">question_id</string>
+    <string name="timestamp">timestamp</string>
+    <string name="question">question</string>
+    <string name="answer">answer</string>
+    <string name="heart_rate_bpm">heart_rate_bpm</string>
+    <string name="ecg_mv">ecg_mv</string>
+    <string name="datapoint_id">datapoint_id</string>
+    <string name="gps_latitude">gps_latitude</string>
+    <string name="gps_longitude">gps_longitude</string>
+    <string name="gps_altitude">gps_altitude</string>
+    <string name="gps_accuracy">gps_accuracy</string>
+    <string name="gps_bearing">gps_bearing</string>
+    <string name="gps_bearing_accuracy_degrees">gps_bearing_accuracy_degrees</string>
+    <string name="gps_speed">gps_speed</string>
+    <string name="gps_speed_accuracy_meters_per_second">gps_speed_accuracy_meters_per_second</string>
+    <string name="accelerometer_x_axis_acceleration">accelerometer_x_axis_acceleration</string>
+    <string name="accelerometer_y_axis_acceleration">accelerometer_y_axis_acceleration</string>
+    <string name="accelerometer_z_axis_acceleration">accelerometer_z_axis_acceleration</string>
+    <string name="gravity_x_axis_gravity">gravity_x_axis_gravity</string>
+    <string name="gravity_y_axis_gravity">gravity_y_axis_gravity</string>
+    <string name="gravity_z_axis_gravity">gravity_z_axis_gravity</string>
+    <string name="gyroscope_x_axis_rotation_rate">gyroscope_x_axis_rotation_rate</string>
+    <string name="gyroscope_y_axis_rotation_rate">gyroscope_y_axis_rotation_rate</string>
+    <string name="gyroscope_z_axis_rotation_rate">gyroscope_z_axis_rotation_rate</string>
+    <string name="linear_accelerometer_x_axis_linear_acceleration">linear_accelerometer_x_axis_linear_acceleration</string>
+    <string name="linear_accelerometer_y_axis_linear_acceleration">linear_accelerometer_y_axis_linear_acceleration</string>
+    <string name="linear_accelerometer_z_axis_linear_acceleration">linear_accelerometer_z_axis_linear_acceleration</string>
+    <string name="rotation_vector_x_axis_rotation_vector">rotation_vector_x_axis_rotation_vector</string>
+    <string name="rotation_vector_y_axis_rotation_vector">rotation_vector_y_axis_rotation_vector</string>
+    <string name="rotation_vector_z_axis_rotation_vector">rotation_vector_z_axis_rotation_vector</string>
+    <string name="rotation_vector_scalar">rotation_vector_scalar</string>
+</resources>

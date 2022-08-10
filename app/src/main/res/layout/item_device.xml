@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_16"
+    android:outlineAmbientShadowColor="@color/green"
+    android:outlineSpotShadowColor="@color/green"
+    app:cardBackgroundColor="?attr/colorItemBackground"
+    app:cardCornerRadius="@dimen/spacing_16">
+
+    <LinearLayout
+        android:background="?selectableItemBackground"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/device_id"
+            style="@style/Comfortly.BodyLarge.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:textStyle="bold"
+            tools:text="Device id"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/device_name"
+            style="@style/Comfortly.BodyLarge.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_8"
+            tools:text="Device name"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/device_address"
+            style="@style/Comfortly.BodyLarge.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_8"
+            android:layout_marginBottom="@dimen/spacing_16"
+            tools:text="Device address"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_16"
+    android:layout_marginHorizontal="@dimen/spacing_16"
+    android:outlineAmbientShadowColor="@color/green"
+    android:outlineSpotShadowColor="@color/green"
+    app:cardBackgroundColor="@color/gray_light"
+    app:cardCornerRadius="@dimen/spacing_16">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:minHeight="80dp"
+        android:padding="@dimen/spacing_16"
+        android:background="?selectableItemBackground">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trip_id"
+            style="@style/Comfortly.BodyLarge.Bold"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/value_background"
+            android:gravity="center"
+            android:text="@string/unknown_value"
+            android:textColor="@color/green_dark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tripName"
+            style="@style/Comfortly.BodyLarge.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:textColor="@color/green_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/trip_id"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Trip name"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/from_time"
+            style="@style/Comfortly.BodyLarge.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_8"
+            android:textColor="@color/green_dark"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/to_time"
+            app:layout_constraintStart_toEndOf="@+id/trip_id"
+            app:layout_constraintTop_toBottomOf="@+id/tripName"
+            tools:text="14:00 12.12.2020"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/to_time"
+            style="@style/Comfortly.BodyLarge.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_8"
+            android:textColor="@color/green_dark"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/from_time"
+            app:layout_constraintTop_toBottomOf="@+id/tripName"
+            tools:text="14:30 12.12.2020"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

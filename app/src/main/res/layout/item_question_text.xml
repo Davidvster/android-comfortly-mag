@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_16"
+    android:outlineAmbientShadowColor="@color/green"
+    android:outlineSpotShadowColor="@color/green"
+    app:cardBackgroundColor="?attr/colorItemBackground"
+    app:cardCornerRadius="@dimen/spacing_16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="80dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/question_name"
+            style="@style/Comfortly.BodyLarge.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:layout_marginEnd="@dimen/spacing_16"
+            android:textStyle="bold"
+            tools:text="Question"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/question_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_16"
+            android:textAppearance="@style/Comfortly.BodyLarge.Medium"
+            android:hint="@string/insert_answer"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

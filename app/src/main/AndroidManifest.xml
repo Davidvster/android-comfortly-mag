@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <permission
+        android:name="com.pkg.map.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" >
+    </permission>
+
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:name=".ComfortlyApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:largeHeap="true"
+        android:theme="@style/Theme.Comfortly"
+        android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_api_key"/>
+
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.trip.questionnaire.QuestionnaireActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.trip.details.TripDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.trip.recordtrip.RecordTripActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.dashboard.DashboardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.trip.setup.SetupTripActivity"
+            android:screenOrientation="portrait" />
+    </application>
+
+</manifest>

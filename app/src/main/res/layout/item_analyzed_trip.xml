@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_16"
+    android:outlineAmbientShadowColor="@color/green"
+    android:outlineSpotShadowColor="@color/green"
+    app:cardBackgroundColor="@color/gray_light"
+    app:cardCornerRadius="@dimen/spacing_16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="80dp"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/from_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_16"
+                android:text="@string/from"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_half"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/from_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_16"
+                android:text="@string/unknown_value"
+                android:textColor="@color/green_dark"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_half"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/from_label" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/from_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_16"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_half"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/from_text"
+                tools:text="14:00 12.12.2020" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_half"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/to_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_16"
+                android:text="@string/to"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline_half"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/to_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_16"
+                android:text="@string/unknown_value"
+                android:textColor="@color/green_dark"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline_half"
+                app:layout_constraintTop_toBottomOf="@+id/to_label" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/to_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_16"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline_half"
+                app:layout_constraintTop_toBottomOf="@+id/to_text"
+                tools:text="14:30 12.12.2020" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/result_value"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="@dimen/spacing_16"
+            android:background="@drawable/value_background"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/unknown_value"
+            android:textColor="@color/green_dark"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
