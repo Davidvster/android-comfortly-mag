@@ -49,9 +49,11 @@ class AnsweredTripsAdapter(
             root.setCardBackgroundColor(value.data)
             tripName.text = trip.name
             tripId.text = trip.id.toString()
-            if (trip.startTime != null && trip.endTime != null) {
-                fromTime.text = tripDateFormat.format(trip.startTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
-                toTime.text = tripDateFormat.format(trip.endTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
+            fromTime.text = trip.startTime?.let { startTime ->
+                tripDateFormat.format(startTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
+            }
+            toTime.text = trip.endTime?.let { endTime ->
+                tripDateFormat.format(endTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
             }
             root.setThrottleClickListener {
                 onItemClickListener(trip.id)

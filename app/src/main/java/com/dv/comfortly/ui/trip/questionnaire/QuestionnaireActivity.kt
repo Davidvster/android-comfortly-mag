@@ -28,8 +28,6 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
         private const val ARG_TRIP_ID = "ARG_TRIP_ID"
         private const val ARG_QUESTIONNAIRE_TYPE = "ARG_QUESTIONNAIRE_TYPE"
 
-        private const val TRIP_DATE_FORMAT = "HH:mm dd.MM.yyy"
-
         fun newIntent(context: Context, tripId: Long, questionnaireType: QuestionnaireType) =
             Intent(context, QuestionnaireActivity::class.java).apply {
                 putExtra(ARG_TRIP_ID, tripId)
@@ -54,18 +52,8 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
     }
 
     override fun renderState(state: QuestionnaireState) {
-        when (state) {
-            is QuestionnaireState.Answers -> {
-                adapter.submitList(state.answers)
-                viewBinding.submitButton.isEnabled = state.submitEnabled
-            }
-            is QuestionnaireState.ReplaceQuestions -> {
-                adapter.submitList(emptyList())
-                adapter.submitList(state.answers)
-                viewBinding.submitButton.isEnabled = state.submitEnabled
-            }
-            else -> Unit
-        }
+        adapter.submitList(state.answers)
+        viewBinding.submitButton.isEnabled = state.submitEnabled
     }
 
     override fun handleEvent(event: QuestionnaireEvent) {

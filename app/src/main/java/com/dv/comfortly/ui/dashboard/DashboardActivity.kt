@@ -49,12 +49,13 @@ class DashboardActivity : BaseActivity<DashboardState, DashboardEvent>() {
     }
 
     override fun renderState(state: DashboardState) {
-        when (state) {
-            is DashboardState.Trips -> {
-                adapter.submitList(state.trips)
+        adapter.submitList(state.trips)
+        if (state.trips.isNotEmpty() && state.hasNewTrip) {
+            viewBinding.tripsList.post {
+                viewBinding.tripsList.smoothScrollToPosition(0)
             }
-            else -> Unit
         }
+
     }
 
     override fun handleEvent(event: DashboardEvent) {

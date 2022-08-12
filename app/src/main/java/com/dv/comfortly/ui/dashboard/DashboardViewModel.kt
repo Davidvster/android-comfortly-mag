@@ -15,12 +15,15 @@ class DashboardViewModel @Inject constructor(
     private val loadTripsUseCase: LoadTripsUseCase,
     private val deleteTripsUseCase: DeleteTripUseCase,
     private val savedStateHandle: SavedStateHandle
-) : BaseViewModel<DashboardState, DashboardEvent>(DashboardState.Idle) {
+) : BaseViewModel<DashboardState, DashboardEvent>(DashboardState()) {
 
     fun getAnalyzedTrips() {
         launchWithBlockingLoading {
             val trips = loadTripsUseCase()
-            viewState = DashboardState.Trips(trips = trips.asReversed())
+            viewState = viewState.copy(
+                trips = trips.asReversed(),
+                hasNewTrip = viewState.trips.size < trips.size
+            )
         }
     }
 

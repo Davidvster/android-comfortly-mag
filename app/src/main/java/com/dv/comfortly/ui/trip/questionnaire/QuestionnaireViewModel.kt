@@ -11,10 +11,10 @@ import com.dv.comfortly.domain.usecases.StoreAnswersUseCase
 import com.dv.comfortly.domain.usecases.params.QuestionnaireParams
 import com.dv.comfortly.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.datetime.Clock
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.delay
+import kotlinx.datetime.Clock
 
 @HiltViewModel
 class QuestionnaireViewModel @Inject constructor(
@@ -22,7 +22,7 @@ class QuestionnaireViewModel @Inject constructor(
     private val loadTripsUseCase: LoadTripsUseCase,
     private val loadQuestionsUseCase: LoadQuestionsUseCase,
     private val savedStateHandle: SavedStateHandle
-) : BaseViewModel<QuestionnaireState, QuestionnaireEvent>(QuestionnaireState.Idle) {
+) : BaseViewModel<QuestionnaireState, QuestionnaireEvent>(QuestionnaireState()) {
 
     companion object {
         private const val MULTI_CHOICE_SEPARATOR = ";"
@@ -32,7 +32,7 @@ class QuestionnaireViewModel @Inject constructor(
     private var answers = mutableListOf<AnswerData>()
 
     private val updatedAnswersViewState
-        get() = QuestionnaireState.Answers(
+        get() = viewState.copy(
             answers = answers,
             submitEnabled = answers.none { it.answer.isNullOrEmpty() }
         )
@@ -67,7 +67,7 @@ class QuestionnaireViewModel @Inject constructor(
         answers.find { it.questionId == questionId }?.apply {
             answer = answerText
             timestamp = Clock.System.now()
-            viewState = QuestionnaireState.Answers(
+            viewState = viewState.copy(
                 answers = answers.toList(),
                 submitEnabled = answers.none { it.answer == null }
             )
@@ -87,12 +87,8 @@ class QuestionnaireViewModel @Inject constructor(
                 answer.orEmpty().replace("$MULTI_CHOICE_SEPARATOR$answerText", "").replace(answerText, "")
             }
             timestamp = Clock.System.now()
-            viewState = QuestionnaireState.Answers(
-                answers = answers.toList(),
-                submitEnabled = answers.none { it.answer.isNullOrEmpty() }
-            )
+            viewState = updatedAnswersViewState
         }
-        viewState = updatedAnswersViewState
     }
 
     fun postAnswers() {
@@ -133,7 +129,7 @@ class QuestionnaireViewModel @Inject constructor(
     fun onPrefillQuestionsSelected(trip: TripSummary) {
         launchWithBlockingLoading {
             val answeredQuestions = loadQuestionsUseCase(QuestionnaireParams(trip.id, questionnaireType))
-            viewState = QuestionnaireState.Answers(
+            viewState = viewState.copy(
                 answers = emptyList(),
                 submitEnabled = false
             )
@@ -141,10 +137,7 @@ class QuestionnaireViewModel @Inject constructor(
             answeredQuestions.questionsWithAnswers.forEachIndexed { index, questionAnswer ->
                 answers.getOrNull(index)?.answer = questionAnswer.answer
             }
-            viewState = QuestionnaireState.Answers(
-                answers = answers,
-                submitEnabled = answers.none { it.answer.isNullOrEmpty() }
-            )
+            viewState = updatedAnswersViewState
         }
     }
 }
