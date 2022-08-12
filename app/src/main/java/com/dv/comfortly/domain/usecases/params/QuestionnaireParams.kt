@@ -6,5 +6,5 @@ import com.dv.comfortly.domain.models.QuestionnaireType
 data class QuestionnaireParams(
     val tripId: Long,
     val questionnaireType: QuestionnaireType,
-    val questions: List<AnswerData>,
+    val questions: List<AnswerData> = emptyList(),
 )

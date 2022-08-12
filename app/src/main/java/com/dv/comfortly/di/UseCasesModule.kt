@@ -6,6 +6,7 @@ import com.dv.comfortly.domain.usecases.DeleteTripUseCase
 import com.dv.comfortly.domain.usecases.DisconnectFromHeartRateDeviceUseCase
 import com.dv.comfortly.domain.usecases.ExportTripToZipUseCase
 import com.dv.comfortly.domain.usecases.IsBluetoothTurnedOnUseCase
+import com.dv.comfortly.domain.usecases.LoadQuestionsUseCase
 import com.dv.comfortly.domain.usecases.LoadTripUseCase
 import com.dv.comfortly.domain.usecases.LoadTripsUseCase
 import com.dv.comfortly.domain.usecases.ObserveConnectedHeartRateDeviceUseCase
@@ -43,6 +44,10 @@ interface UseCasesModule {
     @Binds
     @Singleton
     fun provideLoadTripUseCase(loadTripUseCase: LoadTripUseCase.Default): LoadTripUseCase
+
+    @Binds
+    @Singleton
+    fun provideLoadQuestionsUseCase(loadQuestionsUseCase: LoadQuestionsUseCase.Default): LoadQuestionsUseCase
 
     @Binds
     @Singleton

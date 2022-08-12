@@ -20,7 +20,7 @@ class DashboardViewModel @Inject constructor(
     fun getAnalyzedTrips() {
         launchWithBlockingLoading {
             val trips = loadTripsUseCase()
-            viewState = DashboardState.Trips(trips = trips)
+            viewState = DashboardState.Trips(trips = trips.asReversed())
         }
     }
 

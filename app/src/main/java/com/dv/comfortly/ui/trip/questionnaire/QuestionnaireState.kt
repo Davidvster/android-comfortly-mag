@@ -8,4 +8,8 @@ sealed class QuestionnaireState {
         val answers: List<AnswerData>,
         val submitEnabled: Boolean
     ) : QuestionnaireState()
+    data class ReplaceQuestions(
+        val answers: List<AnswerData>,
+        val submitEnabled: Boolean
+    ) : QuestionnaireState()
 }

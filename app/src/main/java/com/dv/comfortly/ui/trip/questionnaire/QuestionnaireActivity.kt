@@ -3,6 +3,8 @@ package com.dv.comfortly.ui.trip.questionnaire
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dv.comfortly.R
 import com.dv.comfortly.databinding.ActivityQuestionnaireBinding
 import com.dv.comfortly.domain.models.QuestionnaireType
+import com.dv.comfortly.domain.models.TripSummary
 import com.dv.comfortly.ui.base.BaseActivity
 import com.dv.comfortly.ui.base.extensions.setThrottleClickListener
 import com.dv.comfortly.ui.base.viewBinding
 import com.dv.comfortly.ui.trip.setup.SetupTripActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,6 +27,8 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
 
         private const val ARG_TRIP_ID = "ARG_TRIP_ID"
         private const val ARG_QUESTIONNAIRE_TYPE = "ARG_QUESTIONNAIRE_TYPE"
+
+        private const val TRIP_DATE_FORMAT = "HH:mm dd.MM.yyy"
 
         fun newIntent(context: Context, tripId: Long, questionnaireType: QuestionnaireType) =
             Intent(context, QuestionnaireActivity::class.java).apply {
@@ -53,6 +59,11 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
                 adapter.submitList(state.answers)
                 viewBinding.submitButton.isEnabled = state.submitEnabled
             }
+            is QuestionnaireState.ReplaceQuestions -> {
+                adapter.submitList(emptyList())
+                adapter.submitList(state.answers)
+                viewBinding.submitButton.isEnabled = state.submitEnabled
+            }
             else -> Unit
         }
     }
@@ -67,6 +78,7 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
                 startActivity(SetupTripActivity.newIntent(this, event.tripId))
                 finish()
             }
+            is QuestionnaireEvent.ShowPrefillFromTrip -> showSelectTripDialog(event.trips)
             is QuestionnaireEvent.Finish -> finish()
         }
     }
@@ -94,17 +106,47 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val questionnaireType = intent.getSerializableExtra(ARG_QUESTIONNAIRE_TYPE) as QuestionnaireType
+        if (questionnaireType == QuestionnaireType.PRE_DEMOGRAPHIC || questionnaireType == QuestionnaireType.PRE_SPECIFIC) {
+            menuInflater.inflate(R.menu.questionnaire_menu, menu)
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.prefill_questions -> {
+            viewModel.onPrefillQuestions()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun showSelectTripDialog(trips: List<TripSummary>) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.prefill_questions)
+            .setItems(trips.map { "${it.id} - ${it.name} -" }.toTypedArray()) { _, which ->
+                viewModel.onPrefillQuestionsSelected(trips[which])
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
+    }
+
     @StringRes
     private fun QuestionnaireType.getToolBarTitle(): Int = when (this) {
         QuestionnaireType.PRE_TRIP_PANAS -> R.string.panas
+        QuestionnaireType.PRE_SPECIFIC -> R.string.specific
         QuestionnaireType.PRE_DEMOGRAPHIC -> R.string.demographic
         QuestionnaireType.POST_TRIP_PANAS -> R.string.panas
+        QuestionnaireType.POST_SPECIFIC -> R.string.specific
     }
 
     @StringRes
     private fun QuestionnaireType.getQuestionnaireInstructions(): Int = when (this) {
         QuestionnaireType.PRE_TRIP_PANAS -> R.string.panas_instructions
+        QuestionnaireType.PRE_SPECIFIC -> R.string.pre_specific_instructions
         QuestionnaireType.PRE_DEMOGRAPHIC -> R.string.demographic
         QuestionnaireType.POST_TRIP_PANAS -> R.string.panas_instructions
+        QuestionnaireType.POST_SPECIFIC -> R.string.post_specific_instructions
     }
 }

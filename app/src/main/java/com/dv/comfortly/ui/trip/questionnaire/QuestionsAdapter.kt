@@ -26,10 +26,6 @@ class QuestionsAdapter(
         override fun areContentsTheSame(oldItem: AnswerData, newItem: AnswerData): Boolean = oldItem == newItem
     }) {
 
-    companion object {
-        private const val MULTIPLE_ANSWERS_DELIMITER = ";"
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -94,7 +90,7 @@ class QuestionsAdapter(
             val noneCheckbox = MaterialCheckBox(root.context).apply {
                 setTextAppearance(R.style.Comfortly_BodyLarge_Medium)
                 layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                setText(R.string.chebox_none)
+                setText(R.string.checkbox_none)
                 isChecked = question.answer?.contains(text.toString(), true) ?: false
                 setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {

@@ -11,8 +11,10 @@ data class Questionnaire(
 
 enum class QuestionnaireType {
     PRE_DEMOGRAPHIC,
+    PRE_SPECIFIC,
     PRE_TRIP_PANAS,
     POST_TRIP_PANAS,
+    POST_SPECIFIC,
 }
 
 data class QuestionAnswer(
