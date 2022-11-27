@@ -11,10 +11,10 @@ import com.dv.comfortly.domain.usecases.StoreAnswersUseCase
 import com.dv.comfortly.domain.usecases.params.QuestionnaireParams
 import com.dv.comfortly.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class QuestionnaireViewModel @Inject constructor(

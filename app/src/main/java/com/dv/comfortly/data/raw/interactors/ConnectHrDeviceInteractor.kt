@@ -12,7 +12,15 @@ interface ConnectHrDeviceInteractor {
     class Default @Inject constructor(
         private val heartRateSource: HeartRateSource
     ) : ConnectHrDeviceInteractor {
-        override suspend fun connectToDevice(deviceId: String) = heartRateSource.polarApi.connectToDevice(deviceId)
+
+        companion object {
+            private const val MIN_POLAR_H10_MTU = 70
+        }
+
+        override suspend fun connectToDevice(deviceId: String) {
+            heartRateSource.polarApi.setMtu(MIN_POLAR_H10_MTU)
+            heartRateSource.polarApi.connectToDevice(deviceId)
+        }
 
         override suspend fun disconnectFromDevice(deviceId: String) = heartRateSource.polarApi.disconnectFromDevice(deviceId)
     }

@@ -20,15 +20,16 @@ interface RecordEcgSensorDataUseCase : BaseFlowUseCase.InputOutput<RecordSensorD
     ) : RecordEcgSensorDataUseCase {
 
         companion object {
-            private const val SAMPLE_RATE_TO_MILLIS = 1000
+            private const val SAMPLE_RATE_IN_HERTZ_TO_MILLIS = 1000
         }
 
         override operator fun invoke(input: RecordSensorDataParams): Flow<List<EcgDataSample>> =
             heartRateRepository.observeEcg().map { data ->
+                val oneSampleMillis = SAMPLE_RATE_IN_HERTZ_TO_MILLIS / data.sampleRate
                 data.samples.mapIndexed { index, value ->
                     val sample = EcgDataSample(
                         tripId = input.tripId,
-                        timestamp = data.timestamp + (index * (SAMPLE_RATE_TO_MILLIS / data.sampleRate)).milliseconds,
+                        timestamp = data.lastSampleTimestamp - ((data.samples.lastIndex - index) * oneSampleMillis).milliseconds,
                         value = value
                     )
                     when (input.recordTripType) {

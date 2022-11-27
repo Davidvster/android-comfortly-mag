@@ -3,7 +3,10 @@ package com.dv.comfortly.domain.models
 import kotlinx.datetime.Instant
 
 data class EcgData(
-    val timestamp: Instant,
+    /**
+     * Last sample timestamp in nanoseconds. The epoch of timestamp is 1.1.2000
+     */
+    val lastSampleTimestamp: Instant,
     /**
      * ECG samples in microVolts.
      */

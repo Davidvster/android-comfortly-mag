@@ -55,7 +55,6 @@ class DashboardActivity : BaseActivity<DashboardState, DashboardEvent>() {
                 viewBinding.tripsList.smoothScrollToPosition(0)
             }
         }
-
     }
 
     override fun handleEvent(event: DashboardEvent) {
