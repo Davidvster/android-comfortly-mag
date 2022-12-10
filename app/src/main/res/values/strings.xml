@@ -69,6 +69,7 @@
     <string name="search_hr_devices">Poišči merlice srčnega utripa</string>
     <string name="no_hr_devices_found">Najden ni bil noben merilec srčnega utripa</string>
     <string name="calibrating_sensors">Kalibracija se bo avtomatsko končala čez: %dm %ds</string>
+    <string name="recording_trip_time">Trenutni čas vožnje: %dm %ds</string>
     <string name="device_id">ID: %s</string>
     <string name="device_name">Ime: %s</string>
     <string name="device_address">Naslov: %s</string>

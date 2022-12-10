@@ -14,8 +14,9 @@ data class NewTripState(
     val locations: List<GpsData> = emptyList(),
     val heartRate: HeartRateGraphData? = null,
     val ecgData: EcgGraphData? = null,
-    val isForCalibration: Boolean = false,
-    val calibrationTime: Duration = 0.seconds
+    val recordTripType: RecordTripType = RecordTripType.TEST,
+    val calibrationTime: Duration = 0.seconds,
+    val totalElapsedTime: Duration = 0.seconds
 )
 
 data class GraphData(

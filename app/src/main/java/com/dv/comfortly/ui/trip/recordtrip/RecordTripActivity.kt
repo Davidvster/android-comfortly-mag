@@ -77,12 +77,20 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
             setMapData(state.locations)
             state.heartRate?.let { hearRateChart.setData(it) }
             state.ecgData?.let { ecgChart.setData(it) }
-            calibrationProgress.isVisible = state.isForCalibration
-            calibrationProgress.text = getString(
-                R.string.calibrating_sensors,
-                state.calibrationTime.inWholeMinutes,
-                (state.calibrationTime - state.calibrationTime.inWholeMinutes.minutes).inWholeSeconds
-            )
+            progress.isVisible = state.recordTripType == RecordTripType.CALIBRATE || state.recordTripType == RecordTripType.RECORD
+            progress.text = when (state.recordTripType) {
+                RecordTripType.TEST -> null
+                RecordTripType.CALIBRATE -> getString(
+                    R.string.calibrating_sensors,
+                    state.calibrationTime.inWholeMinutes,
+                    (state.calibrationTime - state.calibrationTime.inWholeMinutes.minutes).inWholeSeconds
+                )
+                RecordTripType.RECORD -> getString(
+                    R.string.recording_trip_time,
+                    state.totalElapsedTime.inWholeMinutes,
+                    (state.totalElapsedTime - state.totalElapsedTime.inWholeMinutes.minutes).inWholeSeconds
+                )
+            }
         }
     }
 

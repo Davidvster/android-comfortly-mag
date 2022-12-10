@@ -11,8 +11,8 @@ import com.github.mikephil.charting.data.Entry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.datetime.Clock
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -45,21 +45,16 @@ class RecordTripViewModel @Inject constructor(
     private var gpsData = emptyList<GpsData>()
     private var heartRateData = HeartRateGraphData(emptyList())
     private var ecgData = EcgGraphData(emptyList())
+    private val startDateTime = Clock.System.now()
 
     private val calibrationCountDownTimer: CountDownTimer by lazy {
         object : CountDownTimer(CALIBRATION_TIME.inWholeMilliseconds, CALIBRATION_INTERVAL.inWholeMilliseconds) {
             override fun onTick(millisUntilFinished: Long) {
-                viewState = viewState.copy(
-                    isForCalibration = true,
-                    calibrationTime = millisUntilFinished.milliseconds
-                )
+                viewState = viewState.copy(calibrationTime = millisUntilFinished.milliseconds)
             }
 
             override fun onFinish() {
-                viewState = viewState.copy(
-                    isForCalibration = true,
-                    calibrationTime = 0.seconds
-                )
+                viewState = viewState.copy(calibrationTime = 0.seconds)
                 onStopAction()
             }
         }
@@ -68,8 +63,11 @@ class RecordTripViewModel @Inject constructor(
     fun getTripData(tripId: Long, recordTripType: RecordTripType) {
         this.tripId = tripId
         this.recordTripType = recordTripType
-        if (recordTripType == RecordTripType.CALIBRATE) {
-            calibrationCountDownTimer.start()
+        viewState = viewState.copy(recordTripType = recordTripType)
+        when (recordTripType) {
+            RecordTripType.TEST,
+            RecordTripType.RECORD -> Unit
+            RecordTripType.CALIBRATE -> calibrationCountDownTimer.start()
         }
         launch {
             delay(INITIAL_DELAY)
@@ -187,7 +185,8 @@ class RecordTripViewModel @Inject constructor(
                         rotationVector = rotationVectorData,
                         locations = gpsData.distinct(),
                         heartRate = heartRateData,
-                        ecgData = ecgData
+                        ecgData = ecgData,
+                        totalElapsedTime = Clock.System.now() - startDateTime
                     )
                 }
             }
