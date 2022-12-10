@@ -26,6 +26,7 @@ class DatabaseContainer(
 
     private val db: AppDatabase by lazy {
         Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+            .addMigrations(Migration1to2())
             .build()
     }
 

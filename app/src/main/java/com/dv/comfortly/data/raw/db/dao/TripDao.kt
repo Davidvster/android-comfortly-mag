@@ -3,6 +3,7 @@ package com.dv.comfortly.data.raw.db.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.dv.comfortly.data.raw.db.entity.Trip
 import com.dv.comfortly.data.raw.db.entity.TripWithData
 
@@ -17,6 +18,9 @@ interface TripDao {
 
     @Query("""SELECT * FROM trip""")
     suspend fun loadAll(): List<Trip>
+
+    @Update
+    suspend fun updateTrip(trip: Trip)
 
     @Query("""DELETE FROM trip WHERE id == :tripId""")
     suspend fun deleteTrip(tripId: Long)

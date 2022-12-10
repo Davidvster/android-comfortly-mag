@@ -31,13 +31,18 @@ interface TripRepository {
 
         override suspend fun loadAllTrips(): List<TripSummary> =
             tripDao.loadAll().map { trip ->
-                val firstDataPoint = tripDatapointDao.loadFirstForTrip(trip.id)
-                val lastDatapoint = tripDatapointDao.loadLastForTrip(trip.id)
+                val updatedTrip = if (trip.startDate == null || trip.endDate == null) {
+                    val firstDataPointDate = tripDatapointDao.loadFirstForTrip(trip.id)?.timestamp
+                    val lastDatapointDate = tripDatapointDao.loadLastForTrip(trip.id)?.timestamp
+                    trip.copy(startDate = firstDataPointDate, endDate = lastDatapointDate).also {
+                        tripDao.updateTrip(it)
+                    }
+                } else trip
                 TripSummary(
-                    id = trip.id,
-                    name = trip.name,
-                    startTime = firstDataPoint?.timestamp,
-                    endTime = lastDatapoint?.timestamp
+                    id = updatedTrip.id,
+                    name = updatedTrip.name,
+                    startTime = updatedTrip.startDate,
+                    endTime = updatedTrip.endDate
                 )
             }
 
