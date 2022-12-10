@@ -12,10 +12,7 @@ import com.dv.comfortly.domain.models.HeartRateDevice
 import com.polar.sdk.api.model.PolarDeviceInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.nanoseconds
 
@@ -41,19 +38,17 @@ interface HeartRateRepository {
         private val observeEcgDataInteractor: ObserveEcgDataInteractor
     ) : HeartRateRepository {
 
-        override fun observeHeartRate(): Flow<HeartRateData> = observeHrDataInteractor.observeHeartRateData().onEach {
-            Timber.d("COMFORTLY HEARTRATE ${it.hr} at time ${Clock.System.now()}")
-        }.map { data ->
-            HeartRateData(data.hr)
-        }
+        override fun observeHeartRate(): Flow<HeartRateData> = observeHrDataInteractor.observeHeartRateData()
+            //            .onEach { Timber.d("COMFORTLY HEARTRATE ${it.hr} at time ${Clock.System.now()}") }
+            .map { data -> HeartRateData(data.hr) }
 
         override fun observeEcg(): Flow<EcgData> = observeEcgDataInteractor.observeEcgData()
-            .onEach {
-                val timestamp = Instant.parse(POLAR_ECG_DATA_START) + it.first.timeStamp.nanoseconds
-                val current = Clock.System.now()
-                val diff = current - timestamp
-                Timber.d("COMFORTLY ECG: Got timestamp: $timestamp, current time: $current, diff: $diff")
-            }
+            //            .onEach {
+            //                val timestamp = Instant.parse(POLAR_ECG_DATA_START) + it.first.timeStamp.nanoseconds
+            //                val current = Clock.System.now()
+            //                val diff = current - timestamp
+            //                Timber.d("COMFORTLY ECG: Got timestamp: $timestamp, current time: $current, diff: $diff")
+            //            }
             .map { (ecg, sampleRate) ->
                 EcgData(
                     lastSampleTimestamp = Instant.parse(POLAR_ECG_DATA_START) + ecg.timeStamp.nanoseconds,

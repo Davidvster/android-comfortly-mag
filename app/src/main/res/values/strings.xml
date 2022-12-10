@@ -15,7 +15,7 @@
     <string name="delete_trip_title">Ali želite izbirati vožnjo %d: %s?</string>
     <string name="delete_trip_message">Izbris vožnje bo izbrisal vse podatke o vožnji.</string>
     <string name="delete">Izbriši</string>
-    <string name="stop_recording_trip_title">Alite želite ustaviti snemanje vožnje?</string>
+    <string name="stop_recording_trip_title">Ali želite ustaviti snemanje vožnje?</string>
     <string name="stop_recording_trip_message">Vsi podatki vožnje so že shranjeni.</string>
     <string name="setup">Nastavitev</string>
     <string name="error_message_generic">Prišlo je do nepričakovane napaka</string>

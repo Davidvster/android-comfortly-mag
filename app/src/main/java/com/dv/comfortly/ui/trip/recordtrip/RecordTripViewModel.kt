@@ -3,15 +3,16 @@ package com.dv.comfortly.ui.trip.recordtrip
 import android.os.CountDownTimer
 import androidx.lifecycle.SavedStateHandle
 import com.dv.comfortly.domain.models.GpsData
-import com.dv.comfortly.domain.models.SensorData
 import com.dv.comfortly.domain.usecases.RecordEcgSensorDataUseCase
 import com.dv.comfortly.domain.usecases.RecordSensorDataUseCase
 import com.dv.comfortly.domain.usecases.params.RecordSensorDataParams
 import com.dv.comfortly.ui.base.BaseViewModel
 import com.github.mikephil.charting.data.Entry
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -25,6 +26,7 @@ class RecordTripViewModel @Inject constructor(
 ) : BaseViewModel<NewTripState, RecordTripEvent>(NewTripState()) {
 
     companion object {
+        private const val MAX_UI_DATA_ITEMS = 500
         private val CALIBRATION_TIME = 2.minutes
         private val CALIBRATION_INTERVAL = 1.seconds
         private val INITIAL_DELAY = 2.seconds
@@ -33,13 +35,14 @@ class RecordTripViewModel @Inject constructor(
     private var tripId: Long = 0
     private var recordTripType: RecordTripType = RecordTripType.TEST
 
-    private val sensorData = mutableListOf<SensorData>()
+    private var sensorDataIndex = 0
+    private var ecgSensorDataIndex = 0
     private var accelerometerData = GraphData(emptyList(), emptyList(), emptyList())
     private var gravityData = GraphData(emptyList(), emptyList(), emptyList())
     private var gyroscopeData = GraphData(emptyList(), emptyList(), emptyList())
     private var linearAccelerationData = GraphData(emptyList(), emptyList(), emptyList())
     private var rotationVectorData = RotationVectorGraphData(emptyList(), emptyList(), emptyList(), emptyList())
-    private val gpsData = mutableListOf<GpsData>()
+    private var gpsData = emptyList<GpsData>()
     private var heartRateData = HeartRateGraphData(emptyList())
     private var ecgData = EcgGraphData(emptyList())
 
@@ -71,48 +74,109 @@ class RecordTripViewModel @Inject constructor(
         launch {
             delay(INITIAL_DELAY)
             launch {
-                sensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).collect {
-                    val currentXvalue = sensorData.size.toFloat()
+                sensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO).collect {
+                    val currentXvalue = sensorDataIndex.toFloat()
                     val currentSensorData = it.sensorData
-                    sensorData += currentSensorData
+                    sensorDataIndex++
                     accelerometerData = accelerometerData.copy(
-                        xAxis = accelerometerData.xAxis + Entry(currentXvalue, currentSensorData.accelerometerData.xAxisAcceleration),
-                        yAxis = accelerometerData.yAxis + Entry(currentXvalue, currentSensorData.accelerometerData.yAxisAcceleration),
-                        zAxis = accelerometerData.zAxis + Entry(currentXvalue, currentSensorData.accelerometerData.zAxisAcceleration),
+                        xAxis = accelerometerData.xAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.accelerometerData.xAxisAcceleration
+                            )
+                        ),
+                        yAxis = accelerometerData.yAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.accelerometerData.yAxisAcceleration
+                            )
+                        ),
+                        zAxis = accelerometerData.zAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.accelerometerData.zAxisAcceleration
+                            )
+                        ),
                     )
                     gravityData = gravityData.copy(
-                        xAxis = gravityData.xAxis + Entry(currentXvalue, currentSensorData.gravityData.xAxisGravity),
-                        yAxis = gravityData.yAxis + Entry(currentXvalue, currentSensorData.gravityData.yAxisGravity),
-                        zAxis = gravityData.zAxis + Entry(currentXvalue, currentSensorData.gravityData.zAxisGravity),
+                        xAxis = gravityData.xAxis.appendWithLimitSize(Entry(currentXvalue, currentSensorData.gravityData.xAxisGravity)),
+                        yAxis = gravityData.yAxis.appendWithLimitSize(Entry(currentXvalue, currentSensorData.gravityData.yAxisGravity)),
+                        zAxis = gravityData.zAxis.appendWithLimitSize(Entry(currentXvalue, currentSensorData.gravityData.zAxisGravity)),
                     )
                     gyroscopeData = gyroscopeData.copy(
-                        xAxis = gyroscopeData.xAxis + Entry(currentXvalue, currentSensorData.gyroscopeData.xAxisRotationRate),
-                        yAxis = gyroscopeData.yAxis + Entry(currentXvalue, currentSensorData.gyroscopeData.yAxisRotationRate),
-                        zAxis = gyroscopeData.zAxis + Entry(currentXvalue, currentSensorData.gyroscopeData.zAxisRotationRate),
+                        xAxis = gyroscopeData.xAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.gyroscopeData.xAxisRotationRate
+                            )
+                        ),
+                        yAxis = gyroscopeData.yAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.gyroscopeData.yAxisRotationRate
+                            )
+                        ),
+                        zAxis = gyroscopeData.zAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.gyroscopeData.zAxisRotationRate
+                            )
+                        ),
                     )
                     linearAccelerationData = linearAccelerationData.copy(
-                        xAxis = linearAccelerationData.xAxis + Entry(
-                            currentXvalue,
-                            currentSensorData.linearAccelerometerData.xAxisLinearAcceleration
+                        xAxis = linearAccelerationData.xAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.linearAccelerometerData.xAxisLinearAcceleration
+                            )
                         ),
-                        yAxis = linearAccelerationData.yAxis + Entry(
-                            currentXvalue,
-                            currentSensorData.linearAccelerometerData.yAxisLinearAcceleration
+                        yAxis = linearAccelerationData.yAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.linearAccelerometerData.yAxisLinearAcceleration
+                            )
                         ),
-                        zAxis = linearAccelerationData.zAxis + Entry(
-                            currentXvalue,
-                            currentSensorData.linearAccelerometerData.zAxisLinearAcceleration
+                        zAxis = linearAccelerationData.zAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.linearAccelerometerData.zAxisLinearAcceleration
+                            )
                         ),
                     )
                     rotationVectorData = rotationVectorData.copy(
-                        xAxis = rotationVectorData.xAxis + Entry(currentXvalue, currentSensorData.rotationVectorData.xAxisRotationVector),
-                        yAxis = rotationVectorData.yAxis + Entry(currentXvalue, currentSensorData.rotationVectorData.yAxisRotationVector),
-                        zAxis = rotationVectorData.zAxis + Entry(currentXvalue, currentSensorData.rotationVectorData.zAxisRotationVector),
-                        scalar = rotationVectorData.scalar + Entry(currentXvalue, currentSensorData.rotationVectorData.rotationVectorScalar),
+                        xAxis = rotationVectorData.xAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.rotationVectorData.xAxisRotationVector
+                            )
+                        ),
+                        yAxis = rotationVectorData.yAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.rotationVectorData.yAxisRotationVector
+                            )
+                        ),
+                        zAxis = rotationVectorData.zAxis.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.rotationVectorData.zAxisRotationVector
+                            )
+                        ),
+                        scalar = rotationVectorData.scalar.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                currentSensorData.rotationVectorData.rotationVectorScalar
+                            )
+                        ),
                     )
-                    gpsData += it.gpsData
+                    gpsData = gpsData.appendWithLimitSize(it.gpsData)
                     heartRateData = heartRateData.copy(
-                        heartRate = heartRateData.heartRate + Entry(currentXvalue, it.heartRateData.heartRate.toFloat())
+                        heartRate = heartRateData.heartRate.appendWithLimitSize(
+                            Entry(
+                                currentXvalue,
+                                it.heartRateData.heartRate.toFloat()
+                            )
+                        )
                     )
 
                     viewState = viewState.copy(
@@ -128,10 +192,18 @@ class RecordTripViewModel @Inject constructor(
                 }
             }
             launch {
-                ecgSensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).collect { ecg ->
-                    val currentXvalue = ecgData.ecg.size.toFloat()
+                ecgSensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO).collect { ecg ->
+                    val currentXvalue = ecgSensorDataIndex.toFloat()
+                    ecgSensorDataIndex += ecg.size
                     ecgData = ecgData.copy(
-                        ecg = ecgData.ecg + ecg.mapIndexed { index, value -> Entry(currentXvalue + index, value.value.toFloat()) }
+                        ecg = ecgData.ecg.appendWithLimitSize(
+                            ecg.mapIndexed { index, value ->
+                                Entry(
+                                    currentXvalue + index,
+                                    value.value.toFloat()
+                                )
+                            }
+                        )
                     )
                 }
             }
@@ -147,4 +219,14 @@ class RecordTripViewModel @Inject constructor(
             }
         )
     }
+
+    private fun <T> List<T>.appendWithLimitSize(newEntry: T): List<T> =
+        if (size > MAX_UI_DATA_ITEMS) {
+            this.subList(size - MAX_UI_DATA_ITEMS, size) + newEntry
+        } else this + newEntry
+
+    private fun <T> List<T>.appendWithLimitSize(newEntries: List<T>): List<T> =
+        if (size + newEntries.size > MAX_UI_DATA_ITEMS) {
+            this.subList((size + newEntries.size) - MAX_UI_DATA_ITEMS, size) + newEntries
+        } else this + newEntries
 }
