@@ -19,5 +19,5 @@ data class TripDetailsState(
     val rotationVector: RotationVectorGraphData? = null,
     val locations: List<GpsData> = emptyList(),
     val heartRate: HeartRateGraphData? = null,
-    val ecg: EcgGraphData? = null
+    val ecg: EcgGraphData? = null,
 )

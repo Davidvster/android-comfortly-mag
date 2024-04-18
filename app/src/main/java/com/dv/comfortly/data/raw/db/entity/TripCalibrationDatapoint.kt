@@ -17,9 +17,9 @@ import kotlinx.datetime.Instant
             parentColumns = ["id"],
             childColumns = ["trip_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @TypeConverters(InstantTypeAdapter::class)
 data class TripCalibrationDatapoint(
@@ -43,14 +43,14 @@ data class TripCalibrationDatapoint(
             parentColumns = ["id"],
             childColumns = ["trip_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @TypeConverters(InstantTypeAdapter::class)
 data class TripEcgCalibrationSample(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "trip_id") val tripId: Long,
     @ColumnInfo(name = "timestamp") val timestamp: Instant,
-    @ColumnInfo(name = "ecg_value_mv") val ecgValue: Int
+    @ColumnInfo(name = "ecg_value_mv") val ecgValue: Int,
 )

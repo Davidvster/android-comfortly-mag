@@ -20,9 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity<DashboardState, DashboardEvent>() {
-
     companion object {
-
         fun newIntent(context: Context) = Intent(context, DashboardActivity::class.java)
     }
 
@@ -42,9 +40,9 @@ class DashboardActivity : BaseActivity<DashboardState, DashboardEvent>() {
                     positiveButtonListener = {
                         viewModel.deleteTrip(trip.id)
                     },
-                    negativeButtonText = R.string.cancel
+                    negativeButtonText = R.string.cancel,
                 )
-            }
+            },
         )
     }
 

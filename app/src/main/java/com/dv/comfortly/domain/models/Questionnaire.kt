@@ -6,7 +6,7 @@ data class Questionnaire(
     val id: Long = 0,
     val tripId: Long,
     val questionnaireType: QuestionnaireType,
-    val questionsWithAnswers: List<QuestionAnswer> = emptyList()
+    val questionsWithAnswers: List<QuestionAnswer> = emptyList(),
 )
 
 enum class QuestionnaireType {
@@ -22,5 +22,5 @@ data class QuestionAnswer(
     val questionnaireId: Long,
     val question: String,
     val answer: String,
-    val timestamp: Instant
+    val timestamp: Instant,
 )

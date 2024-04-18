@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import kotlinx.datetime.Instant
 
 internal class InstantTypeAdapter {
-
     @TypeConverter
     fun fromRaw(raw: Long?): Instant? = raw?.let { Instant.fromEpochMilliseconds(it) }
 

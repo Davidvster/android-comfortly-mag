@@ -25,19 +25,20 @@ import com.dv.comfortly.data.raw.db.entity.TripEcgSample
         TripCalibrationDatapoint::class,
         TripEcgCalibrationSample::class,
         QuestionAnswer::class,
-        Questionnaire::class
+        Questionnaire::class,
     ],
     version = AppDbConfig.VERSION,
-    exportSchema = true
+    exportSchema = true,
 )
-
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun trip(): TripDao
 
     abstract fun tripDatapoint(): TripDatapointDao
+
     abstract fun tripEcgDatapoint(): TripEcgDatapointDao
+
     abstract fun tripCalibrationDatapoint(): TripCalibrationDatapointDao
+
     abstract fun tripEcgCalibrationDatapoint(): TripEcgCalibrationDatapointDao
 
     abstract fun questionnaire(): QuestionnaireDao

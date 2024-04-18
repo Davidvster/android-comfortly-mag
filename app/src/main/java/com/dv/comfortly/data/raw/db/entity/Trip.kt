@@ -9,14 +9,14 @@ import com.dv.comfortly.data.raw.db.adapters.InstantTypeAdapter
 import kotlinx.datetime.Instant
 
 @Entity(
-    tableName = "trip"
+    tableName = "trip",
 )
 @TypeConverters(InstantTypeAdapter::class)
 data class Trip(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "start_date") val startDate: Instant? = null,
-    @ColumnInfo(name = "end_date") val endDate: Instant? = null
+    @ColumnInfo(name = "end_date") val endDate: Instant? = null,
 )
 
 data class TripWithData(
@@ -25,21 +25,21 @@ data class TripWithData(
     @Relation(
         parentColumn = "id",
         entityColumn = "trip_id",
-        entity = TripCalibrationDatapoint::class
+        entity = TripCalibrationDatapoint::class,
     ) val calibrationDataPoints: List<TripCalibrationDatapoint>,
     @Relation(
         parentColumn = "id",
         entityColumn = "trip_id",
-        entity = TripEcgCalibrationSample::class
+        entity = TripEcgCalibrationSample::class,
     ) val ecgCalibrationDataPoints: List<TripEcgCalibrationSample>,
     @Relation(
         parentColumn = "id",
         entityColumn = "trip_id",
-        entity = TripDatapoint::class
+        entity = TripDatapoint::class,
     ) val dataPoints: List<TripDatapoint>,
     @Relation(
         parentColumn = "id",
         entityColumn = "trip_id",
-        entity = TripEcgSample::class
-    ) val ecgDataPoints: List<TripEcgSample>
+        entity = TripEcgSample::class,
+    ) val ecgDataPoints: List<TripEcgSample>,
 )

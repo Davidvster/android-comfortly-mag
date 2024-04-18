@@ -4,5 +4,5 @@ import com.dv.comfortly.domain.models.TripSummary
 
 data class DashboardState(
     val trips: List<TripSummary> = emptyList(),
-    val hasNewTrip: Boolean = false
+    val hasNewTrip: Boolean = false,
 )

@@ -7,6 +7,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
-) : BaseViewModel<EmptyState, Nothing>(EmptyState)
+class SplashViewModel
+    @Inject
+    constructor(
+        private val savedStateHandle: SavedStateHandle,
+    ) : BaseViewModel<EmptyState, Nothing>(EmptyState)

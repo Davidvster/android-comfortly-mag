@@ -9,16 +9,17 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 interface ObserveHrDeviceConnectedInteractor {
-
     fun observeConnectedDevices(): Flow<PolarDeviceInfo>
 
-    class Default @Inject constructor(
-        private val heartRateSource: HeartRateSource
-    ) : ObserveHrDeviceConnectedInteractor {
-        override fun observeConnectedDevices(): Flow<PolarDeviceInfo> =
-            heartRateSource.polarState
-                .map { it.connectedDevice }
-                .filterNotNull()
-                .distinctUntilChanged()
-    }
+    class Default
+        @Inject
+        constructor(
+            private val heartRateSource: HeartRateSource,
+        ) : ObserveHrDeviceConnectedInteractor {
+            override fun observeConnectedDevices(): Flow<PolarDeviceInfo> =
+                heartRateSource.polarState
+                    .map { it.connectedDevice }
+                    .filterNotNull()
+                    .distinctUntilChanged()
+        }
 }

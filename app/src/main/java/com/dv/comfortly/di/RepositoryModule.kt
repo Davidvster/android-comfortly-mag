@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface RepositoryModule {
-
     @Binds
     @Singleton
     fun provideAccelerometerSensorRepository(accelerometerSensorRepository: AccelerometerSensorRepository): SensorRepository.Accelerometer
@@ -33,11 +32,15 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun provideLinearAccelerometerSensorRepository(linearAccelerometerSensorRepository: LinearAccelerometerSensorRepository): SensorRepository.LinearAcceleration
+    fun provideLinearAccelerometerSensorRepository(
+        linearAccelerometerSensorRepository: LinearAccelerometerSensorRepository,
+    ): SensorRepository.LinearAcceleration
 
     @Binds
     @Singleton
-    fun provideRotationVectorSensorRepository(rotationVectorSensorRepository: RotationVectorSensorRepository): SensorRepository.RotationVector
+    fun provideRotationVectorSensorRepository(
+        rotationVectorSensorRepository: RotationVectorSensorRepository,
+    ): SensorRepository.RotationVector
 
     @Binds
     @Singleton

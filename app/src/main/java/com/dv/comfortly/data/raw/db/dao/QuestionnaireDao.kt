@@ -9,7 +9,6 @@ import com.dv.comfortly.data.raw.db.entity.QuestionnaireWithQuestions
 
 @Dao
 interface QuestionnaireDao {
-
     @Insert
     suspend fun createQuestionnaire(model: Questionnaire): Long
 

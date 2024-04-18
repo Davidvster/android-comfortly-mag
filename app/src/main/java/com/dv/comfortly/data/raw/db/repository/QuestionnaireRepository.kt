@@ -5,7 +5,6 @@ import com.dv.comfortly.data.raw.db.dao.QuestionnaireDao
 import com.dv.comfortly.domain.models.Questionnaire
 
 interface QuestionnaireRepository {
-
     suspend fun createQuestionnaire(questionnaire: Questionnaire): Questionnaire
 
     suspend fun loadQuestionnaire(questionnaireId: Long): Questionnaire
@@ -15,7 +14,7 @@ interface QuestionnaireRepository {
     suspend fun loadAllQuestionnaires(): List<Questionnaire>
 
     class Default(
-        private val questionnaireDao: QuestionnaireDao
+        private val questionnaireDao: QuestionnaireDao,
     ) : QuestionnaireRepository {
         override suspend fun createQuestionnaire(questionnaire: Questionnaire): Questionnaire =
             questionnaire.copy(id = questionnaireDao.createQuestionnaire(QuestionnaireMapper.domainToDb(questionnaire)))

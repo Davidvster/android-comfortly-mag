@@ -15,5 +15,5 @@ data class AnalyzedLocationData(
     val acceleration: Double,
     val orientation: Double,
     @Serializable(with = InstantSerializer::class)
-    val timestamp: Instant
+    val timestamp: Instant,
 )

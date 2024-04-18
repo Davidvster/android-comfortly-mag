@@ -8,9 +8,11 @@ import androidx.fragment.app.DialogFragment
 import com.dv.comfortly.R
 
 class LoadingDialog : DialogFragment() {
-
     override fun getTheme(): Int = R.style.AppTheme_Dialog
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.dialog_loading, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? = inflater.inflate(R.layout.dialog_loading, container, false)
 }

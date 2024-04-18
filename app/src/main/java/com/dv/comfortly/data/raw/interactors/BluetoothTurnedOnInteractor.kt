@@ -6,11 +6,12 @@ import javax.inject.Inject
 interface BluetoothTurnedOnInteractor {
     val isBluetoothEnabled: Boolean
 
-    class Default @Inject constructor(
-        private val bluetoothSource: BluetoothSource
-    ) : BluetoothTurnedOnInteractor {
-
-        override val isBluetoothEnabled: Boolean
-            get() = bluetoothSource.isBluetoothEnabled
-    }
+    class Default
+        @Inject
+        constructor(
+            private val bluetoothSource: BluetoothSource,
+        ) : BluetoothTurnedOnInteractor {
+            override val isBluetoothEnabled: Boolean
+                get() = bluetoothSource.isBluetoothEnabled
+        }
 }

@@ -24,7 +24,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface UseCasesModule {
-
     @Binds
     @Singleton
     fun provideSensorDataUseCase(sensorDataUseCase: RecordSensorDataUseCase.Default): RecordSensorDataUseCase
@@ -64,25 +63,25 @@ interface UseCasesModule {
     @Binds
     @Singleton
     fun provideSearchForHeartRateDevicesUseCase(
-        searchForHeartRateDevicesUseCase: SearchForHeartRateDevicesUseCase.Default
+        searchForHeartRateDevicesUseCase: SearchForHeartRateDevicesUseCase.Default,
     ): SearchForHeartRateDevicesUseCase
 
     @Binds
     @Singleton
     fun provideConnectToHeartRateDeviceUseCase(
-        connectToHeartRateDeviceUseCase: ConnectToHeartRateDeviceUseCase.Default
+        connectToHeartRateDeviceUseCase: ConnectToHeartRateDeviceUseCase.Default,
     ): ConnectToHeartRateDeviceUseCase
 
     @Binds
     @Singleton
     fun provideDisconnectFromHeartRateDeviceUseCase(
-        disconnectFromHeartRateDeviceUseCase: DisconnectFromHeartRateDeviceUseCase.Default
+        disconnectFromHeartRateDeviceUseCase: DisconnectFromHeartRateDeviceUseCase.Default,
     ): DisconnectFromHeartRateDeviceUseCase
 
     @Binds
     @Singleton
     fun provideObserveConnectedHeartRateDevicesUseCase(
-        observeConnectedHeartRateDeviceUseCase: ObserveConnectedHeartRateDeviceUseCase.Default
+        observeConnectedHeartRateDeviceUseCase: ObserveConnectedHeartRateDeviceUseCase.Default,
     ): ObserveConnectedHeartRateDeviceUseCase
 
     @Binds

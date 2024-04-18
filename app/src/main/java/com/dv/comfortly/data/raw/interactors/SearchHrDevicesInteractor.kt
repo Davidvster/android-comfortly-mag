@@ -8,13 +8,14 @@ import kotlinx.coroutines.reactive.asFlow
 import javax.inject.Inject
 
 interface SearchHrDevicesInteractor {
-
     fun searchForDevices(): Flow<PolarDeviceInfo>
 
-    class Default @Inject constructor(
-        private val heartRateSource: HeartRateSource
-    ) : SearchHrDevicesInteractor {
-        override fun searchForDevices(): Flow<PolarDeviceInfo> =
-            heartRateSource.polarApi.searchForDevice().asFlow().filter { it.isConnectable }
-    }
+    class Default
+        @Inject
+        constructor(
+            private val heartRateSource: HeartRateSource,
+        ) : SearchHrDevicesInteractor {
+            override fun searchForDevices(): Flow<PolarDeviceInfo> =
+                heartRateSource.polarApi.searchForDevice().asFlow().filter { it.isConnectable }
+        }
 }

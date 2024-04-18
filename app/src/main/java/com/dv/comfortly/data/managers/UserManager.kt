@@ -4,11 +4,9 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 
 interface UserManager {
-
     fun getUserId(): String
 
     class Default(context: Context) : UserManager {
-
         companion object {
             private const val USER_ID_PREF = "USER_ID_PREF"
             private const val ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm"

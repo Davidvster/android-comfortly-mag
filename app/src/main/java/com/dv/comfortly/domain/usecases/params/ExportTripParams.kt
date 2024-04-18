@@ -4,5 +4,5 @@ import java.io.OutputStream
 
 data class ExportTripParams(
     val tripId: Long,
-    val outputStream: OutputStream
+    val outputStream: OutputStream,
 )

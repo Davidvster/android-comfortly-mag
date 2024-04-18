@@ -16,15 +16,15 @@ import com.dv.comfortly.data.raw.db.adapters.QuestionnaireTypeAdapter
             parentColumns = ["id"],
             childColumns = ["trip_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @TypeConverters(QuestionnaireTypeAdapter::class)
 data class Questionnaire(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "trip_id") val tripId: Long,
-    @ColumnInfo(name = "type") val questionnaireType: QuestionnaireType
+    @ColumnInfo(name = "type") val questionnaireType: QuestionnaireType,
 )
 
 @TypeConverters(QuestionnaireTypeAdapter::class)
@@ -35,8 +35,8 @@ data class QuestionnaireWithQuestions(
     @Relation(
         parentColumn = "id",
         entityColumn = "questionnaire_id",
-        entity = QuestionAnswer::class
-    ) val questionsWithAnswers: List<QuestionAnswer>
+        entity = QuestionAnswer::class,
+    ) val questionsWithAnswers: List<QuestionAnswer>,
 )
 
 enum class QuestionnaireType {

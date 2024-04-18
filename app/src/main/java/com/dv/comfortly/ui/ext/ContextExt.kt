@@ -31,7 +31,7 @@ fun Context.showDialog(
 }
 
 fun Context.showToast(
-    @StringRes text: Int
+    @StringRes text: Int,
 ) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 
 val Context.layoutInflater: LayoutInflater

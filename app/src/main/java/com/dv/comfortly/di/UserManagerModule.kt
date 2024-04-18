@@ -12,8 +12,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class UserManagerModule {
-
     @Provides
     @Singleton
-    fun provideUserManager(@ApplicationContext context: Context): UserManager = UserManager.Default(context)
+    fun provideUserManager(
+        @ApplicationContext context: Context,
+    ): UserManager = UserManager.Default(context)
 }

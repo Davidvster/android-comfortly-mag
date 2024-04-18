@@ -28,21 +28,20 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.time.Duration.Companion.minutes
 
 @AndroidEntryPoint
 class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapReadyCallback {
-
     companion object {
-
-        private const val HEART_RATE_LABEL = R.string.heart_rate
-        private const val ECG_LABEL = R.string.ecg
-        private const val X_LABEL = R.string.x_axis
-        private const val Y_LABEL = R.string.y_axis
-        private const val Z_LABEL = R.string.z_axis
-        private const val SCALAR_LABEL = R.string.scalar
+        private val HEART_RATE_LABEL = R.string.heart_rate
+        private val ECG_LABEL = R.string.ecg
+        private val X_LABEL = R.string.x_axis
+        private val Y_LABEL = R.string.y_axis
+        private val Z_LABEL = R.string.z_axis
+        private val SCALAR_LABEL = R.string.scalar
 
         private const val HEART_RATE_INDEX = 0
         private const val ECG_INDEX = 0
@@ -56,7 +55,11 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         private const val ARG_TRIP_ID = "ARG_TRIP_ID"
         private const val ARG_RECORD_TYPE = "ARG_RECORD_TYPE"
 
-        fun newIntent(context: Context, tripId: Long, type: RecordTripType) = Intent(context, RecordTripActivity::class.java).apply {
+        fun newIntent(
+            context: Context,
+            tripId: Long,
+            type: RecordTripType,
+        ) = Intent(context, RecordTripActivity::class.java).apply {
             putExtra(ARG_TRIP_ID, tripId)
             putExtra(ARG_RECORD_TYPE, type)
         }
@@ -66,6 +69,14 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     override val viewModel: RecordTripViewModel by viewModels()
 
     private lateinit var map: GoogleMap
+
+    private val polylinePoints by lazy {
+        PolylineOptions()
+            .width(8f)
+            .color(ContextCompat.getColor(this, R.color.green))
+    }
+
+    private var currentPolyLine: Polyline? = null
 
     override fun renderState(state: NewTripState) {
         with(viewBinding) {
@@ -77,20 +88,25 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
             setMapData(state.locations)
             state.heartRate?.let { hearRateChart.setData(it) }
             state.ecgData?.let { ecgChart.setData(it) }
-            progress.isVisible = state.recordTripType == RecordTripType.CALIBRATE || state.recordTripType == RecordTripType.RECORD
-            progress.text = when (state.recordTripType) {
-                RecordTripType.TEST -> null
-                RecordTripType.CALIBRATE -> getString(
-                    R.string.calibrating_sensors,
-                    state.calibrationTime.inWholeMinutes,
-                    (state.calibrationTime - state.calibrationTime.inWholeMinutes.minutes).inWholeSeconds
-                )
-                RecordTripType.RECORD -> getString(
-                    R.string.recording_trip_time,
-                    state.totalElapsedTime.inWholeMinutes,
-                    (state.totalElapsedTime - state.totalElapsedTime.inWholeMinutes.minutes).inWholeSeconds
-                )
-            }
+            progress.isVisible =
+                state.recordTripType == RecordTripType.CALIBRATE || state.recordTripType == RecordTripType.RECORD
+            progress.text =
+                when (state.recordTripType) {
+                    RecordTripType.TEST -> null
+                    RecordTripType.CALIBRATE ->
+                        getString(
+                            R.string.calibrating_sensors,
+                            state.calibrationTime.inWholeMinutes,
+                            (state.calibrationTime - state.calibrationTime.inWholeMinutes.minutes).inWholeSeconds,
+                        )
+
+                    RecordTripType.RECORD ->
+                        getString(
+                            R.string.recording_trip_time,
+                            state.totalElapsedTime.inWholeMinutes,
+                            (state.totalElapsedTime - state.totalElapsedTime.inWholeMinutes.minutes).inWholeSeconds,
+                        )
+                }
         }
     }
 
@@ -100,10 +116,12 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 startActivity(newIntent(this, event.tripId, RecordTripType.CALIBRATE))
                 finish()
             }
+
             is RecordTripEvent.NavigateToRecordTrip -> {
                 startActivity(newIntent(this, event.tripId, RecordTripType.RECORD))
                 finish()
             }
+
             is RecordTripEvent.NavigateToQuestionnaire -> {
                 startActivity(QuestionnaireActivity.newIntent(this, event.tripId, QuestionnaireType.POST_TRIP_PANAS))
                 finish()
@@ -125,7 +143,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 RecordTripType.TEST -> R.string.test_trip
                 RecordTripType.CALIBRATE -> R.string.calibrating_trip
                 RecordTripType.RECORD -> R.string.recording_trip_data
-            }
+            },
         )
 
         viewBinding.stopTripButton.setText(
@@ -133,7 +151,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 RecordTripType.TEST -> R.string._continue
                 RecordTripType.CALIBRATE -> R.string.skip_calibration
                 RecordTripType.RECORD -> R.string.stop_recording
-            }
+            },
         )
 
         viewBinding.stopTripButton.setThrottleClickListener { viewModel.onStopAction() }
@@ -162,27 +180,24 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         if (locations.size > 1) {
             val first = locations[locations.lastIndex - 1]
             val second = locations.last()
-            map.addPolyline(
-                PolylineOptions()
-                    .add(
-                        LatLng(first.latitude, first.longitude),
-                        LatLng(second.latitude, second.longitude)
-                    )
-                    .width(8f)
-                    .color(ContextCompat.getColor(this, R.color.green))
+            polylinePoints.add(
+                LatLng(first.latitude, first.longitude),
+                LatLng(second.latitude, second.longitude),
             )
+            currentPolyLine?.remove()
+            currentPolyLine = map.addPolyline(polylinePoints)
             map.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(second.latitude, second.longitude),
-                    MAP_ZOOM_LEVEL
-                )
+                    MAP_ZOOM_LEVEL,
+                ),
             )
         } else if (locations.size == 1) {
             map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(locations.first().latitude, locations.first().longitude),
-                    MAP_ZOOM_LEVEL
-                )
+                    MAP_ZOOM_LEVEL,
+                ),
             )
         }
     }
@@ -215,7 +230,9 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         }
     }
 
-    private fun LineChart.initData(@StringRes title: Int) {
+    private fun LineChart.initData(
+        @StringRes title: Int,
+    ) {
         val x = SimpleLineDataSet(dataLabel = getString(X_LABEL), lineColor = Color.RED)
         val y = SimpleLineDataSet(dataLabel = getString(Y_LABEL), lineColor = Color.GREEN)
         val z = SimpleLineDataSet(dataLabel = getString(Z_LABEL), lineColor = Color.BLUE)
@@ -230,10 +247,10 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         x.values = newData.xAxis
         y.values = newData.yAxis
         z.values = newData.zAxis
-        x.notifyDataSetChanged()
-        y.notifyDataSetChanged()
-        z.notifyDataSetChanged()
-        data.notifyDataChanged()
+//        x.notifyDataSetChanged()
+//        y.notifyDataSetChanged()
+//        z.notifyDataSetChanged()
+//        data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
@@ -247,11 +264,11 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         y.values = newData.yAxis
         z.values = newData.zAxis
         scalar.values = newData.scalar
-        x.notifyDataSetChanged()
-        y.notifyDataSetChanged()
-        z.notifyDataSetChanged()
-        scalar.notifyDataSetChanged()
-        data.notifyDataChanged()
+//        x.notifyDataSetChanged()
+//        y.notifyDataSetChanged()
+//        z.notifyDataSetChanged()
+//        scalar.notifyDataSetChanged()
+//        data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
@@ -259,8 +276,8 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     private fun LineChart.setData(newData: HeartRateGraphData) {
         val x: LineDataSet = data.getDataSetByIndex(HEART_RATE_INDEX) as LineDataSet
         x.values = newData.heartRate
-        x.notifyDataSetChanged()
-        data.notifyDataChanged()
+//        x.notifyDataSetChanged()
+//        data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
@@ -268,8 +285,8 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     private fun LineChart.setData(newData: EcgGraphData) {
         val x: LineDataSet = data.getDataSetByIndex(ECG_INDEX) as LineDataSet
         x.values = newData.ecg
-        x.notifyDataSetChanged()
-        data.notifyDataChanged()
+//        x.notifyDataSetChanged()
+//        data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
@@ -280,7 +297,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
             message = R.string.stop_recording_trip_message,
             positiveButtonText = R.string.stop_recording,
             negativeButtonText = R.string.cancel,
-            positiveButtonListener = { viewModel.onStopAction() }
+            positiveButtonListener = { viewModel.onStopAction() },
         )
     }
 }

@@ -13,94 +13,100 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
-class SetupTripViewModel @Inject constructor(
-    private val turnOnLocationUseCase: TurnOnLocationUseCase,
-    private val isBluetoothTurnedOnUseCase: IsBluetoothTurnedOnUseCase,
-    private val searchForHeartRateDevicesUseCase: SearchForHeartRateDevicesUseCase,
-    private val connectToHeartRateDeviceUseCase: ConnectToHeartRateDeviceUseCase,
-    private val disconnectFromHeartRateDeviceUseCase: DisconnectFromHeartRateDeviceUseCase,
-    private val observeConnectedHeartRateDeviceUseCase: ObserveConnectedHeartRateDeviceUseCase,
-    private val savedStateHandle: SavedStateHandle
-) : BaseViewModel<SetupTripState, SetupTripEvent>(SetupTripState()) {
+class SetupTripViewModel
+    @Inject
+    constructor(
+        private val turnOnLocationUseCase: TurnOnLocationUseCase,
+        private val isBluetoothTurnedOnUseCase: IsBluetoothTurnedOnUseCase,
+        private val searchForHeartRateDevicesUseCase: SearchForHeartRateDevicesUseCase,
+        private val connectToHeartRateDeviceUseCase: ConnectToHeartRateDeviceUseCase,
+        private val disconnectFromHeartRateDeviceUseCase: DisconnectFromHeartRateDeviceUseCase,
+        private val observeConnectedHeartRateDeviceUseCase: ObserveConnectedHeartRateDeviceUseCase,
+        private val savedStateHandle: SavedStateHandle,
+    ) : BaseViewModel<SetupTripState, SetupTripEvent>(SetupTripState()) {
+        private var tripId: Long = -1
 
-    private var tripId: Long = -1
+        private var searchJob: Job? = null
 
-    private var searchJob: Job? = null
+        fun init(tripId: Long) {
+            this.tripId = tripId
+            turnOnLocation()
 
-    fun init(tripId: Long) {
-        this.tripId = tripId
-        turnOnLocation()
-
-        launch {
-            observeConnectedHeartRateDeviceUseCase()
-                .collect { heartRateDevice ->
-                    hideLoading()
-                    viewState = viewState.copy(
-                        connectedHeartRateDevice = heartRateDevice,
-                        heartRateDevices = viewState.heartRateDevices - heartRateDevice
-                    )
-                }
+            launch {
+                observeConnectedHeartRateDeviceUseCase()
+                    .collect { heartRateDevice ->
+                        hideLoading()
+                        viewState =
+                            viewState.copy(
+                                connectedHeartRateDevice = heartRateDevice,
+                                heartRateDevices = viewState.heartRateDevices - heartRateDevice,
+                            )
+                    }
+            }
         }
-    }
 
-    fun onBluetoothEnabledResult() {
-        turnOnLocation()
-    }
-
-    fun onGpsEnabledResult(isGpsEnabled: Boolean) {
-        if (isGpsEnabled) {
-            onLocationStatusObtained(isGpsEnabled)
-        } else {
+        fun onBluetoothEnabledResult() {
             turnOnLocation()
         }
-    }
 
-    fun turnOnLocation() {
-        launch {
-            val isGpsEnabled = turnOnLocationUseCase()
-            isGpsEnabled.second?.let { request ->
-                emitEvent(SetupTripEvent.TurnOnGps(request))
+        fun onGpsEnabledResult(isGpsEnabled: Boolean) {
+            if (isGpsEnabled) {
+                onLocationStatusObtained(isGpsEnabled)
+            } else {
+                turnOnLocation()
             }
-            onLocationStatusObtained(isGpsEnabled.first)
         }
-    }
 
-    private fun onLocationStatusObtained(isGpsEnabled: Boolean) {
-        launch {
-            val isBluetoothEnabled = isBluetoothTurnedOnUseCase()
-            viewState = viewState.copy(
-                gpsTurnedOn = isGpsEnabled,
-                bluetoothTurnedOn = isBluetoothEnabled,
-                searchForDevicesEnabled = isGpsEnabled && isBluetoothEnabled
-            )
+        fun turnOnLocation() {
+            launch {
+                val isGpsEnabled = turnOnLocationUseCase()
+                isGpsEnabled.second?.let { request ->
+                    emitEvent(SetupTripEvent.TurnOnGps(request))
+                }
+                onLocationStatusObtained(isGpsEnabled.first)
+            }
         }
-    }
 
-    fun searchForDevices() {
-        searchJob?.cancel()
-        viewState = viewState.copy(
-            heartRateDevices = emptySet(),
-            isSearchingForHrDevices = true
-        )
-        searchJob = launch {
-            searchForHeartRateDevicesUseCase().collect { newHeartRateDevice ->
-                viewState = viewState.copy(
-                    heartRateDevices = (viewState.heartRateDevices + newHeartRateDevice).toSet(),
-                    isSearchingForHrDevices = false
+        private fun onLocationStatusObtained(isGpsEnabled: Boolean) {
+            launch {
+                val isBluetoothEnabled = isBluetoothTurnedOnUseCase()
+                viewState =
+                    viewState.copy(
+                        gpsTurnedOn = isGpsEnabled,
+                        bluetoothTurnedOn = isBluetoothEnabled,
+                        searchForDevicesEnabled = isGpsEnabled && isBluetoothEnabled,
+                    )
+            }
+        }
+
+        fun searchForDevices() {
+            searchJob?.cancel()
+            viewState =
+                viewState.copy(
+                    heartRateDevices = emptySet(),
+                    isSearchingForHrDevices = true,
                 )
+            searchJob =
+                launch {
+                    searchForHeartRateDevicesUseCase().collect { newHeartRateDevice ->
+                        viewState =
+                            viewState.copy(
+                                heartRateDevices = (viewState.heartRateDevices + newHeartRateDevice).toSet(),
+                                isSearchingForHrDevices = false,
+                            )
+                    }
+                }
+        }
+
+        fun onSubmitClicked() {
+            emitEvent(SetupTripEvent.NavigateToCalibrateTrip(tripId))
+        }
+
+        fun connectToHrDevice(deviceId: String) {
+            launchWithBlockingLoading {
+                viewState.connectedHeartRateDevice?.let { disconnectFromHeartRateDeviceUseCase(it.deviceId) }
+                showLoading()
+                connectToHeartRateDeviceUseCase(deviceId)
             }
         }
     }
-
-    fun onSubmitClicked() {
-        emitEvent(SetupTripEvent.NavigateToCalibrateTrip(tripId))
-    }
-
-    fun connectToHrDevice(deviceId: String) {
-        launchWithBlockingLoading {
-            viewState.connectedHeartRateDevice?.let { disconnectFromHeartRateDeviceUseCase(it.deviceId) }
-            showLoading()
-            connectToHeartRateDeviceUseCase(deviceId)
-        }
-    }
-}

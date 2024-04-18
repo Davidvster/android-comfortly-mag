@@ -6,17 +6,18 @@ private typealias DbQuestionnaireWithQuestions = com.dv.comfortly.data.raw.db.en
 private typealias DbQuestionnaire = com.dv.comfortly.data.raw.db.entity.Questionnaire
 
 object QuestionnaireMapper {
+    fun dbToDomain(data: DbQuestionnaireWithQuestions): Questionnaire =
+        Questionnaire(
+            id = data.id,
+            tripId = data.tripId,
+            questionnaireType = QuestionnaireTypeMapper.dbToDomain(data.questionnaireType),
+            questionsWithAnswers = data.questionsWithAnswers.map { QuestionAnswerMapper.dbToDomain(it) },
+        )
 
-    fun dbToDomain(data: DbQuestionnaireWithQuestions): Questionnaire = Questionnaire(
-        id = data.id,
-        tripId = data.tripId,
-        questionnaireType = QuestionnaireTypeMapper.dbToDomain(data.questionnaireType),
-        questionsWithAnswers = data.questionsWithAnswers.map { QuestionAnswerMapper.dbToDomain(it) }
-    )
-
-    fun domainToDb(data: Questionnaire): DbQuestionnaire = DbQuestionnaire(
-        id = data.id,
-        tripId = data.tripId,
-        questionnaireType = QuestionnaireTypeMapper.domainToDb(data.questionnaireType)
-    )
+    fun domainToDb(data: Questionnaire): DbQuestionnaire =
+        DbQuestionnaire(
+            id = data.id,
+            tripId = data.tripId,
+            questionnaireType = QuestionnaireTypeMapper.domainToDb(data.questionnaireType),
+        )
 }

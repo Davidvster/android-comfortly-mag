@@ -5,5 +5,5 @@ data class SensorData(
     val gravityData: GravityData,
     val gyroscopeData: GyroscopeData,
     val linearAccelerometerData: LinearAccelerometerData,
-    val rotationVectorData: RotationVectorData
+    val rotationVectorData: RotationVectorData,
 )

@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 abstract class BaseActivity<State : Any, Event : Any> : AppCompatActivity() {
-
     abstract val viewModel: BaseViewModel<State, Event>?
 
     open val viewBinding: ViewBinding? = null
@@ -85,7 +84,11 @@ abstract class BaseActivity<State : Any, Event : Any> : AppCompatActivity() {
         loadingDialog.dismiss()
     }
 
-    fun setToolbar(toolbar: Toolbar?, @StringRes title: Int? = null, titleText: String? = null) {
+    fun setToolbar(
+        toolbar: Toolbar?,
+        @StringRes title: Int? = null,
+        titleText: String? = null,
+    ) {
         toolbar?.let {
             setSupportActionBar(toolbar)
             title?.let {

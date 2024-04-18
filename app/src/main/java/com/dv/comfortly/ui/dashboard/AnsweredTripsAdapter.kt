@@ -18,12 +18,20 @@ import java.util.Locale
 
 class AnsweredTripsAdapter(
     private val onItemClickListener: (tripId: Long) -> Unit,
-    private val onItemLongPressListener: (trip: TripSummary) -> Unit
-) : ListAdapter<TripSummary, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<TripSummary>() {
-    override fun areItemsTheSame(oldItem: TripSummary, newItem: TripSummary): Boolean = oldItem.id == newItem.id
-    override fun areContentsTheSame(oldItem: TripSummary, newItem: TripSummary): Boolean = oldItem == newItem
-}) {
+    private val onItemLongPressListener: (trip: TripSummary) -> Unit,
+) : ListAdapter<TripSummary, RecyclerView.ViewHolder>(
+        object : DiffUtil.ItemCallback<TripSummary>() {
+            override fun areItemsTheSame(
+                oldItem: TripSummary,
+                newItem: TripSummary,
+            ): Boolean = oldItem.id == newItem.id
 
+            override fun areContentsTheSame(
+                oldItem: TripSummary,
+                newItem: TripSummary,
+            ): Boolean = oldItem == newItem
+        },
+    ) {
     companion object {
         private const val TRIP_DATE_FORMAT = "HH:mm\ndd.MM.yyyy"
     }
@@ -32,36 +40,39 @@ class AnsweredTripsAdapter(
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): RecyclerView.ViewHolder = AnsweredAdapterItemView(ItemTripBinding.inflate(parent.context.layoutInflater, parent, false))
 
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
-        position: Int
+        position: Int,
     ) {
         (holder as AnsweredAdapterItemView).bind(getItem(position))
     }
 
     private inner class AnsweredAdapterItemView(private val binding: ItemTripBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(trip: TripSummary) = with(binding) {
-            val value = TypedValue()
-            root.context.theme.resolveAttribute(R.attr.colorItemBackground, value, true)
-            root.setCardBackgroundColor(value.data)
-            tripName.text = trip.name
-            tripId.text = trip.id.toString()
-            fromTime.text = trip.startTime?.let { startTime ->
-                tripDateFormat.format(startTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
+        fun bind(trip: TripSummary) =
+            with(binding) {
+                val value = TypedValue()
+                root.context.theme.resolveAttribute(R.attr.colorItemBackground, value, true)
+                root.setCardBackgroundColor(value.data)
+                tripName.text = trip.name
+                tripId.text = trip.id.toString()
+                fromTime.text =
+                    trip.startTime?.let { startTime ->
+                        tripDateFormat.format(startTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
+                    }
+                toTime.text =
+                    trip.endTime?.let { endTime ->
+                        tripDateFormat.format(endTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
+                    }
+                root.setThrottleClickListener {
+                    onItemClickListener(trip.id)
+                }
+                root.setOnLongClickListener {
+                    onItemLongPressListener(trip)
+                    true
+                }
             }
-            toTime.text = trip.endTime?.let { endTime ->
-                tripDateFormat.format(endTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
-            }
-            root.setThrottleClickListener {
-                onItemClickListener(trip.id)
-            }
-            root.setOnLongClickListener {
-                onItemLongPressListener(trip)
-                true
-            }
-        }
     }
 }

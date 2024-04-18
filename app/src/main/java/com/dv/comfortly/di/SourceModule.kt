@@ -23,30 +23,36 @@ import javax.inject.Singleton
 @Module(includes = [SourceModule.Sources::class])
 @InstallIn(SingletonComponent::class)
 class SourceModule {
+    @Provides
+    @Singleton
+    fun provideBluetoothSource(
+        @ApplicationContext context: Context,
+    ): BluetoothSource = BluetoothSource.Default(context)
 
     @Provides
     @Singleton
-    fun provideBluetoothSource(@ApplicationContext context: Context): BluetoothSource = BluetoothSource.Default(context)
+    fun provideSensorManager(
+        @ApplicationContext context: Context,
+    ): SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
     @Provides
     @Singleton
-    fun provideSensorManager(@ApplicationContext context: Context): SensorManager =
-        context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    fun provideHearRateSource(
+        @ApplicationContext context: Context,
+    ): HeartRateSource = HeartRateSource.Default(context)
 
     @Provides
     @Singleton
-    fun provideHearRateSource(@ApplicationContext context: Context): HeartRateSource =
-        HeartRateSource.Default(context)
+    fun provideGpsSource(
+        @ApplicationContext context: Context,
+    ): GpsSource = GpsSource.Default(context)
 
     @Provides
     @Singleton
-    fun provideGpsSource(@ApplicationContext context: Context): GpsSource =
-        GpsSource.Default(context)
-
-    @Provides
-    @Singleton
-    fun provideGpsObserver(@ApplicationContext context: Context, gpsSource: GpsSource): GpsObserver =
-        GpsObserver.Default(context, gpsSource)
+    fun provideGpsObserver(
+        @ApplicationContext context: Context,
+        gpsSource: GpsSource,
+    ): GpsObserver = GpsObserver.Default(context, gpsSource)
 
     @Module
     @InstallIn(SingletonComponent::class)

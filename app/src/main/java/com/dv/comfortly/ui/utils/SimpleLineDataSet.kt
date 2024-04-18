@@ -6,7 +6,7 @@ import com.github.mikephil.charting.data.LineDataSet
 class SimpleLineDataSet(
     entries: List<Entry> = emptyList(),
     dataLabel: String,
-    lineColor: Int
+    lineColor: Int,
 ) : LineDataSet(entries, dataLabel) {
     init {
         setDrawCircles(false)

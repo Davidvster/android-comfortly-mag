@@ -8,10 +8,12 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 
 object InstantSerializer : KSerializer<Instant> {
-
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("KotlinInstant", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: kotlinx.serialization.encoding.Encoder, value: Instant) {
+    override fun serialize(
+        encoder: kotlinx.serialization.encoding.Encoder,
+        value: Instant,
+    ) {
         encoder.encodeString(value.toString())
     }
 

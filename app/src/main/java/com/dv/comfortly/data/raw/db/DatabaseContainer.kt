@@ -18,7 +18,7 @@ import com.dv.comfortly.data.raw.db.repository.TripEcgDataRepository
 import com.dv.comfortly.data.raw.db.repository.TripRepository
 
 class DatabaseContainer(
-    private val context: Context
+    private val context: Context,
 ) {
     companion object {
         private const val DATABASE_NAME = "app_db"

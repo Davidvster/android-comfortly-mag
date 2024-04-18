@@ -8,5 +8,5 @@ data class LocationData(
     val bearing: Float,
     val bearingAccuracyDegrees: Float,
     val speed: Float,
-    val speedAccuracyMetersPerSecond: Float
+    val speedAccuracyMetersPerSecond: Float,
 )

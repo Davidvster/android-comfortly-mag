@@ -9,6 +9,7 @@ fun LineChart.configureForApp(label: String? = null) {
         description = Description().apply { text = label }
     }
     xAxis.setDrawLabels(false)
+    xAxis.granularity = 1.0f
     setBackgroundColor(Color.WHITE)
     zoom(5f, 1f, 0f, 0f)
     isAutoScaleMinMaxEnabled = true

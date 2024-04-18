@@ -1,7 +1,6 @@
 package com.dv.comfortly.domain.usecases
 
 interface BaseUseCase {
-
     interface Input<Input> : BaseUseCase {
         suspend operator fun invoke(input: Input)
     }

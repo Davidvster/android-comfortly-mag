@@ -4,5 +4,5 @@ import com.dv.comfortly.ui.trip.recordtrip.RecordTripType
 
 data class RecordSensorDataParams(
     val tripId: Long,
-    val recordTripType: RecordTripType
+    val recordTripType: RecordTripType,
 )

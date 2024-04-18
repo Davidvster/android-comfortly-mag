@@ -7,5 +7,5 @@ enum class EmotionLevel(private val text: String) {
     ANGRY("ANGRY"),
     SAD("SAD"),
     FRIGHTENED("FRIGHTENED"),
-    UNKNOWN("UNKNOWN")
+    UNKNOWN("UNKNOWN"),
 }

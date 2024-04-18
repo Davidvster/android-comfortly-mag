@@ -7,7 +7,13 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 
 class EnableBluetoothResultContract : ActivityResultContract<Unit, Boolean>() {
-    override fun createIntent(context: Context, input: Unit): Intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+    override fun createIntent(
+        context: Context,
+        input: Unit,
+    ): Intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Boolean = resultCode == RESULT_OK
+    override fun parseResult(
+        resultCode: Int,
+        intent: Intent?,
+    ): Boolean = resultCode == RESULT_OK
 }

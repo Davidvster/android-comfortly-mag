@@ -17,9 +17,9 @@ import kotlinx.datetime.Instant
             parentColumns = ["id"],
             childColumns = ["trip_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @TypeConverters(InstantTypeAdapter::class)
 data class TripDatapoint(
@@ -56,11 +56,11 @@ data class GpsData(
     @ColumnInfo(name = "bearing") val bearing: Float,
     @ColumnInfo(name = "bearingAccuracyDegrees") val bearingAccuracyDegrees: Float,
     @ColumnInfo(name = "speed") val speed: Float,
-    @ColumnInfo(name = "speedAccuracyMetersPerSecond") val speedAccuracyMetersPerSecond: Float
+    @ColumnInfo(name = "speedAccuracyMetersPerSecond") val speedAccuracyMetersPerSecond: Float,
 )
 
 data class HeartRateData(
-    @ColumnInfo(name = "heart_rate") val heartRate: Int
+    @ColumnInfo(name = "heart_rate") val heartRate: Int,
 )
 
 @Entity(
@@ -71,14 +71,14 @@ data class HeartRateData(
             parentColumns = ["id"],
             childColumns = ["trip_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @TypeConverters(InstantTypeAdapter::class)
 data class TripEcgSample(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "trip_id") val tripId: Long,
     @ColumnInfo(name = "timestamp") val timestamp: Instant,
-    @ColumnInfo(name = "ecg_value_mv") val ecgValue: Int
+    @ColumnInfo(name = "ecg_value_mv") val ecgValue: Int,
 )

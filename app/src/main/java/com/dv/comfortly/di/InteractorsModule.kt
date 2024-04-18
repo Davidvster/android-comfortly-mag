@@ -16,7 +16,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface InteractorsModule {
-
     @Binds
     @Singleton
     fun provideSearchHrDevicesInteractor(searchHrDevicesInteractor: SearchHrDevicesInteractor.Default): SearchHrDevicesInteractor
@@ -24,7 +23,7 @@ interface InteractorsModule {
     @Binds
     @Singleton
     fun provideObserveHrDeviceConnectedInteractor(
-        observeHrDeviceConnectedInteractor: ObserveHrDeviceConnectedInteractor.Default
+        observeHrDeviceConnectedInteractor: ObserveHrDeviceConnectedInteractor.Default,
     ): ObserveHrDeviceConnectedInteractor
 
     @Binds

@@ -16,20 +16,25 @@ private const val DEFAULT_SENSOR_SAMPLING_INTERVAL_US = 20_000
 fun observeSensor(
     sensorManager: SensorManager,
     sensor: Sensor?,
-    sensorName: String
-): Flow<SensorEvent> = callbackFlow {
-    sensor?.let {
-        val sensorEventListener = object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent) {
-                this@callbackFlow.trySend(event)
+    sensorName: String,
+): Flow<SensorEvent> =
+    callbackFlow {
+        sensor?.let {
+            val sensorEventListener =
+                object : SensorEventListener {
+                    override fun onSensorChanged(event: SensorEvent) {
+                        this@callbackFlow.trySend(event)
+                    }
+
+                    override fun onAccuracyChanged(
+                        sensor: Sensor?,
+                        accuracy: Int,
+                    ) = Unit
+                }
+
+            sensorManager.registerListener(sensorEventListener, it, DEFAULT_SENSOR_SAMPLING_INTERVAL_US)
+            awaitClose {
+                sensorManager.unregisterListener(sensorEventListener)
             }
-
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
-        }
-
-        sensorManager.registerListener(sensorEventListener, it, DEFAULT_SENSOR_SAMPLING_INTERVAL_US)
-        awaitClose {
-            sensorManager.unregisterListener(sensorEventListener)
-        }
-    } ?: throw SensorNotFoundError(sensorName)
-}
+        } ?: throw SensorNotFoundError(sensorName)
+    }

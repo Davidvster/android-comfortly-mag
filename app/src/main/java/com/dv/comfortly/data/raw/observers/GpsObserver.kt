@@ -22,71 +22,73 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 interface GpsObserver : BaseObserver<LocationData> {
-
     companion object {
         val LOCATION_REQUEST_INTERVAL = 0.5.seconds
     }
 
-    class Default @Inject constructor(
-        @ApplicationContext private val context: Context,
-        private val gpsSource: GpsSource,
-    ) : GpsObserver {
+    class Default
+        @Inject
+        constructor(
+            @ApplicationContext private val context: Context,
+            private val gpsSource: GpsSource,
+        ) : GpsObserver {
+            override fun observe(): Flow<LocationData> =
+                callbackFlow {
+                    if (ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        throw NoLocationPermissionError()
+                    }
 
-        override fun observe(): Flow<LocationData> = callbackFlow {
+                    val locationClient = gpsSource.locationClient
+                    val locationSettingsClient = gpsSource.locationSettingsClient
 
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                throw NoLocationPermissionError()
-            }
+                    val locationRequest =
+                        LocationRequest.create()
+                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(LOCATION_REQUEST_INTERVAL.inWholeMilliseconds)
 
-            val locationClient = gpsSource.locationClient
-            val locationSettingsClient = gpsSource.locationSettingsClient
+                    val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+                    val task = locationSettingsClient.checkLocationSettings(builder.build())
 
-            val locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(LOCATION_REQUEST_INTERVAL.inWholeMilliseconds)
+                    val locationCallback =
+                        object : LocationCallback() {
+                            override fun onLocationResult(locationResult: LocationResult) {
+                                super.onLocationResult(locationResult)
+                                Timber.d("Got location data $locationResult")
+                                locationResult.lastLocation?.let { location ->
+                                    this@callbackFlow.trySend(
+                                        LocationData(
+                                            location.latitude,
+                                            location.longitude,
+                                            location.altitude,
+                                            location.accuracy,
+                                            location.bearing,
+                                            location.bearingAccuracyDegrees,
+                                            location.speed,
+                                            location.speedAccuracyMetersPerSecond,
+                                        ),
+                                    )
+                                }
+                            }
+                        }
 
-            val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-            val task = locationSettingsClient.checkLocationSettings(builder.build())
+                    task.addOnSuccessListener {
+                        locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+                    }
 
-            val locationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    super.onLocationResult(locationResult)
-                    Timber.d("Got location data $locationResult")
-                    locationResult.lastLocation?.let { location ->
-                        this@callbackFlow.trySend(
-                            LocationData(
-                                location.latitude,
-                                location.longitude,
-                                location.altitude,
-                                location.accuracy,
-                                location.bearing,
-                                location.bearingAccuracyDegrees,
-                                location.speed,
-                                location.speedAccuracyMetersPerSecond,
-                            )
-                        )
+                    task.addOnFailureListener {
+                        throw GpsTurnedOffError()
+                    }
+
+                    awaitClose {
+                        locationClient.removeLocationUpdates(locationCallback)
                     }
                 }
-            }
-
-            task.addOnSuccessListener {
-                locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-            }
-
-            task.addOnFailureListener {
-                throw GpsTurnedOffError()
-            }
-
-            awaitClose {
-                locationClient.removeLocationUpdates(locationCallback)
-            }
         }
-    }
 }

@@ -8,24 +8,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GpsRepository @Inject constructor(
-    private val gpsObserver: GpsObserver,
-    private val turnOnGpsInteractor: TurnOnGpsInteractor
-) : SensorRepository.GpsRepository {
+class GpsRepository
+    @Inject
+    constructor(
+        private val gpsObserver: GpsObserver,
+        private val turnOnGpsInteractor: TurnOnGpsInteractor,
+    ) : SensorRepository.GpsRepository {
+        override fun observeData(): Flow<GpsData> =
+            gpsObserver.observe().map { locationData ->
+                GpsData(
+                    latitude = locationData.latitude,
+                    longitude = locationData.longitude,
+                    altitude = locationData.altitude,
+                    accuracy = locationData.accuracy,
+                    bearing = locationData.bearing,
+                    bearingAccuracyDegrees = locationData.bearingAccuracyDegrees,
+                    speed = locationData.speed,
+                    speedAccuracyMetersPerSecond = locationData.speedAccuracyMetersPerSecond,
+                )
+            }
 
-    override fun observeData(): Flow<GpsData> =
-        gpsObserver.observe().map { locationData ->
-            GpsData(
-                latitude = locationData.latitude,
-                longitude = locationData.longitude,
-                altitude = locationData.altitude,
-                accuracy = locationData.accuracy,
-                bearing = locationData.bearing,
-                bearingAccuracyDegrees = locationData.bearingAccuracyDegrees,
-                speed = locationData.speed,
-                speedAccuracyMetersPerSecond = locationData.speedAccuracyMetersPerSecond
-            )
-        }
-
-    override suspend fun turnOnGps(): Pair<Boolean, IntentSenderRequest?> = turnOnGpsInteractor.turnOnGps()
-}
+        override suspend fun turnOnGps(): Pair<Boolean, IntentSenderRequest?> = turnOnGpsInteractor.turnOnGps()
+    }

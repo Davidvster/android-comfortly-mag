@@ -5,11 +5,11 @@ import com.dv.comfortly.domain.models.TripSummary
 import javax.inject.Inject
 
 interface LoadTripsUseCase : BaseUseCase.Output<List<TripSummary>> {
-
-    class Default @Inject constructor(
-        private val tripRepository: TripRepository
-    ) : LoadTripsUseCase {
-
-        override suspend operator fun invoke(): List<TripSummary> = tripRepository.loadAllTrips()
-    }
+    class Default
+        @Inject
+        constructor(
+            private val tripRepository: TripRepository,
+        ) : LoadTripsUseCase {
+            override suspend operator fun invoke(): List<TripSummary> = tripRepository.loadAllTrips()
+        }
 }

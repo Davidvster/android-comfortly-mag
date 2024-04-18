@@ -42,19 +42,17 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), OnMapReadyCallback {
-
     companion object {
-
         private const val ARG_TRIP_ID = "ARG_TRIP_ID"
 
         private const val TRIP_DATE_FORMAT = "HH:mm - dd.MM.yyyy"
 
-        private const val HEART_RATE_LABEL = R.string.heart_rate
-        private const val ECG_LABEL = R.string.ecg
-        private const val X_LABEL = R.string.x_axis
-        private const val Y_LABEL = R.string.y_axis
-        private const val Z_LABEL = R.string.z_axis
-        private const val SCALAR_LABEL = R.string.scalar
+        private val HEART_RATE_LABEL = R.string.heart_rate
+        private val ECG_LABEL = R.string.ecg
+        private val X_LABEL = R.string.x_axis
+        private val Y_LABEL = R.string.y_axis
+        private val Z_LABEL = R.string.z_axis
+        private val SCALAR_LABEL = R.string.scalar
 
         private const val HEART_RATE_INDEX = 0
         private const val ECG_INDEX = 0
@@ -67,7 +65,10 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
 
         private const val MAP_ZOOM_LEVEL = 10f
 
-        fun newIntent(context: Context, tripId: Long) = Intent(context, TripDetailsActivity::class.java).apply {
+        fun newIntent(
+            context: Context,
+            tripId: Long,
+        ) = Intent(context, TripDetailsActivity::class.java).apply {
             putExtra(ARG_TRIP_ID, tripId)
         }
     }
@@ -81,22 +82,33 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
 
     private val tripDateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern(TRIP_DATE_FORMAT, Locale.getDefault())
 
-    private val exportTripDataUriRequest = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        activityResult.data?.data?.let { uri ->
-            runCatching { contentResolver.openOutputStream(uri) }.getOrNull()?.let {
-                viewModel.onZipOutputAcquired(uri.toString(), it)
+    private val exportTripDataUriRequest =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+            activityResult.data?.data?.let { uri ->
+                runCatching { contentResolver.openOutputStream(uri) }.getOrNull()?.let {
+                    viewModel.onZipOutputAcquired(uri.toString(), it)
+                }
             }
         }
-    }
 
     override fun renderState(state: TripDetailsState) {
         vmState = state
         with(viewBinding) {
-            state.tripId?.let { setToolbar(toolbar = toolbar, titleText = getString(R.string.trip_id, it, state.tripName.orEmpty())) }
+            state.tripId?.let {
+                setToolbar(
+                    toolbar = toolbar,
+                    titleText = getString(R.string.trip_id, it, state.tripName.orEmpty()),
+                )
+            }
             if (state.startTime != null && state.endTime != null) {
                 val startTime =
-                    tripDateFormat.format(state.startTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
-                val endTime = tripDateFormat.format(state.endTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime())
+                    tripDateFormat.format(
+                        state.startTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime(),
+                    )
+                val endTime =
+                    tripDateFormat.format(
+                        state.endTime.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime(),
+                    )
                 val duration = (state.endTime.minus(state.startTime)).toIsoString().substring(2)
                 tripDate.text = getString(R.string.from_to_time_minutes, startTime, endTime, duration)
             }
@@ -141,19 +153,20 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
 
     private fun setMapData(locations: List<GpsData>) {
         if (locations.size > 1) {
-            locations.forEachIndexed { index, gpsData ->
-                if (index != locations.lastIndex) {
-                    map.addPolyline(
-                        PolylineOptions()
-                            .add(
-                                LatLng(gpsData.latitude, gpsData.longitude),
-                                LatLng(locations[index + 1].latitude, locations[index + 1].longitude)
-                            )
-                            .width(8f)
-                            .color(ContextCompat.getColor(this, R.color.green))
-                    )
+            val polylines =
+                buildList {
+                    locations.forEachIndexed { index, gpsData ->
+                        if (index != locations.lastIndex) {
+                            add(LatLng(gpsData.latitude, gpsData.longitude))
+                            add(LatLng(locations[index + 1].latitude, locations[index + 1].longitude))
+                        }
+                    }
                 }
-            }
+            map.addPolyline(
+                PolylineOptions()
+                    .add(*polylines.toTypedArray()).width(8f)
+                    .color(ContextCompat.getColor(this, R.color.green)),
+            )
             val start = LatLng(locations.first().latitude, locations.first().longitude)
             val end = LatLng(locations.last().latitude, locations.last().longitude)
             map.addMarker(MarkerOptions().position(start).title(getString(R.string.start)))
@@ -164,8 +177,8 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
             map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(locations.first().latitude, locations.first().longitude),
-                    MAP_ZOOM_LEVEL
-                )
+                    MAP_ZOOM_LEVEL,
+                ),
             )
         }
     }
@@ -174,20 +187,24 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
         ChartTab.values().forEach {
             chartTabs.addTab(chartTabs.newTab().setText(it.stringRes))
         }
-        chartTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val chartTab = ChartTab.values().first { getString(it.stringRes).equals(tab?.text.toString(), true) }
-                vmState?.let { setGraph(chartTab, it) }
-            }
+        chartTabs.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    val chartTab = ChartTab.values().first { getString(it.stringRes).equals(tab?.text.toString(), true) }
+                    vmState?.let { setGraph(chartTab, it) }
+                }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+                override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
 
-            override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-        })
+                override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+            },
+        )
         chart.configureForApp(null)
     }
 
-    private fun LineChart.initData(@StringRes title: Int) {
+    private fun LineChart.initData(
+        @StringRes title: Int,
+    ) {
         val x = SimpleLineDataSet(dataLabel = getString(X_LABEL), lineColor = Color.RED)
         val y = SimpleLineDataSet(dataLabel = getString(Y_LABEL), lineColor = Color.GREEN)
         val z = SimpleLineDataSet(dataLabel = getString(Z_LABEL), lineColor = Color.BLUE)
@@ -195,7 +212,10 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
         data = LineData(x, y, z)
     }
 
-    private fun setGraph(chartTab: ChartTab, state: TripDetailsState) = with(viewBinding) {
+    private fun setGraph(
+        chartTab: ChartTab,
+        state: TripDetailsState,
+    ) = with(viewBinding) {
         when (chartTab) {
             ChartTab.HEART_RATE -> {
                 chart.apply {
@@ -205,6 +225,7 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
                     state.heartRate?.let { setData(it) }
                 }
             }
+
             ChartTab.ECG -> {
                 chart.apply {
                     val x = SimpleLineDataSet(dataLabel = getString(ECG_LABEL), lineColor = Color.RED)
@@ -213,22 +234,27 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
                     state.ecg?.let { setData(it) }
                 }
             }
+
             ChartTab.ACCELEROMETER -> {
                 chart.initData(R.string.accelerometer)
                 state.accelerometer?.let { chart.setData(it) }
             }
+
             ChartTab.GRAVITY -> {
                 chart.initData(R.string.gravity)
                 state.gravity?.let { chart.setData(it) }
             }
+
             ChartTab.GYROSCOPE -> {
                 chart.initData(R.string.gyroscope)
                 state.gyroscope?.let { chart.setData(it) }
             }
+
             ChartTab.LINEAR_ACCELERATION -> {
                 chart.initData(R.string.linear_acceleration)
                 state.linearAcceleration?.let { chart.setData(it) }
             }
+
             ChartTab.ROTATION_VECTOR -> {
                 chart.apply {
                     val x = SimpleLineDataSet(dataLabel = getString(X_LABEL), lineColor = Color.RED)
@@ -294,7 +320,9 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
         invalidate()
     }
 
-    private enum class ChartTab(@StringRes val stringRes: Int) {
+    private enum class ChartTab(
+        @StringRes val stringRes: Int,
+    ) {
         HEART_RATE(R.string.heart_rate),
         ECG(R.string.ecg),
         ACCELEROMETER(R.string.accelerometer),
@@ -305,12 +333,13 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
     }
 
     private fun exportTripDataZipCreateDocument(name: String) {
-        val createZip = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = ALL_MIME_TYPE
-            putExtra(Intent.EXTRA_TITLE, name)
-        }
+        val createZip =
+            Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = ALL_MIME_TYPE
+                putExtra(Intent.EXTRA_TITLE, name)
+            }
         exportTripDataUriRequest.launch(createZip)
     }
 
@@ -321,8 +350,8 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     data = uri.toUri()
                 },
-                null
-            )
+                null,
+            ),
         )
     }
 }

@@ -8,19 +8,19 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 interface GpsSource {
-
     val locationClient: FusedLocationProviderClient
 
     val locationSettingsClient: SettingsClient
 
-    class Default @Inject constructor(
-        @ApplicationContext private val context: Context
-    ) : GpsSource {
+    class Default
+        @Inject
+        constructor(
+            @ApplicationContext private val context: Context,
+        ) : GpsSource {
+            override val locationClient: FusedLocationProviderClient
+                get() = LocationServices.getFusedLocationProviderClient(context)
 
-        override val locationClient: FusedLocationProviderClient
-            get() = LocationServices.getFusedLocationProviderClient(context)
-
-        override val locationSettingsClient: SettingsClient
-            get() = LocationServices.getSettingsClient(context)
-    }
+            override val locationSettingsClient: SettingsClient
+                get() = LocationServices.getSettingsClient(context)
+        }
 }

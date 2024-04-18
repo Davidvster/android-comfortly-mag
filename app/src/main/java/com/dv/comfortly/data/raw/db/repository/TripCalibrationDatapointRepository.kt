@@ -7,15 +7,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface TripCalibrationDatapointRepository {
-
     suspend fun insert(data: TripDatapoint): TripDatapoint
 
     fun observeLastDatapointForTrip(tripId: Long): Flow<TripDatapoint>
 
     class Default(
-        private val tripCalibrationDatapointDao: TripCalibrationDatapointDao
+        private val tripCalibrationDatapointDao: TripCalibrationDatapointDao,
     ) : TripCalibrationDatapointRepository {
-
         override suspend fun insert(data: TripDatapoint): TripDatapoint =
             tripCalibrationDatapointDao.insertTripCalibrationDatapoint(TripCalibrationDatapointMapper.domainToDb(data)).let { insertedId ->
                 data.copy(id = insertedId)

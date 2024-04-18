@@ -23,15 +23,15 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SetupTripActivity : BaseActivity<SetupTripState, SetupTripEvent>() {
-
     companion object {
-
         private const val ARG_TRIP_ID = "ARG_TRIP_ID"
 
-        fun newIntent(context: Context, tripId: Long) =
-            Intent(context, SetupTripActivity::class.java).apply {
-                putExtra(ARG_TRIP_ID, tripId)
-            }
+        fun newIntent(
+            context: Context,
+            tripId: Long,
+        ) = Intent(context, SetupTripActivity::class.java).apply {
+            putExtra(ARG_TRIP_ID, tripId)
+        }
     }
 
     override val viewBinding: ActivitySetupTripBinding by viewBinding(ActivitySetupTripBinding::inflate)
@@ -44,42 +44,49 @@ class SetupTripActivity : BaseActivity<SetupTripState, SetupTripEvent>() {
         }
     }
 
-    private val enableBluetoothRequest = registerForActivityResult(EnableBluetoothResultContract()) {
-        viewModel.onBluetoothEnabledResult()
-    }
-
-    private val enableGpsResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
-        viewModel.onGpsEnabledResult(activityResult.resultCode == RESULT_OK)
-    }
-
-    override fun renderState(state: SetupTripState) = with(viewBinding) {
-        bluetoothButton.isEnabled = !state.bluetoothTurnedOn
-        bluetoothButton.isGone = state.bluetoothTurnedOn
-        gpsButton.isEnabled = !state.gpsTurnedOn
-        gpsButton.isGone = state.gpsTurnedOn
-        hrDevicesInstructions.isVisible = state.searchForDevicesEnabled
-        searchDevicesButton.isVisible = state.searchForDevicesEnabled
-        listTitle.text = if (state.heartRateDevices.isNotEmpty()) {
-            getString(R.string.select_device_to_connect)
-        } else if (state.isSearchingForHrDevices) {
-            getString(R.string.searching_for_devices)
-        } else null
-        listTitle.isVisible = state.heartRateDevices.isNotEmpty() || state.isSearchingForHrDevices
-        hrDevicesList.isInvisible = state.heartRateDevices.isEmpty()
-        adapter.submitList(state.heartRateDevices.toList())
-        if (state.connectedHeartRateDevice != null) {
-            connectedDevice.text = getString(
-                R.string.connected_device,
-                state.connectedHeartRateDevice.deviceId,
-                state.connectedHeartRateDevice.name,
-                state.connectedHeartRateDevice.address
-            )
-            connectedDevice.isVisible = true
-        } else {
-            connectedDevice.isVisible = false
+    private val enableBluetoothRequest =
+        registerForActivityResult(EnableBluetoothResultContract()) {
+            viewModel.onBluetoothEnabledResult()
         }
-        submitButton.isEnabled = state.bluetoothTurnedOn && state.gpsTurnedOn && state.connectedHeartRateDevice != null
-    }
+
+    private val enableGpsResult =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
+            viewModel.onGpsEnabledResult(activityResult.resultCode == RESULT_OK)
+        }
+
+    override fun renderState(state: SetupTripState) =
+        with(viewBinding) {
+            bluetoothButton.isEnabled = !state.bluetoothTurnedOn
+            bluetoothButton.isGone = state.bluetoothTurnedOn
+            gpsButton.isEnabled = !state.gpsTurnedOn
+            gpsButton.isGone = state.gpsTurnedOn
+            hrDevicesInstructions.isVisible = state.searchForDevicesEnabled
+            searchDevicesButton.isVisible = state.searchForDevicesEnabled
+            listTitle.text =
+                if (state.heartRateDevices.isNotEmpty()) {
+                    getString(R.string.select_device_to_connect)
+                } else if (state.isSearchingForHrDevices) {
+                    getString(R.string.searching_for_devices)
+                } else {
+                    null
+                }
+            listTitle.isVisible = state.heartRateDevices.isNotEmpty() || state.isSearchingForHrDevices
+            hrDevicesList.isInvisible = state.heartRateDevices.isEmpty()
+            adapter.submitList(state.heartRateDevices.toList())
+            if (state.connectedHeartRateDevice != null) {
+                connectedDevice.text =
+                    getString(
+                        R.string.connected_device,
+                        state.connectedHeartRateDevice.deviceId,
+                        state.connectedHeartRateDevice.name,
+                        state.connectedHeartRateDevice.address,
+                    )
+                connectedDevice.isVisible = true
+            } else {
+                connectedDevice.isVisible = false
+            }
+            submitButton.isEnabled = state.bluetoothTurnedOn && state.gpsTurnedOn && state.connectedHeartRateDevice != null
+        }
 
     override fun handleEvent(event: SetupTripEvent) {
         when (event) {

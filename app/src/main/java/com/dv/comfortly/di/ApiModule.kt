@@ -21,25 +21,28 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class ApiModule {
-
     companion object {
         private const val HEADER_USER_ID = "UserId"
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(userManager: UserManager, @ApplicationContext context: Context): Retrofit {
+    fun provideRetrofit(
+        userManager: UserManager,
+        @ApplicationContext context: Context,
+    ): Retrofit {
+        val userIdInterceptor =
+            Interceptor { chain ->
+                val requestBuilder = chain.request().newBuilder()
+                requestBuilder.addHeader(HEADER_USER_ID, userManager.getUserId())
+                chain.proceed(requestBuilder.build())
+            }
 
-        val userIdInterceptor = Interceptor { chain ->
-            val requestBuilder = chain.request().newBuilder()
-            requestBuilder.addHeader(HEADER_USER_ID, userManager.getUserId())
-            chain.proceed(requestBuilder.build())
-        }
-
-        val client = OkHttpClient.Builder()
-            .addInterceptor(ChuckerInterceptor(context))
-            .addInterceptor(userIdInterceptor)
-            .build()
+        val client =
+            OkHttpClient.Builder()
+                .addInterceptor(ChuckerInterceptor(context))
+                .addInterceptor(userIdInterceptor)
+                .build()
 
         return Retrofit.Builder()
             .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType()))

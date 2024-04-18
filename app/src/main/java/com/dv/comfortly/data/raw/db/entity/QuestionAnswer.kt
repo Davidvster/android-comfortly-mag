@@ -16,9 +16,9 @@ import kotlinx.datetime.Instant
             parentColumns = ["id"],
             childColumns = ["questionnaire_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @TypeConverters(InstantTypeAdapter::class)
 data class QuestionAnswer(
@@ -26,5 +26,5 @@ data class QuestionAnswer(
     @ColumnInfo(name = "questionnaire_id") val questionnaireId: Long,
     @ColumnInfo(name = "question") val question: String,
     @ColumnInfo(name = "answer") val answer: String,
-    @ColumnInfo(name = "timestamp") val timestamp: Instant
+    @ColumnInfo(name = "timestamp") val timestamp: Instant,
 )

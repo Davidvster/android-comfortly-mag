@@ -6,10 +6,11 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface ObserveConnectedHeartRateDeviceUseCase : BaseFlowUseCase.Output<HeartRateDevice> {
-
-    class Default @Inject constructor(
-        private val heartRateRepository: HeartRateRepository
-    ) : ObserveConnectedHeartRateDeviceUseCase {
-        override fun invoke(): Flow<HeartRateDevice> = heartRateRepository.observeDeviceConnected()
-    }
+    class Default
+        @Inject
+        constructor(
+            private val heartRateRepository: HeartRateRepository,
+        ) : ObserveConnectedHeartRateDeviceUseCase {
+            override fun invoke(): Flow<HeartRateDevice> = heartRateRepository.observeDeviceConnected()
+        }
 }

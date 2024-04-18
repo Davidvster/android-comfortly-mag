@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import com.dv.comfortly.data.raw.db.entity.QuestionnaireType
 
 internal class QuestionnaireTypeAdapter {
-
     companion object {
         private const val PRE_DEMOGRAPHIC = "PRE_DEMOGRAPHIC"
         private const val PRE_SPECIFIC = "PRE_SPECIFIC"
@@ -14,21 +13,23 @@ internal class QuestionnaireTypeAdapter {
     }
 
     @TypeConverter
-    fun fromRaw(raw: String): QuestionnaireType = when (raw) {
-        PRE_DEMOGRAPHIC -> QuestionnaireType.PRE_DEMOGRAPHIC
-        PRE_SPECIFIC -> QuestionnaireType.PRE_SPECIFIC
-        PRE_TRIP_PANAS -> QuestionnaireType.PRE_TRIP_PANAS
-        POST_TRIP_PANAS -> QuestionnaireType.POST_TRIP_PANAS
-        POST_SPECIFIC -> QuestionnaireType.POST_SPECIFIC
-        else -> throw IllegalArgumentException("Unknown questionnaire type for type $raw")
-    }
+    fun fromRaw(raw: String): QuestionnaireType =
+        when (raw) {
+            PRE_DEMOGRAPHIC -> QuestionnaireType.PRE_DEMOGRAPHIC
+            PRE_SPECIFIC -> QuestionnaireType.PRE_SPECIFIC
+            PRE_TRIP_PANAS -> QuestionnaireType.PRE_TRIP_PANAS
+            POST_TRIP_PANAS -> QuestionnaireType.POST_TRIP_PANAS
+            POST_SPECIFIC -> QuestionnaireType.POST_SPECIFIC
+            else -> throw IllegalArgumentException("Unknown questionnaire type for type $raw")
+        }
 
     @TypeConverter
-    fun toRaw(type: QuestionnaireType): String = when (type) {
-        QuestionnaireType.PRE_DEMOGRAPHIC -> PRE_DEMOGRAPHIC
-        QuestionnaireType.PRE_SPECIFIC -> PRE_SPECIFIC
-        QuestionnaireType.PRE_TRIP_PANAS -> PRE_TRIP_PANAS
-        QuestionnaireType.POST_TRIP_PANAS -> POST_TRIP_PANAS
-        QuestionnaireType.POST_SPECIFIC -> POST_SPECIFIC
-    }
+    fun toRaw(type: QuestionnaireType): String =
+        when (type) {
+            QuestionnaireType.PRE_DEMOGRAPHIC -> PRE_DEMOGRAPHIC
+            QuestionnaireType.PRE_SPECIFIC -> PRE_SPECIFIC
+            QuestionnaireType.PRE_TRIP_PANAS -> PRE_TRIP_PANAS
+            QuestionnaireType.POST_TRIP_PANAS -> POST_TRIP_PANAS
+            QuestionnaireType.POST_SPECIFIC -> POST_SPECIFIC
+        }
 }

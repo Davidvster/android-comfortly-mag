@@ -8,7 +8,6 @@ import com.dv.comfortly.data.raw.db.entity.TripEcgCalibrationSample
 
 @Dao
 interface TripEcgCalibrationDatapointDao {
-
     @Insert
     suspend fun insertTripEcgDatapoint(model: TripEcgCalibrationSample): Long
 

@@ -14,7 +14,6 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 abstract class BaseViewModel<State : Any, Event : Any> constructor(idleState: State) : ViewModel() {
-
     private val states: MutableStateFlow<ViewState<State>> = MutableStateFlow(ViewState(idleState))
 
     fun viewStates(): Flow<ViewState<State>> = states
@@ -56,13 +55,13 @@ abstract class BaseViewModel<State : Any, Event : Any> constructor(idleState: St
         commonState = Idle
     }
 
-    private val errorHandler = CoroutineExceptionHandler { _, throwable ->
-        Timber.e(throwable)
-        handleError(throwable)
-    }
+    private val errorHandler =
+        CoroutineExceptionHandler { _, throwable ->
+            Timber.e(throwable)
+            handleError(throwable)
+        }
 
-    fun launch(block: suspend CoroutineScope.() -> Unit) =
-        viewModelScope.launch(errorHandler) { block.invoke(this) }
+    fun launch(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(errorHandler) { block.invoke(this) }
 
     fun launchWithBlockingLoading(block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch(errorHandler) {
@@ -80,6 +79,5 @@ abstract class BaseViewModel<State : Any, Event : Any> constructor(idleState: St
         }
     }
 
-    suspend fun <T> io(block: suspend CoroutineScope.() -> T) =
-        withContext(Dispatchers.IO) { block.invoke(this) }
+    suspend fun <T> io(block: suspend CoroutineScope.() -> T) = withContext(Dispatchers.IO) { block.invoke(this) }
 }

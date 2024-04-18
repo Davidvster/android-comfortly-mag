@@ -8,7 +8,6 @@ import com.dv.comfortly.data.raw.db.entity.QuestionAnswer
 
 @Dao
 interface QuestionAnswerDao {
-
     @Insert
     suspend fun inserQuestionAnswer(model: QuestionAnswer): Long
 

@@ -10,34 +10,36 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel @Inject constructor(
-    private val newTripUseCase: CreateNewTripUseCase,
-    private val loadTripsUseCase: LoadTripsUseCase,
-    private val deleteTripsUseCase: DeleteTripUseCase,
-    private val savedStateHandle: SavedStateHandle
-) : BaseViewModel<DashboardState, DashboardEvent>(DashboardState()) {
+class DashboardViewModel
+    @Inject
+    constructor(
+        private val newTripUseCase: CreateNewTripUseCase,
+        private val loadTripsUseCase: LoadTripsUseCase,
+        private val deleteTripsUseCase: DeleteTripUseCase,
+        private val savedStateHandle: SavedStateHandle,
+    ) : BaseViewModel<DashboardState, DashboardEvent>(DashboardState()) {
+        fun getAnalyzedTrips() {
+            launchWithBlockingLoading {
+                val trips = loadTripsUseCase()
+                viewState =
+                    viewState.copy(
+                        trips = trips.asReversed(),
+                        hasNewTrip = viewState.trips.size < trips.size,
+                    )
+            }
+        }
 
-    fun getAnalyzedTrips() {
-        launchWithBlockingLoading {
-            val trips = loadTripsUseCase()
-            viewState = viewState.copy(
-                trips = trips.asReversed(),
-                hasNewTrip = viewState.trips.size < trips.size
-            )
+        fun startNewTrip(tripName: String) {
+            launchWithBlockingLoading {
+                val createdTrip = newTripUseCase(tripName)
+                emitEvent(DashboardEvent.ToQuestionnaire(createdTrip.id, QuestionnaireType.PRE_DEMOGRAPHIC))
+            }
+        }
+
+        fun deleteTrip(tripId: Long) {
+            launchWithBlockingLoading {
+                deleteTripsUseCase(tripId)
+                getAnalyzedTrips()
+            }
         }
     }
-
-    fun startNewTrip(tripName: String) {
-        launchWithBlockingLoading {
-            val createdTrip = newTripUseCase(tripName)
-            emitEvent(DashboardEvent.ToQuestionnaire(createdTrip.id, QuestionnaireType.PRE_DEMOGRAPHIC))
-        }
-    }
-
-    fun deleteTrip(tripId: Long) {
-        launchWithBlockingLoading {
-            deleteTripsUseCase(tripId)
-            getAnalyzedTrips()
-        }
-    }
-}

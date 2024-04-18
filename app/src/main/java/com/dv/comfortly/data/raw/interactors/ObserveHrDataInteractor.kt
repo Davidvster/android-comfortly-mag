@@ -8,14 +8,16 @@ import kotlinx.coroutines.reactive.asFlow
 import javax.inject.Inject
 
 interface ObserveHrDataInteractor {
-
     fun observeHeartRateData(): Flow<PolarHrBroadcastData>
 
-    class Default @Inject constructor(
-        private val heartRateSource: HeartRateSource
-    ) : ObserveHrDataInteractor {
-        override fun observeHeartRateData(): Flow<PolarHrBroadcastData> = heartRateSource.polarState.value.connectedDevice?.let { hrDevice ->
-            heartRateSource.polarApi.startListenForPolarHrBroadcasts(setOf(hrDevice.deviceId)).asFlow()
-        } ?: emptyFlow()
-    }
+    class Default
+        @Inject
+        constructor(
+            private val heartRateSource: HeartRateSource,
+        ) : ObserveHrDataInteractor {
+            override fun observeHeartRateData(): Flow<PolarHrBroadcastData> =
+                heartRateSource.polarState.value.connectedDevice?.let { hrDevice ->
+                    heartRateSource.polarApi.startListenForPolarHrBroadcasts(setOf(hrDevice.deviceId)).asFlow()
+                } ?: emptyFlow()
+        }
 }

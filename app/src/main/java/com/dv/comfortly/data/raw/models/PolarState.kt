@@ -8,5 +8,5 @@ data class PolarState(
     val connectedDevice: PolarDeviceInfo? = null,
     val disconnectedDevice: PolarDeviceInfo? = null,
     val hrFeatureReady: Boolean? = null,
-    val batteryLevel: Int? = null
+    val batteryLevel: Int? = null,
 )

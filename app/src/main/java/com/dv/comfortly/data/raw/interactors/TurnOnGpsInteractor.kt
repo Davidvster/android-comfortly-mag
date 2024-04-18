@@ -12,41 +12,44 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 
 interface TurnOnGpsInteractor {
-
     suspend fun turnOnGps(): Pair<Boolean, IntentSenderRequest?>
 
-    class Default @Inject constructor(
-        private val gpsSource: GpsSource
-    ) : TurnOnGpsInteractor {
-        override suspend fun turnOnGps(): Pair<Boolean, IntentSenderRequest?> = suspendCancellableCoroutine { continuation ->
+    class Default
+        @Inject
+        constructor(
+            private val gpsSource: GpsSource,
+        ) : TurnOnGpsInteractor {
+            override suspend fun turnOnGps(): Pair<Boolean, IntentSenderRequest?> =
+                suspendCancellableCoroutine { continuation ->
 
-            val locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(GpsObserver.LOCATION_REQUEST_INTERVAL.inWholeMilliseconds)
+                    val locationRequest =
+                        LocationRequest.create()
+                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(GpsObserver.LOCATION_REQUEST_INTERVAL.inWholeMilliseconds)
 
-            val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-            val task = gpsSource.locationSettingsClient.checkLocationSettings(builder.build())
+                    val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+                    val task = gpsSource.locationSettingsClient.checkLocationSettings(builder.build())
 
-            task.addOnFailureListener { exception ->
-                if (exception is ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed by showing the user a dialog.
-                    try {
-                        val intentSenderRequest = IntentSenderRequest.Builder(exception.resolution).build()
-                        // Show the dialog by calling startResolutionForResult(), and check the result in onActivityResult().
-                        if (continuation.isActive) {
-                            continuation.resume(false to intentSenderRequest)
+                    task.addOnFailureListener { exception ->
+                        if (exception is ResolvableApiException) {
+                            // Location settings are not satisfied, but this can be fixed by showing the user a dialog.
+                            try {
+                                val intentSenderRequest = IntentSenderRequest.Builder(exception.resolution).build()
+                                // Show the dialog by calling startResolutionForResult(), and check the result in onActivityResult().
+                                if (continuation.isActive) {
+                                    continuation.resume(false to intentSenderRequest)
+                                }
+                            } catch (sendEx: IntentSender.SendIntentException) {
+                                // Ignore the error.
+                            }
                         }
-                    } catch (sendEx: IntentSender.SendIntentException) {
-                        // Ignore the error.
+                    }
+
+                    task.addOnSuccessListener {
+                        if (continuation.isActive) {
+                            continuation.resume(true to null)
+                        }
                     }
                 }
-            }
-
-            task.addOnSuccessListener {
-                if (continuation.isActive) {
-                    continuation.resume(true to null)
-                }
-            }
         }
-    }
 }

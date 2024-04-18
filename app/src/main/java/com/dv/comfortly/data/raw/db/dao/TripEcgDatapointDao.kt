@@ -8,7 +8,6 @@ import com.dv.comfortly.data.raw.db.entity.TripEcgSample
 
 @Dao
 interface TripEcgDatapointDao {
-
     @Insert
     suspend fun insertTripEcgDatapoint(model: TripEcgSample): Long
 

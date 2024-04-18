@@ -9,7 +9,6 @@ import com.dv.comfortly.data.raw.db.entity.TripWithData
 
 @Dao
 interface TripDao {
-
     @Insert
     suspend fun createTrip(model: Trip): Long
 

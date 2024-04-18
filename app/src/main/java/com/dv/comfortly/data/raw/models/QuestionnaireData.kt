@@ -8,7 +8,7 @@ data class QuestionnaireData(
     val id: Long,
     @StringRes val question: Int,
     val type: QuestionType,
-    @StringRes val possibleAnswers: List<Int>? = null
+    @StringRes val possibleAnswers: List<Int>? = null,
 )
 
 enum class QuestionType(private val text: String) {
@@ -16,5 +16,5 @@ enum class QuestionType(private val text: String) {
     NUMBER("NUMBER"),
     NUMBER_DECIMAL("NUMBER_DECIMAL"),
     MULTIPLE_CHOICE("MULTIPLE_CHOICE"),
-    SINGLE_CHOICE("SINGLE_CHOICE")
+    SINGLE_CHOICE("SINGLE_CHOICE"),
 }

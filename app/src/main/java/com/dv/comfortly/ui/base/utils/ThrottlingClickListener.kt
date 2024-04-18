@@ -9,11 +9,9 @@ import android.view.View
 abstract class ThrottlingClickListener(
     private val onClickListener: (v: View) -> Unit,
 ) : View.OnClickListener {
-
     abstract var lastClickMillis: Long
 
     companion object {
-
         /**
          * The cooldown during which click events are discarded. This is global and shared for all decorated listeners.
          */
@@ -41,7 +39,6 @@ abstract class ThrottlingClickListener(
 class LocalThrottleClickListener(
     onClickListener: (v: View) -> Unit,
 ) : ThrottlingClickListener(onClickListener) {
-
     private var localLastClickMillis: Long = 0
 
     override var lastClickMillis: Long
@@ -57,9 +54,7 @@ class LocalThrottleClickListener(
 class GlobalThrottleClickListener(
     onClickListener: (v: View) -> Unit,
 ) : ThrottlingClickListener(onClickListener) {
-
     companion object {
-
         private var globalLastClickMillis: Long = 0
     }
 

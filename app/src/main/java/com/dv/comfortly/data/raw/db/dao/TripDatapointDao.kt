@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TripDatapointDao {
-
     @Insert
     suspend fun insertTripDatapoint(model: TripDatapoint): Long
 

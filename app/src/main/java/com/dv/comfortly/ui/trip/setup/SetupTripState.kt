@@ -9,5 +9,5 @@ data class SetupTripState(
     val isSearchingForHrDevices: Boolean = false,
     val connectedHeartRateDevice: HeartRateDevice? = null,
     val heartRateDevices: Set<HeartRateDevice> = emptySet(),
-    val submitEnabled: Boolean = false
+    val submitEnabled: Boolean = false,
 )
