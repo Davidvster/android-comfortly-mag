@@ -97,9 +97,10 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val questionnaireType = intent.getSerializableExtra(ARG_QUESTIONNAIRE_TYPE) as QuestionnaireType
-        if (questionnaireType == QuestionnaireType.PRE_DEMOGRAPHIC || questionnaireType == QuestionnaireType.PRE_SPECIFIC) {
+        // TODO re-enable
+//        if (questionnaireType == QuestionnaireType.PRE_DEMOGRAPHIC || questionnaireType == QuestionnaireType.PRE_SPECIFIC) {
             menuInflater.inflate(R.menu.questionnaire_menu, menu)
-        }
+//        }
         return super.onCreateOptionsMenu(menu)
     }
 
