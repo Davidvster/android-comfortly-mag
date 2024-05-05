@@ -167,15 +167,12 @@ object QuestionnaireSource {
             QuestionnaireData(
                 id = nextId(),
                 question = R.string.post_1_question,
-                type = QuestionType.SINGLE_CHOICE,
-                possibleAnswers =
-                    listOf(
-                        R.string.post_1_answer_1,
-                        R.string.post_1_answer_2,
-                        R.string.post_1_answer_3,
-                        R.string.post_1_answer_4,
-                        R.string.post_1_answer_5,
-                    ),
+                type = QuestionType.NUMBER
+            ),
+            QuestionnaireData(
+                id = nextId(),
+                question = R.string.post_6_question,
+                type = QuestionType.NUMBER
             ),
             QuestionnaireData(
                 id = nextId(),
