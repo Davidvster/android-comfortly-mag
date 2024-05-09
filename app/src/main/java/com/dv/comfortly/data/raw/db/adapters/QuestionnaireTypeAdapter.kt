@@ -7,6 +7,9 @@ internal class QuestionnaireTypeAdapter {
     companion object {
         private const val PRE_DEMOGRAPHIC = "PRE_DEMOGRAPHIC"
         private const val PRE_SPECIFIC = "PRE_SPECIFIC"
+        private const val PRE_MSSQ_1 = "PRE_MSSQ_1"
+        private const val PRE_MSSQ_2 = "PRE_MSSQ_2"
+        private const val PRE_BSSS = "PRE_BSSS"
         private const val PRE_TRIP_PANAS = "PRE_TRIP_PANAS"
         private const val POST_TRIP_PANAS = "POST_PANAS"
         private const val POST_SPECIFIC = "POST_SPECIFIC"
@@ -17,6 +20,9 @@ internal class QuestionnaireTypeAdapter {
         when (raw) {
             PRE_DEMOGRAPHIC -> QuestionnaireType.PRE_DEMOGRAPHIC
             PRE_SPECIFIC -> QuestionnaireType.PRE_SPECIFIC
+            PRE_MSSQ_1 -> QuestionnaireType.PRE_MSSQ_1
+            PRE_MSSQ_2 -> QuestionnaireType.PRE_MSSQ_2
+            PRE_BSSS -> QuestionnaireType.PRE_BSSS
             PRE_TRIP_PANAS -> QuestionnaireType.PRE_TRIP_PANAS
             POST_TRIP_PANAS -> QuestionnaireType.POST_TRIP_PANAS
             POST_SPECIFIC -> QuestionnaireType.POST_SPECIFIC
@@ -28,6 +34,9 @@ internal class QuestionnaireTypeAdapter {
         when (type) {
             QuestionnaireType.PRE_DEMOGRAPHIC -> PRE_DEMOGRAPHIC
             QuestionnaireType.PRE_SPECIFIC -> PRE_SPECIFIC
+            QuestionnaireType.PRE_MSSQ_1 -> PRE_MSSQ_1
+            QuestionnaireType.PRE_MSSQ_2 -> PRE_MSSQ_2
+            QuestionnaireType.PRE_BSSS -> PRE_BSSS
             QuestionnaireType.PRE_TRIP_PANAS -> PRE_TRIP_PANAS
             QuestionnaireType.POST_TRIP_PANAS -> POST_TRIP_PANAS
             QuestionnaireType.POST_SPECIFIC -> POST_SPECIFIC

@@ -63,10 +63,12 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
                 startActivity(newIntent(this, event.tripId, event.questionnaireType))
                 finish()
             }
+
             is QuestionnaireEvent.NavigateToSetup -> {
                 startActivity(SetupTripActivity.newIntent(this, event.tripId))
                 finish()
             }
+
             is QuestionnaireEvent.ShowPrefillFromTrip -> showSelectTripDialog(event.trips)
             is QuestionnaireEvent.Finish -> finish()
         }
@@ -97,10 +99,17 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val questionnaireType = intent.getSerializableExtra(ARG_QUESTIONNAIRE_TYPE) as QuestionnaireType
-        // TODO re-enable
-//        if (questionnaireType == QuestionnaireType.PRE_DEMOGRAPHIC || questionnaireType == QuestionnaireType.PRE_SPECIFIC) {
-            menuInflater.inflate(R.menu.questionnaire_menu, menu)
-//        }
+        when (questionnaireType) {
+            QuestionnaireType.PRE_DEMOGRAPHIC,
+            QuestionnaireType.PRE_SPECIFIC,
+            QuestionnaireType.PRE_MSSQ_1,
+            QuestionnaireType.PRE_MSSQ_2,
+            QuestionnaireType.PRE_BSSS -> menuInflater.inflate(R.menu.questionnaire_menu, menu)
+
+            QuestionnaireType.PRE_TRIP_PANAS,
+            QuestionnaireType.POST_TRIP_PANAS,
+            QuestionnaireType.POST_SPECIFIC -> Unit
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -110,6 +119,7 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
                 viewModel.onPrefillQuestions()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -127,6 +137,9 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
     private fun QuestionnaireType.getToolBarTitle(): Int =
         when (this) {
             QuestionnaireType.PRE_TRIP_PANAS -> R.string.panas
+            QuestionnaireType.PRE_MSSQ_1 -> R.string.mssq
+            QuestionnaireType.PRE_MSSQ_2 -> R.string.mssq
+            QuestionnaireType.PRE_BSSS -> R.string.bsss
             QuestionnaireType.PRE_SPECIFIC -> R.string.specific
             QuestionnaireType.PRE_DEMOGRAPHIC -> R.string.demographic
             QuestionnaireType.POST_TRIP_PANAS -> R.string.panas
@@ -137,6 +150,9 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
     private fun QuestionnaireType.getQuestionnaireInstructions(): Int =
         when (this) {
             QuestionnaireType.PRE_TRIP_PANAS -> R.string.panas_instructions
+            QuestionnaireType.PRE_MSSQ_1 -> R.string.mssq_1_instructions
+            QuestionnaireType.PRE_MSSQ_2 -> R.string.mssq_2_instructions
+            QuestionnaireType.PRE_BSSS -> R.string.bsss_instructions
             QuestionnaireType.PRE_SPECIFIC -> R.string.pre_specific_instructions
             QuestionnaireType.PRE_DEMOGRAPHIC -> R.string.demographic
             QuestionnaireType.POST_TRIP_PANAS -> R.string.panas_instructions

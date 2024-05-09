@@ -9,6 +9,9 @@ object QuestionnaireSource {
     fun getQuestionnaire(questionnaireType: QuestionnaireType): List<QuestionnaireData> =
         when (questionnaireType) {
             QuestionnaireType.PRE_DEMOGRAPHIC -> PRE_DEMOGRAPHIC
+            QuestionnaireType.PRE_MSSQ_1 -> PRE_MSSQ_1
+            QuestionnaireType.PRE_MSSQ_2 -> PRE_MSSQ_2
+            QuestionnaireType.PRE_BSSS -> PRE_BSSS
             QuestionnaireType.PRE_SPECIFIC -> PRE_SPECIFIC
             QuestionnaireType.PRE_TRIP_PANAS -> PRE_PANAS
             QuestionnaireType.POST_TRIP_PANAS -> POST_PANAS
@@ -154,6 +157,41 @@ object QuestionnaireSource {
         )
     }
 
+    private val PRE_MSSQ_1 by lazy {
+        generateMssq()
+    }
+
+    private val PRE_MSSQ_2 by lazy {
+        generateMssq()
+    }
+
+    private val PRE_BSSS by lazy {
+        listOf(
+           R.string.bsss_1_question,
+           R.string.bsss_2_question,
+           R.string.bsss_3_question,
+           R.string.bsss_4_question,
+           R.string.bsss_5_question,
+           R.string.bsss_6_question,
+           R.string.bsss_7_question,
+           R.string.bsss_8_question,
+        ).map {
+            QuestionnaireData(
+                id = nextId(),
+                question = it,
+                type = QuestionType.SINGLE_CHOICE,
+                possibleAnswers =
+                listOf(
+                    R.string.bsss_1_answer,
+                    R.string.bsss_2_answer,
+                    R.string.bsss_3_answer,
+                    R.string.bsss_4_answer,
+                    R.string.bsss_5_answer,
+                )
+            )
+        }
+    }
+
     private val PRE_PANAS by lazy {
         generatePanas()
     }
@@ -230,6 +268,32 @@ object QuestionnaireSource {
     private var questionIdGenerator: Long = 0
 
     private fun nextId(): Long = questionIdGenerator++
+
+    private fun generateMssq() =
+        listOf(
+            R.string.mssq_1_question,
+            R.string.mssq_2_question,
+            R.string.mssq_3_question,
+            R.string.mssq_4_question,
+            R.string.mssq_5_question,
+            R.string.mssq_6_question,
+            R.string.mssq_7_question,
+            R.string.mssq_8_question,
+        ).map { title ->
+            QuestionnaireData(
+                id = nextId(),
+                question = title,
+                type = QuestionType.SINGLE_CHOICE,
+                possibleAnswers =
+                listOf(
+                    R.string.mssq_1_answer,
+                    R.string.mssq_2_answer,
+                    R.string.mssq_3_answer,
+                    R.string.mssq_4_answer,
+                    R.string.mssq_5_answer,
+                ),
+            )
+        }
 
     private fun generatePanas() =
         listOf(

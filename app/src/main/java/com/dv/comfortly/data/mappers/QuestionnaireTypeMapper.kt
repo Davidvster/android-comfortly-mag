@@ -9,6 +9,9 @@ object QuestionnaireTypeMapper {
         when (data) {
             DbQuestionnaireType.PRE_DEMOGRAPHIC -> QuestionnaireType.PRE_DEMOGRAPHIC
             DbQuestionnaireType.PRE_SPECIFIC -> QuestionnaireType.PRE_SPECIFIC
+            DbQuestionnaireType.PRE_MSSQ_1 -> QuestionnaireType.PRE_MSSQ_1
+            DbQuestionnaireType.PRE_MSSQ_2 -> QuestionnaireType.PRE_MSSQ_2
+            DbQuestionnaireType.PRE_BSSS -> QuestionnaireType.PRE_BSSS
             DbQuestionnaireType.PRE_TRIP_PANAS -> QuestionnaireType.PRE_TRIP_PANAS
             DbQuestionnaireType.POST_TRIP_PANAS -> QuestionnaireType.POST_TRIP_PANAS
             DbQuestionnaireType.POST_SPECIFIC -> QuestionnaireType.POST_SPECIFIC
@@ -18,6 +21,9 @@ object QuestionnaireTypeMapper {
         when (data) {
             QuestionnaireType.PRE_DEMOGRAPHIC -> DbQuestionnaireType.PRE_DEMOGRAPHIC
             QuestionnaireType.PRE_SPECIFIC -> DbQuestionnaireType.PRE_SPECIFIC
+            QuestionnaireType.PRE_MSSQ_1 -> DbQuestionnaireType.PRE_MSSQ_1
+            QuestionnaireType.PRE_MSSQ_2 -> DbQuestionnaireType.PRE_MSSQ_2
+            QuestionnaireType.PRE_BSSS -> DbQuestionnaireType.PRE_BSSS
             QuestionnaireType.PRE_TRIP_PANAS -> DbQuestionnaireType.PRE_TRIP_PANAS
             QuestionnaireType.POST_TRIP_PANAS -> DbQuestionnaireType.POST_TRIP_PANAS
             QuestionnaireType.POST_SPECIFIC -> DbQuestionnaireType.POST_SPECIFIC

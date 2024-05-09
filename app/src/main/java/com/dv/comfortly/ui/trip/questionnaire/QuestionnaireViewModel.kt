@@ -124,6 +124,21 @@ class QuestionnaireViewModel
                         QuestionnaireType.PRE_SPECIFIC ->
                             QuestionnaireEvent.NavigateToQuestionnaire(
                                 tripId = tripId,
+                                questionnaireType = QuestionnaireType.PRE_MSSQ_1,
+                            )
+                        QuestionnaireType.PRE_MSSQ_1 ->
+                            QuestionnaireEvent.NavigateToQuestionnaire(
+                                tripId = tripId,
+                                questionnaireType = QuestionnaireType.PRE_MSSQ_2,
+                            )
+                        QuestionnaireType.PRE_MSSQ_2 ->
+                            QuestionnaireEvent.NavigateToQuestionnaire(
+                                tripId = tripId,
+                                questionnaireType = QuestionnaireType.PRE_BSSS,
+                            )
+                        QuestionnaireType.PRE_BSSS ->
+                            QuestionnaireEvent.NavigateToQuestionnaire(
+                                tripId = tripId,
                                 questionnaireType = QuestionnaireType.PRE_TRIP_PANAS,
                             )
                         QuestionnaireType.PRE_TRIP_PANAS -> QuestionnaireEvent.NavigateToSetup(tripId)
