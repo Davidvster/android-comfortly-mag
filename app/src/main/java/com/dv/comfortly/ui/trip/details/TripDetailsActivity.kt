@@ -18,6 +18,7 @@ import com.dv.comfortly.ui.base.viewBinding
 import com.dv.comfortly.ui.ext.configureForApp
 import com.dv.comfortly.ui.trip.recordtrip.EcgGraphData
 import com.dv.comfortly.ui.trip.recordtrip.GraphData
+import com.dv.comfortly.ui.trip.recordtrip.GyroscopeGraphData
 import com.dv.comfortly.ui.trip.recordtrip.HeartRateGraphData
 import com.dv.comfortly.ui.trip.recordtrip.RotationVectorGraphData
 import com.dv.comfortly.ui.utils.SimpleLineDataSet
@@ -114,7 +115,7 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
             }
             setMapData(state.locations)
             chartTabs.getTabAt(chartTabs.selectedTabPosition)?.let { tab ->
-                val chartTab = ChartTab.values().first { getString(it.stringRes).equals(tab.text.toString(), true) }
+                val chartTab = ChartTab.entries.first { getString(it.stringRes).equals(tab.text.toString(), true) }
                 setGraph(chartTab, state)
             }
         }
@@ -250,6 +251,11 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
                 state.gyroscope?.let { chart.setData(it) }
             }
 
+            ChartTab.GYROSCOPE_ORIENTATION -> {
+                chart.initData(R.string.gyroscope_orientation)
+                state.gyroscope?.let { chart.setOrientationData(it) }
+            }
+
             ChartTab.LINEAR_ACCELERATION -> {
                 chart.initData(R.string.linear_acceleration)
                 state.linearAcceleration?.let { chart.setData(it) }
@@ -266,6 +272,11 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
                 }
                 state.rotationVector?.let { chart.setData(it) }
             }
+
+            ChartTab.ROTATION_VECTOR_ORIENTATION -> {
+                chart.initData(R.string.rotation_vector_orientation)
+                state.rotationVector?.let { chart.setOrientationData(it) }
+            }
         }
     }
 
@@ -276,6 +287,51 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
         x.values = newData.xAxis
         y.values = newData.yAxis
         z.values = newData.zAxis
+        x.notifyDataSetChanged()
+        y.notifyDataSetChanged()
+        z.notifyDataSetChanged()
+        data.notifyDataChanged()
+        notifyDataSetChanged()
+        invalidate()
+    }
+
+    private fun LineChart.setData(newData: GyroscopeGraphData) {
+        val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
+        val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
+        val z: LineDataSet = data.getDataSetByIndex(Z_LABEL_INDEX) as LineDataSet
+        x.values = newData.xAxis
+        y.values = newData.yAxis
+        z.values = newData.zAxis
+        x.notifyDataSetChanged()
+        y.notifyDataSetChanged()
+        z.notifyDataSetChanged()
+        data.notifyDataChanged()
+        notifyDataSetChanged()
+        invalidate()
+    }
+
+    private fun LineChart.setOrientationData(newData: GyroscopeGraphData) {
+        val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
+        val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
+        val z: LineDataSet = data.getDataSetByIndex(Z_LABEL_INDEX) as LineDataSet
+        x.values = newData.orientationX
+        y.values = newData.orientationY
+        z.values = newData.orientationZ
+        x.notifyDataSetChanged()
+        y.notifyDataSetChanged()
+        z.notifyDataSetChanged()
+        data.notifyDataChanged()
+        notifyDataSetChanged()
+        invalidate()
+    }
+
+    private fun LineChart.setOrientationData(newData: RotationVectorGraphData) {
+        val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
+        val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
+        val z: LineDataSet = data.getDataSetByIndex(Z_LABEL_INDEX) as LineDataSet
+        x.values = newData.orientationX
+        y.values = newData.orientationY
+        z.values = newData.orientationZ
         x.notifyDataSetChanged()
         y.notifyDataSetChanged()
         z.notifyDataSetChanged()
@@ -328,8 +384,10 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
         ACCELEROMETER(R.string.accelerometer),
         GRAVITY(R.string.gravity),
         GYROSCOPE(R.string.gyroscope),
+        GYROSCOPE_ORIENTATION(R.string.gyroscope_orientation),
         LINEAR_ACCELERATION(R.string.linear_acceleration),
         ROTATION_VECTOR(R.string.rotation_vector),
+        ROTATION_VECTOR_ORIENTATION(R.string.rotation_vector_orientation),
     }
 
     private fun exportTripDataZipCreateDocument(name: String) {

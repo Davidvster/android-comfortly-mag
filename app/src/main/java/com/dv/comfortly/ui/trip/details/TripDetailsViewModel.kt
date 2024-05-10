@@ -8,6 +8,7 @@ import com.dv.comfortly.domain.usecases.params.ExportTripParams
 import com.dv.comfortly.ui.base.BaseViewModel
 import com.dv.comfortly.ui.trip.recordtrip.EcgGraphData
 import com.dv.comfortly.ui.trip.recordtrip.GraphData
+import com.dv.comfortly.ui.trip.recordtrip.GyroscopeGraphData
 import com.dv.comfortly.ui.trip.recordtrip.HeartRateGraphData
 import com.dv.comfortly.ui.trip.recordtrip.RotationVectorGraphData
 import com.github.mikephil.charting.data.Entry
@@ -64,10 +65,13 @@ class TripDetailsViewModel
                                     zAxis = trip.data.map { it.sensorData.gravityData.zAxisGravity }.toEntry(),
                                 ),
                             gyroscope =
-                                GraphData(
+                                GyroscopeGraphData(
                                     xAxis = trip.data.map { it.sensorData.gyroscopeData.xAxisRotationRate }.toEntry(),
                                     yAxis = trip.data.map { it.sensorData.gyroscopeData.yAxisRotationRate }.toEntry(),
                                     zAxis = trip.data.map { it.sensorData.gyroscopeData.zAxisRotationRate }.toEntry(),
+                                    orientationX = trip.data.map { it.sensorData.gyroscopeData.orientationX }.toEntry(),
+                                    orientationY = trip.data.map { it.sensorData.gyroscopeData.orientationY }.toEntry(),
+                                    orientationZ = trip.data.map { it.sensorData.gyroscopeData.orientationZ }.toEntry(),
                                 ),
                             linearAcceleration =
                                 GraphData(
@@ -81,6 +85,9 @@ class TripDetailsViewModel
                                     yAxis = trip.data.map { it.sensorData.rotationVectorData.yAxisRotationVector }.toEntry(),
                                     zAxis = trip.data.map { it.sensorData.rotationVectorData.zAxisRotationVector }.toEntry(),
                                     scalar = trip.data.map { it.sensorData.rotationVectorData.rotationVectorScalar }.toEntry(),
+                                    orientationX = trip.data.map { it.sensorData.rotationVectorData.orientationX }.toEntry(),
+                                    orientationY = trip.data.map { it.sensorData.rotationVectorData.orientationY }.toEntry(),
+                                    orientationZ = trip.data.map { it.sensorData.rotationVectorData.orientationZ }.toEntry(),
                                 ),
                             locations = trip.data.map { it.gpsData }.distinct(),
                             heartRate = HeartRateGraphData(trip.data.map { it.heartRateData.heartRate.toFloat() }.toEntry()),

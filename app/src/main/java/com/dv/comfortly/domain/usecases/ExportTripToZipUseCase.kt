@@ -134,6 +134,9 @@ interface ExportTripToZipUseCase : BaseUseCase.Input<ExportTripParams> {
                     context.getString(R.string.gyroscope_x_axis_rotation_rate).escapeComma(),
                     context.getString(R.string.gyroscope_y_axis_rotation_rate).escapeComma(),
                     context.getString(R.string.gyroscope_z_axis_rotation_rate).escapeComma(),
+                    context.getString(R.string.gyroscope_orientation_x).escapeComma(),
+                    context.getString(R.string.gyroscope_orientation_y).escapeComma(),
+                    context.getString(R.string.gyroscope_orientation_z).escapeComma(),
                     context.getString(R.string.linear_accelerometer_x_axis_linear_acceleration).escapeComma(),
                     context.getString(R.string.linear_accelerometer_y_axis_linear_acceleration).escapeComma(),
                     context.getString(R.string.linear_accelerometer_z_axis_linear_acceleration).escapeComma(),
@@ -141,6 +144,9 @@ interface ExportTripToZipUseCase : BaseUseCase.Input<ExportTripParams> {
                     context.getString(R.string.rotation_vector_y_axis_rotation_vector).escapeComma(),
                     context.getString(R.string.rotation_vector_z_axis_rotation_vector).escapeComma(),
                     context.getString(R.string.rotation_vector_scalar).escapeComma(),
+                    context.getString(R.string.rotation_vector_orientation_x).escapeComma(),
+                    context.getString(R.string.rotation_vector_orientation_y).escapeComma(),
+                    context.getString(R.string.rotation_vector_orientation_z).escapeComma(),
                 ).joinToString(separator = CSV_ITEM_SEPARATOR) + System.lineSeparator() +
                     data.joinToString(System.lineSeparator()) { tripDatapoint ->
                         listOf(
@@ -164,6 +170,9 @@ interface ExportTripToZipUseCase : BaseUseCase.Input<ExportTripParams> {
                             tripDatapoint.sensorData.gyroscopeData.xAxisRotationRate.escapeComma(),
                             tripDatapoint.sensorData.gyroscopeData.yAxisRotationRate.escapeComma(),
                             tripDatapoint.sensorData.gyroscopeData.zAxisRotationRate.escapeComma(),
+                            tripDatapoint.sensorData.gyroscopeData.orientationX.escapeComma(),
+                            tripDatapoint.sensorData.gyroscopeData.orientationY.escapeComma(),
+                            tripDatapoint.sensorData.gyroscopeData.orientationZ.escapeComma(),
                             tripDatapoint.sensorData.linearAccelerometerData.xAxisLinearAcceleration.escapeComma(),
                             tripDatapoint.sensorData.linearAccelerometerData.yAxisLinearAcceleration.escapeComma(),
                             tripDatapoint.sensorData.linearAccelerometerData.zAxisLinearAcceleration.escapeComma(),
@@ -171,6 +180,9 @@ interface ExportTripToZipUseCase : BaseUseCase.Input<ExportTripParams> {
                             tripDatapoint.sensorData.rotationVectorData.yAxisRotationVector.escapeComma(),
                             tripDatapoint.sensorData.rotationVectorData.zAxisRotationVector.escapeComma(),
                             tripDatapoint.sensorData.rotationVectorData.rotationVectorScalar.escapeComma(),
+                            tripDatapoint.sensorData.rotationVectorData.orientationX.escapeComma(),
+                            tripDatapoint.sensorData.rotationVectorData.orientationY.escapeComma(),
+                            tripDatapoint.sensorData.rotationVectorData.orientationZ.escapeComma(),
                         ).joinToString(separator = CSV_ITEM_SEPARATOR)
                     }
 

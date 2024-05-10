@@ -28,7 +28,7 @@ data class TripDatapoint(
     @ColumnInfo(name = "timestamp") val timestamp: Instant,
     @Embedded(prefix = "accelerometer_") val accelerometerData: SensorData,
     @Embedded(prefix = "gravity_") val gravityData: SensorData,
-    @Embedded(prefix = "gyroscope_") val gyroscopeData: SensorData,
+    @Embedded(prefix = "gyroscope_") val gyroscopeData: GyroscopeData,
     @Embedded(prefix = "linear_accelerometer_") val linearAccelerometerData: SensorData,
     @Embedded(prefix = "rotation_vector_") val rotationVectorData: RotationVectorSensorData,
     @Embedded(prefix = "gps_") val gpsData: GpsData,
@@ -41,11 +41,23 @@ data class SensorData(
     @ColumnInfo(name = "z_axis") val zAxis: Float,
 )
 
+data class GyroscopeData(
+    @ColumnInfo(name = "x_axis") val xAxis: Float,
+    @ColumnInfo(name = "y_axis") val yAxis: Float,
+    @ColumnInfo(name = "z_axis") val zAxis: Float,
+    @ColumnInfo(name = "orientation_x") val orientationX: Float,
+    @ColumnInfo(name = "orientation_y") val orientationY: Float,
+    @ColumnInfo(name = "orientation_z") val orientationZ: Float,
+)
+
 data class RotationVectorSensorData(
     @ColumnInfo(name = "x_axis") val xAxis: Float,
     @ColumnInfo(name = "y_axis") val yAxis: Float,
     @ColumnInfo(name = "z_axis") val zAxis: Float,
     @ColumnInfo(name = "scalar") val scalar: Float,
+    @ColumnInfo(name = "orientation_x") val orientationX: Float,
+    @ColumnInfo(name = "orientation_y") val orientationY: Float,
+    @ColumnInfo(name = "orientation_z") val orientationZ: Float,
 )
 
 data class GpsData(

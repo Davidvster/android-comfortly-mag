@@ -5,4 +5,7 @@ data class RotationVectorData(
     val yAxisRotationVector: Float,
     val zAxisRotationVector: Float,
     val rotationVectorScalar: Float,
+    val orientationX: Float,
+    val orientationY: Float,
+    val orientationZ: Float,
 )

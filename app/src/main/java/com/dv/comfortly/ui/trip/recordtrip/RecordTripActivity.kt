@@ -50,6 +50,10 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         private const val Z_LABEL_INDEX = 2
         private const val SCALAR_LABEL_INDEX = 3
 
+        private const val X_ORIENTATION_LABEL_INDEX = 0
+        private const val Y_ORIENTATION_LABEL_INDEX = 1
+        private const val Z_ORIENTATION_LABEL_INDEX = 2
+
         private const val MAP_ZOOM_LEVEL = 16f
 
         private const val ARG_TRIP_ID = "ARG_TRIP_ID"
@@ -82,9 +86,21 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         with(viewBinding) {
             state.accelerometer?.let { accelerometerChart.setData(it) }
             state.gravity?.let { gravityChart.setData(it) }
-            state.gyroscope?.let { gyroscopeChart.setData(it) }
+            state.gyroscope?.let {
+                setDataGyroscope(
+                    coreGraph = gyroscopeChart,
+                    orientationGraph = gyroscopeOrientationChart,
+                    newData = it
+                )
+            }
             state.linearAcceleration?.let { linearAccelerationChart.setData(it) }
-            state.rotationVector?.let { rotationVectorChart.setData(it) }
+            state.rotationVector?.let {
+                setDataRotationVector(
+                    coreGraph = rotationVectorChart,
+                    orientationGraph = rotationVectorOrientationChart,
+                    newData = it
+                )
+            }
             setMapData(state.locations)
             state.heartRate?.let { hearRateChart.setData(it) }
             state.ecgData?.let { ecgChart.setData(it) }
@@ -206,6 +222,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         accelerometerChart.initData(R.string.accelerometer)
         gravityChart.initData(R.string.gravity)
         gyroscopeChart.initData(R.string.gyroscope)
+        gyroscopeOrientationChart.initData(R.string.gyroscope_orientation)
         linearAccelerationChart.initData(R.string.linear_acceleration)
 
         rotationVectorChart.apply {
@@ -216,6 +233,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
             configureForApp(getString(R.string.rotation_vector))
             data = LineData(x, y, z, scalar)
         }
+        rotationVectorOrientationChart.initData(R.string.rotation_vector_orientation)
 
         hearRateChart.apply {
             val x = SimpleLineDataSet(dataLabel = getString(HEART_RATE_LABEL), lineColor = Color.RED)
@@ -255,22 +273,66 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         invalidate()
     }
 
-    private fun LineChart.setData(newData: RotationVectorGraphData) {
-        val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
-        val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
-        val z: LineDataSet = data.getDataSetByIndex(Z_LABEL_INDEX) as LineDataSet
-        val scalar: LineDataSet = data.getDataSetByIndex(SCALAR_LABEL_INDEX) as LineDataSet
-        x.values = newData.xAxis
-        y.values = newData.yAxis
-        z.values = newData.zAxis
-        scalar.values = newData.scalar
+    private fun setDataGyroscope(coreGraph: LineChart, orientationGraph: LineChart, newData: GyroscopeGraphData) {
+        coreGraph.apply {
+            val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
+            val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
+            val z: LineDataSet = data.getDataSetByIndex(Z_LABEL_INDEX) as LineDataSet
+            x.values = newData.xAxis
+            y.values = newData.yAxis
+            z.values = newData.zAxis
+//        x.notifyDataSetChanged()
+//        y.notifyDataSetChanged()
+//        z.notifyDataSetChanged()
+//        data.notifyDataChanged()
+            notifyDataSetChanged()
+            invalidate()
+        }
+
+        orientationGraph.apply {
+            val x: LineDataSet = data.getDataSetByIndex(X_ORIENTATION_LABEL_INDEX) as LineDataSet
+            val y: LineDataSet = data.getDataSetByIndex(Y_ORIENTATION_LABEL_INDEX) as LineDataSet
+            val z: LineDataSet = data.getDataSetByIndex(Z_ORIENTATION_LABEL_INDEX) as LineDataSet
+
+            x.values = newData.orientationX
+            y.values = newData.orientationY
+            z.values = newData.orientationZ
+
+            notifyDataSetChanged()
+            invalidate()
+        }
+    }
+
+    private fun setDataRotationVector(coreGraph: LineChart, orientationGraph: LineChart, newData: RotationVectorGraphData) {
+        coreGraph.apply {
+            val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
+            val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
+            val z: LineDataSet = data.getDataSetByIndex(Z_LABEL_INDEX) as LineDataSet
+            val scalar: LineDataSet = data.getDataSetByIndex(SCALAR_LABEL_INDEX) as LineDataSet
+            x.values = newData.xAxis
+            y.values = newData.yAxis
+            z.values = newData.zAxis
+            scalar.values = newData.scalar
 //        x.notifyDataSetChanged()
 //        y.notifyDataSetChanged()
 //        z.notifyDataSetChanged()
 //        scalar.notifyDataSetChanged()
 //        data.notifyDataChanged()
-        notifyDataSetChanged()
-        invalidate()
+            notifyDataSetChanged()
+            invalidate()
+        }
+        orientationGraph.apply {
+            val x: LineDataSet = data.getDataSetByIndex(X_ORIENTATION_LABEL_INDEX) as LineDataSet
+            val y: LineDataSet = data.getDataSetByIndex(Y_ORIENTATION_LABEL_INDEX) as LineDataSet
+            val z: LineDataSet = data.getDataSetByIndex(Z_ORIENTATION_LABEL_INDEX) as LineDataSet
+
+            x.values = newData.orientationX
+            y.values = newData.orientationY
+            z.values = newData.orientationZ
+
+            notifyDataSetChanged()
+            invalidate()
+        }
     }
 
     private fun LineChart.setData(newData: HeartRateGraphData) {

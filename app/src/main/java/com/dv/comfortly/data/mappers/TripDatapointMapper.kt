@@ -13,6 +13,7 @@ import com.dv.comfortly.domain.models.TripDatapoint
 private typealias DbTripDatapoint = com.dv.comfortly.data.raw.db.entity.TripDatapoint
 typealias DbSensorData = com.dv.comfortly.data.raw.db.entity.SensorData
 typealias DbRotationVectorSensorData = com.dv.comfortly.data.raw.db.entity.RotationVectorSensorData
+typealias DbGyroscopeData = com.dv.comfortly.data.raw.db.entity.GyroscopeData
 typealias DbGpsData = com.dv.comfortly.data.raw.db.entity.GpsData
 typealias DbHeartRateData = com.dv.comfortly.data.raw.db.entity.HeartRateData
 
@@ -23,54 +24,58 @@ object TripDatapointMapper {
             tripId = data.tripId,
             timestamp = data.timestamp,
             sensorData =
-                SensorData(
-                    accelerometerData =
-                        AccelerometerData(
-                            xAxisAcceleration = data.accelerometerData.xAxis,
-                            yAxisAcceleration = data.accelerometerData.yAxis,
-                            zAxisAcceleration = data.accelerometerData.zAxis,
-                        ),
-                    gravityData =
-                        GravityData(
-                            xAxisGravity = data.gravityData.xAxis,
-                            yAxisGravity = data.gravityData.yAxis,
-                            zAxisGravity = data.gravityData.zAxis,
-                        ),
-                    gyroscopeData =
-                        GyroscopeData(
-                            xAxisRotationRate = data.gyroscopeData.xAxis,
-                            yAxisRotationRate = data.gyroscopeData.yAxis,
-                            zAxisRotationRate = data.gyroscopeData.zAxis,
-                        ),
-                    linearAccelerometerData =
-                        LinearAccelerometerData(
-                            xAxisLinearAcceleration = data.linearAccelerometerData.xAxis,
-                            yAxisLinearAcceleration = data.linearAccelerometerData.yAxis,
-                            zAxisLinearAcceleration = data.linearAccelerometerData.zAxis,
-                        ),
-                    rotationVectorData =
-                        RotationVectorData(
-                            xAxisRotationVector = data.rotationVectorData.xAxis,
-                            yAxisRotationVector = data.rotationVectorData.yAxis,
-                            zAxisRotationVector = data.rotationVectorData.zAxis,
-                            rotationVectorScalar = data.rotationVectorData.scalar,
-                        ),
+            SensorData(
+                accelerometerData =
+                AccelerometerData(
+                    xAxisAcceleration = data.accelerometerData.xAxis,
+                    yAxisAcceleration = data.accelerometerData.yAxis,
+                    zAxisAcceleration = data.accelerometerData.zAxis,
                 ),
+                gravityData =
+                GravityData(
+                    xAxisGravity = data.gravityData.xAxis,
+                    yAxisGravity = data.gravityData.yAxis,
+                    zAxisGravity = data.gravityData.zAxis,
+                ),
+                gyroscopeData = GyroscopeData(
+                    xAxisRotationRate = data.gyroscopeData.xAxis,
+                    yAxisRotationRate = data.gyroscopeData.yAxis,
+                    zAxisRotationRate = data.gyroscopeData.zAxis,
+                    orientationX = data.gyroscopeData.orientationX,
+                    orientationY = data.gyroscopeData.orientationY,
+                    orientationZ = data.gyroscopeData.orientationZ,
+                ),
+                linearAccelerometerData =
+                LinearAccelerometerData(
+                    xAxisLinearAcceleration = data.linearAccelerometerData.xAxis,
+                    yAxisLinearAcceleration = data.linearAccelerometerData.yAxis,
+                    zAxisLinearAcceleration = data.linearAccelerometerData.zAxis,
+                ),
+                rotationVectorData = RotationVectorData(
+                    xAxisRotationVector = data.rotationVectorData.xAxis,
+                    yAxisRotationVector = data.rotationVectorData.yAxis,
+                    zAxisRotationVector = data.rotationVectorData.zAxis,
+                    rotationVectorScalar = data.rotationVectorData.scalar,
+                    orientationX = data.rotationVectorData.orientationX,
+                    orientationY = data.rotationVectorData.orientationY,
+                    orientationZ = data.rotationVectorData.orientationZ,
+                ),
+            ),
             gpsData =
-                GpsData(
-                    latitude = data.gpsData.latitude,
-                    longitude = data.gpsData.longitude,
-                    altitude = data.gpsData.altitude,
-                    accuracy = data.gpsData.accuracy,
-                    bearing = data.gpsData.bearing,
-                    bearingAccuracyDegrees = data.gpsData.bearingAccuracyDegrees,
-                    speed = data.gpsData.speed,
-                    speedAccuracyMetersPerSecond = data.gpsData.speedAccuracyMetersPerSecond,
-                ),
+            GpsData(
+                latitude = data.gpsData.latitude,
+                longitude = data.gpsData.longitude,
+                altitude = data.gpsData.altitude,
+                accuracy = data.gpsData.accuracy,
+                bearing = data.gpsData.bearing,
+                bearingAccuracyDegrees = data.gpsData.bearingAccuracyDegrees,
+                speed = data.gpsData.speed,
+                speedAccuracyMetersPerSecond = data.gpsData.speedAccuracyMetersPerSecond,
+            ),
             heartRateData =
-                HeartRateData(
-                    heartRate = data.heartRateData.heartRate,
-                ),
+            HeartRateData(
+                heartRate = data.heartRateData.heartRate,
+            ),
         )
 
     fun domainToDb(data: TripDatapoint): DbTripDatapoint =
@@ -78,50 +83,56 @@ object TripDatapointMapper {
             tripId = data.tripId,
             timestamp = data.timestamp,
             accelerometerData =
-                DbSensorData(
-                    xAxis = data.sensorData.accelerometerData.xAxisAcceleration,
-                    yAxis = data.sensorData.accelerometerData.yAxisAcceleration,
-                    zAxis = data.sensorData.accelerometerData.zAxisAcceleration,
-                ),
+            DbSensorData(
+                xAxis = data.sensorData.accelerometerData.xAxisAcceleration,
+                yAxis = data.sensorData.accelerometerData.yAxisAcceleration,
+                zAxis = data.sensorData.accelerometerData.zAxisAcceleration,
+            ),
             gravityData =
-                DbSensorData(
-                    xAxis = data.sensorData.gravityData.xAxisGravity,
-                    yAxis = data.sensorData.gravityData.yAxisGravity,
-                    zAxis = data.sensorData.gravityData.zAxisGravity,
-                ),
+            DbSensorData(
+                xAxis = data.sensorData.gravityData.xAxisGravity,
+                yAxis = data.sensorData.gravityData.yAxisGravity,
+                zAxis = data.sensorData.gravityData.zAxisGravity,
+            ),
             gyroscopeData =
-                DbSensorData(
-                    xAxis = data.sensorData.gyroscopeData.xAxisRotationRate,
-                    yAxis = data.sensorData.gyroscopeData.yAxisRotationRate,
-                    zAxis = data.sensorData.gyroscopeData.zAxisRotationRate,
-                ),
+            DbGyroscopeData(
+                xAxis = data.sensorData.gyroscopeData.xAxisRotationRate,
+                yAxis = data.sensorData.gyroscopeData.yAxisRotationRate,
+                zAxis = data.sensorData.gyroscopeData.zAxisRotationRate,
+                orientationX = data.sensorData.gyroscopeData.orientationX,
+                orientationY = data.sensorData.gyroscopeData.orientationY,
+                orientationZ = data.sensorData.gyroscopeData.orientationZ,
+            ),
             linearAccelerometerData =
-                DbSensorData(
-                    xAxis = data.sensorData.linearAccelerometerData.xAxisLinearAcceleration,
-                    yAxis = data.sensorData.linearAccelerometerData.yAxisLinearAcceleration,
-                    zAxis = data.sensorData.linearAccelerometerData.zAxisLinearAcceleration,
-                ),
+            DbSensorData(
+                xAxis = data.sensorData.linearAccelerometerData.xAxisLinearAcceleration,
+                yAxis = data.sensorData.linearAccelerometerData.yAxisLinearAcceleration,
+                zAxis = data.sensorData.linearAccelerometerData.zAxisLinearAcceleration,
+            ),
             rotationVectorData =
-                DbRotationVectorSensorData(
-                    xAxis = data.sensorData.rotationVectorData.xAxisRotationVector,
-                    yAxis = data.sensorData.rotationVectorData.yAxisRotationVector,
-                    zAxis = data.sensorData.rotationVectorData.zAxisRotationVector,
-                    scalar = data.sensorData.rotationVectorData.rotationVectorScalar,
-                ),
+            DbRotationVectorSensorData(
+                xAxis = data.sensorData.rotationVectorData.xAxisRotationVector,
+                yAxis = data.sensorData.rotationVectorData.yAxisRotationVector,
+                zAxis = data.sensorData.rotationVectorData.zAxisRotationVector,
+                scalar = data.sensorData.rotationVectorData.rotationVectorScalar,
+                orientationX = data.sensorData.rotationVectorData.orientationX,
+                orientationY = data.sensorData.rotationVectorData.orientationY,
+                orientationZ = data.sensorData.rotationVectorData.orientationZ,
+            ),
             gpsData =
-                DbGpsData(
-                    latitude = data.gpsData.latitude,
-                    longitude = data.gpsData.longitude,
-                    altitude = data.gpsData.altitude,
-                    accuracy = data.gpsData.accuracy,
-                    bearing = data.gpsData.bearing,
-                    bearingAccuracyDegrees = data.gpsData.bearingAccuracyDegrees,
-                    speed = data.gpsData.speed,
-                    speedAccuracyMetersPerSecond = data.gpsData.speedAccuracyMetersPerSecond,
-                ),
+            DbGpsData(
+                latitude = data.gpsData.latitude,
+                longitude = data.gpsData.longitude,
+                altitude = data.gpsData.altitude,
+                accuracy = data.gpsData.accuracy,
+                bearing = data.gpsData.bearing,
+                bearingAccuracyDegrees = data.gpsData.bearingAccuracyDegrees,
+                speed = data.gpsData.speed,
+                speedAccuracyMetersPerSecond = data.gpsData.speedAccuracyMetersPerSecond,
+            ),
             heartRateData =
-                DbHeartRateData(
-                    heartRate = data.heartRateData.heartRate,
-                ),
+            DbHeartRateData(
+                heartRate = data.heartRateData.heartRate,
+            ),
         )
 }

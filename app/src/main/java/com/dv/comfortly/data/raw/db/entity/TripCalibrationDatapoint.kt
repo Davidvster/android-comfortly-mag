@@ -28,7 +28,7 @@ data class TripCalibrationDatapoint(
     @ColumnInfo(name = "timestamp") val timestamp: Instant,
     @Embedded(prefix = "accelerometer_") val accelerometerData: SensorData,
     @Embedded(prefix = "gravity_") val gravityData: SensorData,
-    @Embedded(prefix = "gyroscope_") val gyroscopeData: SensorData,
+    @Embedded(prefix = "gyroscope_") val gyroscopeData: GyroscopeData,
     @Embedded(prefix = "linear_accelerometer_") val linearAccelerometerData: SensorData,
     @Embedded(prefix = "rotation_vector_") val rotationVectorData: RotationVectorSensorData,
     @Embedded(prefix = "gps_") val gpsData: GpsData,

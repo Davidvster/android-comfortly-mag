@@ -32,12 +32,14 @@ object TripCalibrationDatapointMapper {
                             yAxisGravity = data.gravityData.yAxis,
                             zAxisGravity = data.gravityData.zAxis,
                         ),
-                    gyroscopeData =
-                        GyroscopeData(
-                            xAxisRotationRate = data.gyroscopeData.xAxis,
-                            yAxisRotationRate = data.gyroscopeData.yAxis,
-                            zAxisRotationRate = data.gyroscopeData.zAxis,
-                        ),
+                    gyroscopeData = GyroscopeData(
+                        xAxisRotationRate = data.gyroscopeData.xAxis,
+                        yAxisRotationRate = data.gyroscopeData.yAxis,
+                        zAxisRotationRate = data.gyroscopeData.zAxis,
+                        orientationX = data.gyroscopeData.orientationX,
+                        orientationY = data.gyroscopeData.orientationY,
+                        orientationZ = data.gyroscopeData.orientationZ,
+                    ),
                     linearAccelerometerData =
                         LinearAccelerometerData(
                             xAxisLinearAcceleration = data.linearAccelerometerData.xAxis,
@@ -45,12 +47,15 @@ object TripCalibrationDatapointMapper {
                             zAxisLinearAcceleration = data.linearAccelerometerData.zAxis,
                         ),
                     rotationVectorData =
-                        RotationVectorData(
-                            xAxisRotationVector = data.rotationVectorData.xAxis,
-                            yAxisRotationVector = data.rotationVectorData.yAxis,
-                            zAxisRotationVector = data.rotationVectorData.zAxis,
-                            rotationVectorScalar = data.rotationVectorData.scalar,
-                        ),
+                    RotationVectorData(
+                        xAxisRotationVector = data.rotationVectorData.xAxis,
+                        yAxisRotationVector = data.rotationVectorData.yAxis,
+                        zAxisRotationVector = data.rotationVectorData.zAxis,
+                        rotationVectorScalar = data.rotationVectorData.scalar,
+                        orientationX = data.rotationVectorData.orientationX,
+                        orientationY = data.rotationVectorData.orientationY,
+                        orientationZ = data.rotationVectorData.orientationZ,
+                    ),
                 ),
             gpsData =
                 GpsData(
@@ -85,12 +90,14 @@ object TripCalibrationDatapointMapper {
                     yAxis = data.sensorData.gravityData.yAxisGravity,
                     zAxis = data.sensorData.gravityData.zAxisGravity,
                 ),
-            gyroscopeData =
-                DbSensorData(
-                    xAxis = data.sensorData.gyroscopeData.xAxisRotationRate,
-                    yAxis = data.sensorData.gyroscopeData.yAxisRotationRate,
-                    zAxis = data.sensorData.gyroscopeData.zAxisRotationRate,
-                ),
+            gyroscopeData = DbGyroscopeData(
+                xAxis = data.sensorData.gyroscopeData.xAxisRotationRate,
+                yAxis = data.sensorData.gyroscopeData.yAxisRotationRate,
+                zAxis = data.sensorData.gyroscopeData.zAxisRotationRate,
+                orientationX = data.sensorData.gyroscopeData.orientationX,
+                orientationY = data.sensorData.gyroscopeData.orientationY,
+                orientationZ = data.sensorData.gyroscopeData.orientationZ,
+            ),
             linearAccelerometerData =
                 DbSensorData(
                     xAxis = data.sensorData.linearAccelerometerData.xAxisLinearAcceleration,
@@ -98,12 +105,15 @@ object TripCalibrationDatapointMapper {
                     zAxis = data.sensorData.linearAccelerometerData.zAxisLinearAcceleration,
                 ),
             rotationVectorData =
-                DbRotationVectorSensorData(
-                    xAxis = data.sensorData.rotationVectorData.xAxisRotationVector,
-                    yAxis = data.sensorData.rotationVectorData.yAxisRotationVector,
-                    zAxis = data.sensorData.rotationVectorData.zAxisRotationVector,
-                    scalar = data.sensorData.rotationVectorData.rotationVectorScalar,
-                ),
+            DbRotationVectorSensorData(
+                xAxis = data.sensorData.rotationVectorData.xAxisRotationVector,
+                yAxis = data.sensorData.rotationVectorData.yAxisRotationVector,
+                zAxis = data.sensorData.rotationVectorData.zAxisRotationVector,
+                scalar = data.sensorData.rotationVectorData.rotationVectorScalar,
+                orientationX = data.sensorData.rotationVectorData.orientationX,
+                orientationY = data.sensorData.rotationVectorData.orientationY,
+                orientationZ = data.sensorData.rotationVectorData.orientationZ,
+            ),
             gpsData =
                 DbGpsData(
                     latitude = data.gpsData.latitude,

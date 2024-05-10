@@ -64,14 +64,14 @@ interface GpsObserver : BaseObserver<LocationData> {
                                 locationResult.lastLocation?.let { location ->
                                     this@callbackFlow.trySend(
                                         LocationData(
-                                            location.latitude,
-                                            location.longitude,
-                                            location.altitude,
-                                            location.accuracy,
-                                            location.bearing,
-                                            location.bearingAccuracyDegrees,
-                                            location.speed,
-                                            location.speedAccuracyMetersPerSecond,
+                                            latitude = location.latitude,
+                                            longitude = location.longitude,
+                                            altitude = location.altitude,
+                                            accuracy = location.accuracy,
+                                            bearing = location.bearing,
+                                            bearingAccuracyDegrees = location.bearingAccuracyDegrees,
+                                            speed = location.speed,
+                                            speedAccuracyMetersPerSecond = location.speedAccuracyMetersPerSecond,
                                         ),
                                     )
                                 }

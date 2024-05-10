@@ -42,9 +42,9 @@ constructor(
     private var ecgSensorDataIndex = 0
     private var accelerometerData = GraphData(emptyList(), emptyList(), emptyList())
     private var gravityData = GraphData(emptyList(), emptyList(), emptyList())
-    private var gyroscopeData = GraphData(emptyList(), emptyList(), emptyList())
+    private var gyroscopeData = GyroscopeGraphData(emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList())
     private var linearAccelerationData = GraphData(emptyList(), emptyList(), emptyList())
-    private var rotationVectorData = RotationVectorGraphData(emptyList(), emptyList(), emptyList(), emptyList())
+    private var rotationVectorData = RotationVectorGraphData(emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList())
     private var gpsData = emptyList<GpsData>()
     private var heartRateData = HeartRateGraphData(emptyList())
     private var ecgData = EcgGraphData(emptyList())
@@ -81,24 +81,24 @@ constructor(
             launch {
                 sensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO).collect {
                     sensorDataIndex = accelerometerData.xAxis.size
-                    val currentXvalue = sensorDataIndex.toFloat()
+                    val currentIndex = sensorDataIndex.toFloat()
                     val currentSensorData = it.sensorData
                     accelerometerData = accelerometerData.copy(
                         xAxis = accelerometerData.xAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.accelerometerData.xAxisAcceleration,
                             ),
                         ),
                         yAxis = accelerometerData.yAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.accelerometerData.yAxisAcceleration,
                             ),
                         ),
                         zAxis = accelerometerData.zAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.accelerometerData.zAxisAcceleration,
                             ),
                         ),
@@ -106,19 +106,19 @@ constructor(
                     gravityData = gravityData.copy(
                         xAxis = gravityData.xAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.gravityData.xAxisGravity
                             )
                         ),
                         yAxis = gravityData.yAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.gravityData.yAxisGravity
                             )
                         ),
                         zAxis = gravityData.zAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.gravityData.zAxisGravity
                             )
                         ),
@@ -126,39 +126,57 @@ constructor(
                     gyroscopeData = gyroscopeData.copy(
                         xAxis = gyroscopeData.xAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.gyroscopeData.xAxisRotationRate,
                             ),
                         ),
                         yAxis = gyroscopeData.yAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.gyroscopeData.yAxisRotationRate,
                             ),
                         ),
                         zAxis = gyroscopeData.zAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.gyroscopeData.zAxisRotationRate,
+                            ),
+                        ),
+                        orientationX = gyroscopeData.orientationX.appendWithLimitSize(
+                            Entry(
+                                currentIndex,
+                                currentSensorData.gyroscopeData.orientationX,
+                            ),
+                        ),
+                        orientationY = gyroscopeData.orientationY.appendWithLimitSize(
+                            Entry(
+                                currentIndex,
+                                currentSensorData.gyroscopeData.orientationY,
+                            ),
+                        ),
+                        orientationZ = gyroscopeData.orientationX.appendWithLimitSize(
+                            Entry(
+                                currentIndex,
+                                currentSensorData.gyroscopeData.orientationZ,
                             ),
                         ),
                     )
                     linearAccelerationData = linearAccelerationData.copy(
                         xAxis = linearAccelerationData.xAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.linearAccelerometerData.xAxisLinearAcceleration,
                             ),
                         ),
                         yAxis = linearAccelerationData.yAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.linearAccelerometerData.yAxisLinearAcceleration,
                             ),
                         ),
                         zAxis = linearAccelerationData.zAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.linearAccelerometerData.zAxisLinearAcceleration,
                             ),
                         ),
@@ -166,26 +184,44 @@ constructor(
                     rotationVectorData = rotationVectorData.copy(
                         xAxis = rotationVectorData.xAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.rotationVectorData.xAxisRotationVector,
                             ),
                         ),
                         yAxis = rotationVectorData.yAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.rotationVectorData.yAxisRotationVector,
                             ),
                         ),
                         zAxis = rotationVectorData.zAxis.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.rotationVectorData.zAxisRotationVector,
                             ),
                         ),
                         scalar = rotationVectorData.scalar.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 currentSensorData.rotationVectorData.rotationVectorScalar,
+                            ),
+                        ),
+                        orientationX = rotationVectorData.orientationX.appendWithLimitSize(
+                            Entry(
+                                currentIndex,
+                                currentSensorData.rotationVectorData.orientationX,
+                            ),
+                        ),
+                        orientationY = rotationVectorData.orientationY.appendWithLimitSize(
+                            Entry(
+                                currentIndex,
+                                currentSensorData.rotationVectorData.orientationY,
+                            ),
+                        ),
+                        orientationZ = rotationVectorData.orientationX.appendWithLimitSize(
+                            Entry(
+                                currentIndex,
+                                currentSensorData.rotationVectorData.orientationZ,
                             ),
                         ),
                     )
@@ -203,7 +239,7 @@ constructor(
                         heartRate =
                         heartRateData.heartRate.appendWithLimitSize(
                             Entry(
-                                currentXvalue,
+                                currentIndex,
                                 it.heartRateData.heartRate.toFloat(),
                             ),
                         ),

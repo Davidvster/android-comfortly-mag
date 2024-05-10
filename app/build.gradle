@@ -18,10 +18,15 @@ android {
         versionCode 1
         versionName "1.0"
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["room.schemaLocation": "$projectDir/database/schemas".toString()]
-            }
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments += ["room.schemaLocation": "$projectDir/database/schemas".toString()]
+//            }
+//        }
+
+        //      *** For Kotlin ****
+        ksp {
+            arg("room.schemaLocation", "$projectDir/database/schemas".toString())
         }
     }
 

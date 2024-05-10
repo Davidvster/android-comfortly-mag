@@ -72,6 +72,13 @@
                 android:layout_marginHorizontal="@dimen/spacing_16"/>
 
             <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/gyroscopeOrientationChart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:layout_marginHorizontal="@dimen/spacing_16"/>
+
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/linearAccelerationChart"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
@@ -80,6 +87,13 @@
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/rotationVectorChart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:layout_marginHorizontal="@dimen/spacing_16"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/rotationVectorOrientationChart"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_marginTop="@dimen/spacing_16"

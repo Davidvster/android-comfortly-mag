@@ -48,8 +48,10 @@
     <string name="accelerometer">Pospeškometer</string>
     <string name="gravity">Gravitacija</string>
     <string name="gyroscope">Giroskop</string>
+    <string name="gyroscope_orientation">Giroskop orientacija</string>
     <string name="linear_acceleration">Linearni pospešek</string>
     <string name="rotation_vector">Rotacijski vektor</string>
+    <string name="rotation_vector_orientation">Rotacijski vektor orientacija</string>
     <string name="heart_rate">Srčni utrip (bpm)</string>
     <string name="ecg">EKG (mV)</string>
     <string name="x_axis">X-os</string>
