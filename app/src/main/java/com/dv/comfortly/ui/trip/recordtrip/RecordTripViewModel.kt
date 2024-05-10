@@ -42,9 +42,18 @@ constructor(
     private var ecgSensorDataIndex = 0
     private var accelerometerData = GraphData(emptyList(), emptyList(), emptyList())
     private var gravityData = GraphData(emptyList(), emptyList(), emptyList())
-    private var gyroscopeData = GyroscopeGraphData(emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList())
+    private var gyroscopeData =
+        GyroscopeGraphData(emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList())
     private var linearAccelerationData = GraphData(emptyList(), emptyList(), emptyList())
-    private var rotationVectorData = RotationVectorGraphData(emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList())
+    private var rotationVectorData = RotationVectorGraphData(
+        emptyList(),
+        emptyList(),
+        emptyList(),
+        emptyList(),
+        emptyList(),
+        emptyList(),
+        emptyList()
+    )
     private var gpsData = emptyList<GpsData>()
     private var heartRateData = HeartRateGraphData(emptyList())
     private var ecgData = EcgGraphData(emptyList())
@@ -80,151 +89,153 @@ constructor(
             delay(INITIAL_DELAY)
             launch {
                 sensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO).collect {
-                    sensorDataIndex = accelerometerData.xAxis.size
+                    sensorDataIndex = heartRateData.heartRate.size
                     val currentIndex = sensorDataIndex.toFloat()
                     val currentSensorData = it.sensorData
-                    accelerometerData = accelerometerData.copy(
-                        xAxis = accelerometerData.xAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.accelerometerData.xAxisAcceleration,
+                    if (!RecordTripActivity.FAST_MODE) {
+                        accelerometerData = accelerometerData.copy(
+                            xAxis = accelerometerData.xAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.accelerometerData.xAxisAcceleration,
+                                ),
                             ),
-                        ),
-                        yAxis = accelerometerData.yAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.accelerometerData.yAxisAcceleration,
+                            yAxis = accelerometerData.yAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.accelerometerData.yAxisAcceleration,
+                                ),
                             ),
-                        ),
-                        zAxis = accelerometerData.zAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.accelerometerData.zAxisAcceleration,
+                            zAxis = accelerometerData.zAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.accelerometerData.zAxisAcceleration,
+                                ),
                             ),
-                        ),
-                    )
-                    gravityData = gravityData.copy(
-                        xAxis = gravityData.xAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gravityData.xAxisGravity
-                            )
-                        ),
-                        yAxis = gravityData.yAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gravityData.yAxisGravity
-                            )
-                        ),
-                        zAxis = gravityData.zAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gravityData.zAxisGravity
-                            )
-                        ),
-                    )
-                    gyroscopeData = gyroscopeData.copy(
-                        xAxis = gyroscopeData.xAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gyroscopeData.xAxisRotationRate,
+                        )
+                        gravityData = gravityData.copy(
+                            xAxis = gravityData.xAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gravityData.xAxisGravity
+                                )
                             ),
-                        ),
-                        yAxis = gyroscopeData.yAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gyroscopeData.yAxisRotationRate,
+                            yAxis = gravityData.yAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gravityData.yAxisGravity
+                                )
                             ),
-                        ),
-                        zAxis = gyroscopeData.zAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gyroscopeData.zAxisRotationRate,
+                            zAxis = gravityData.zAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gravityData.zAxisGravity
+                                )
                             ),
-                        ),
-                        orientationX = gyroscopeData.orientationX.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gyroscopeData.orientationX,
+                        )
+                        gyroscopeData = gyroscopeData.copy(
+                            xAxis = gyroscopeData.xAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gyroscopeData.xAxisRotationRate,
+                                ),
                             ),
-                        ),
-                        orientationY = gyroscopeData.orientationY.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gyroscopeData.orientationY,
+                            yAxis = gyroscopeData.yAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gyroscopeData.yAxisRotationRate,
+                                ),
                             ),
-                        ),
-                        orientationZ = gyroscopeData.orientationX.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.gyroscopeData.orientationZ,
+                            zAxis = gyroscopeData.zAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gyroscopeData.zAxisRotationRate,
+                                ),
                             ),
-                        ),
-                    )
-                    linearAccelerationData = linearAccelerationData.copy(
-                        xAxis = linearAccelerationData.xAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.linearAccelerometerData.xAxisLinearAcceleration,
+                            orientationX = gyroscopeData.orientationX.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gyroscopeData.orientationX,
+                                ),
                             ),
-                        ),
-                        yAxis = linearAccelerationData.yAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.linearAccelerometerData.yAxisLinearAcceleration,
+                            orientationY = gyroscopeData.orientationY.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gyroscopeData.orientationY,
+                                ),
                             ),
-                        ),
-                        zAxis = linearAccelerationData.zAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.linearAccelerometerData.zAxisLinearAcceleration,
+                            orientationZ = gyroscopeData.orientationX.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.gyroscopeData.orientationZ,
+                                ),
                             ),
-                        ),
-                    )
-                    rotationVectorData = rotationVectorData.copy(
-                        xAxis = rotationVectorData.xAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.rotationVectorData.xAxisRotationVector,
+                        )
+                        linearAccelerationData = linearAccelerationData.copy(
+                            xAxis = linearAccelerationData.xAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.linearAccelerometerData.xAxisLinearAcceleration,
+                                ),
                             ),
-                        ),
-                        yAxis = rotationVectorData.yAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.rotationVectorData.yAxisRotationVector,
+                            yAxis = linearAccelerationData.yAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.linearAccelerometerData.yAxisLinearAcceleration,
+                                ),
                             ),
-                        ),
-                        zAxis = rotationVectorData.zAxis.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.rotationVectorData.zAxisRotationVector,
+                            zAxis = linearAccelerationData.zAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.linearAccelerometerData.zAxisLinearAcceleration,
+                                ),
                             ),
-                        ),
-                        scalar = rotationVectorData.scalar.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.rotationVectorData.rotationVectorScalar,
+                        )
+                        rotationVectorData = rotationVectorData.copy(
+                            xAxis = rotationVectorData.xAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.rotationVectorData.xAxisRotationVector,
+                                ),
                             ),
-                        ),
-                        orientationX = rotationVectorData.orientationX.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.rotationVectorData.orientationX,
+                            yAxis = rotationVectorData.yAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.rotationVectorData.yAxisRotationVector,
+                                ),
                             ),
-                        ),
-                        orientationY = rotationVectorData.orientationY.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.rotationVectorData.orientationY,
+                            zAxis = rotationVectorData.zAxis.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.rotationVectorData.zAxisRotationVector,
+                                ),
                             ),
-                        ),
-                        orientationZ = rotationVectorData.orientationX.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                currentSensorData.rotationVectorData.orientationZ,
+                            scalar = rotationVectorData.scalar.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.rotationVectorData.rotationVectorScalar,
+                                ),
                             ),
-                        ),
-                    )
+                            orientationX = rotationVectorData.orientationX.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.rotationVectorData.orientationX,
+                                ),
+                            ),
+                            orientationY = rotationVectorData.orientationY.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.rotationVectorData.orientationY,
+                                ),
+                            ),
+                            orientationZ = rotationVectorData.orientationX.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    currentSensorData.rotationVectorData.orientationZ,
+                                ),
+                            ),
+                        )
+                    }
                     val lastGps = gpsData.lastOrNull()
                     val currentGps = it.gpsData
                     gpsData = if (lastGps != null &&
@@ -245,35 +256,45 @@ constructor(
                         ),
                     )
 
-                    viewState = viewState.copy(
-                        accelerometer = accelerometerData,
-                        gravity = gravityData,
-                        gyroscope = gyroscopeData,
-                        linearAcceleration = linearAccelerationData,
-                        rotationVector = rotationVectorData,
-                        locations = gpsData.distinct(),
-                        heartRate = heartRateData,
-                        ecgData = ecgData,
-                        totalElapsedTime = Clock.System.now() - startDateTime,
-                    )
+                    if (!RecordTripActivity.FAST_MODE) {
+                        viewState = viewState.copy(
+                            accelerometer = accelerometerData,
+                            gravity = gravityData,
+                            gyroscope = gyroscopeData,
+                            linearAcceleration = linearAccelerationData,
+                            rotationVector = rotationVectorData,
+                            locations = gpsData.distinct(),
+                            heartRate = heartRateData,
+                            ecgData = ecgData,
+                            totalElapsedTime = Clock.System.now() - startDateTime,
+                        )
+                    } else {
+                        viewState = viewState.copy(
+                            locations = gpsData.distinct(),
+                            heartRate = heartRateData,
+                            ecgData = ecgData,
+                            totalElapsedTime = Clock.System.now() - startDateTime,
+                        )
+                    }
                 }
             }
             launch {
                 ecgSensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO)
                     .collect { ecg ->
-                        ecgSensorDataIndex = ecgData.ecg.size
-                        val currentXvalue = ecgSensorDataIndex.toFloat()
-                        ecgData =
-                            ecgData.copy(
+//                        if (!RecordTripActivity.FAST_MODE) {
+                            ecgSensorDataIndex = ecgData.ecg.size
+                            val currentIndex = ecgSensorDataIndex.toFloat()
+                            ecgData = ecgData.copy(
                                 ecg = ecgData.ecg.appendWithLimitSize(
                                     ecg.mapIndexed { index, value ->
                                         Entry(
-                                            currentXvalue + index,
+                                            currentIndex + index,
                                             value.value.toFloat(),
                                         )
                                     },
                                 ),
                             )
+//                        }
                     }
             }
         }

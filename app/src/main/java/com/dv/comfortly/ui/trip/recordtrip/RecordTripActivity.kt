@@ -36,6 +36,8 @@ import kotlin.time.Duration.Companion.minutes
 @AndroidEntryPoint
 class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapReadyCallback {
     companion object {
+        const val FAST_MODE = true
+
         private val HEART_RATE_LABEL = R.string.heart_rate
         private val ECG_LABEL = R.string.ecg
         private val X_LABEL = R.string.x_axis
@@ -84,26 +86,28 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
 
     override fun renderState(state: NewTripState) {
         with(viewBinding) {
-            state.accelerometer?.let { accelerometerChart.setData(it) }
-            state.gravity?.let { gravityChart.setData(it) }
-            state.gyroscope?.let {
-                setDataGyroscope(
-                    coreGraph = gyroscopeChart,
-                    orientationGraph = gyroscopeOrientationChart,
-                    newData = it
-                )
+            if (!FAST_MODE) {
+                state.accelerometer?.let { accelerometerChart.setData(it) }
+                state.gravity?.let { gravityChart.setData(it) }
+                state.gyroscope?.let {
+                    setDataGyroscope(
+                        coreGraph = gyroscopeChart,
+                        orientationGraph = gyroscopeOrientationChart,
+                        newData = it
+                    )
+                }
+                state.linearAcceleration?.let { linearAccelerationChart.setData(it) }
+                state.rotationVector?.let {
+                    setDataRotationVector(
+                        coreGraph = rotationVectorChart,
+                        orientationGraph = rotationVectorOrientationChart,
+                        newData = it
+                    )
+                }
             }
-            state.linearAcceleration?.let { linearAccelerationChart.setData(it) }
-            state.rotationVector?.let {
-                setDataRotationVector(
-                    coreGraph = rotationVectorChart,
-                    orientationGraph = rotationVectorOrientationChart,
-                    newData = it
-                )
-            }
+            state.ecgData?.let { ecgChart.setData(it) }
             setMapData(state.locations)
             state.heartRate?.let { hearRateChart.setData(it) }
-            state.ecgData?.let { ecgChart.setData(it) }
             progress.isVisible =
                 state.recordTripType == RecordTripType.CALIBRATE || state.recordTripType == RecordTripType.RECORD
             progress.text =
@@ -200,14 +204,16 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 LatLng(first.latitude, first.longitude),
                 LatLng(second.latitude, second.longitude),
             )
-            currentPolyLine?.remove()
-            currentPolyLine = map.addPolyline(polylinePoints)
-            map.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(second.latitude, second.longitude),
-                    MAP_ZOOM_LEVEL,
-                ),
-            )
+            if (locations.size % 20 == 0) {
+                currentPolyLine?.remove()
+                currentPolyLine = map.addPolyline(polylinePoints)
+                map.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(second.latitude, second.longitude),
+                        MAP_ZOOM_LEVEL,
+                    ),
+                )
+            }
         } else if (locations.size == 1) {
             map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
@@ -219,31 +225,32 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     }
 
     private fun ActivityRecordTripBinding.initGraphs() {
-        accelerometerChart.initData(R.string.accelerometer)
-        gravityChart.initData(R.string.gravity)
-        gyroscopeChart.initData(R.string.gyroscope)
-        gyroscopeOrientationChart.initData(R.string.gyroscope_orientation)
-        linearAccelerationChart.initData(R.string.linear_acceleration)
+        if (!FAST_MODE) {
+            accelerometerChart.initData(R.string.accelerometer)
+            gravityChart.initData(R.string.gravity)
+            gyroscopeChart.initData(R.string.gyroscope)
+            gyroscopeOrientationChart.initData(R.string.gyroscope_orientation)
+            linearAccelerationChart.initData(R.string.linear_acceleration)
 
-        rotationVectorChart.apply {
-            val x = SimpleLineDataSet(dataLabel = getString(X_LABEL), lineColor = Color.RED)
-            val y = SimpleLineDataSet(dataLabel = getString(Y_LABEL), lineColor = Color.GREEN)
-            val z = SimpleLineDataSet(dataLabel = getString(Z_LABEL), lineColor = Color.BLUE)
-            val scalar = SimpleLineDataSet(dataLabel = getString(SCALAR_LABEL), lineColor = Color.YELLOW)
-            configureForApp(getString(R.string.rotation_vector))
-            data = LineData(x, y, z, scalar)
+            rotationVectorChart.apply {
+                val x = SimpleLineDataSet(dataLabel = getString(X_LABEL), lineColor = Color.RED)
+                val y = SimpleLineDataSet(dataLabel = getString(Y_LABEL), lineColor = Color.GREEN)
+                val z = SimpleLineDataSet(dataLabel = getString(Z_LABEL), lineColor = Color.BLUE)
+                val scalar = SimpleLineDataSet(dataLabel = getString(SCALAR_LABEL), lineColor = Color.YELLOW)
+                configureForApp(getString(R.string.rotation_vector))
+                data = LineData(x, y, z, scalar)
+            }
+            rotationVectorOrientationChart.initData(R.string.rotation_vector_orientation)
         }
-        rotationVectorOrientationChart.initData(R.string.rotation_vector_orientation)
+        ecgChart.apply {
+            val x = SimpleLineDataSet(dataLabel = getString(ECG_LABEL), lineColor = Color.RED)
+            configureForApp(getString(R.string.ecg))
+            data = LineData(x)
+        }
 
         hearRateChart.apply {
             val x = SimpleLineDataSet(dataLabel = getString(HEART_RATE_LABEL), lineColor = Color.RED)
             configureForApp(getString(R.string.heart_rate))
-            data = LineData(x)
-        }
-
-        ecgChart.apply {
-            val x = SimpleLineDataSet(dataLabel = getString(ECG_LABEL), lineColor = Color.RED)
-            configureForApp(getString(R.string.ecg))
             data = LineData(x)
         }
     }
@@ -265,10 +272,6 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         x.values = newData.xAxis
         y.values = newData.yAxis
         z.values = newData.zAxis
-//        x.notifyDataSetChanged()
-//        y.notifyDataSetChanged()
-//        z.notifyDataSetChanged()
-//        data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
@@ -281,10 +284,6 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
             x.values = newData.xAxis
             y.values = newData.yAxis
             z.values = newData.zAxis
-//        x.notifyDataSetChanged()
-//        y.notifyDataSetChanged()
-//        z.notifyDataSetChanged()
-//        data.notifyDataChanged()
             notifyDataSetChanged()
             invalidate()
         }
@@ -303,7 +302,11 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         }
     }
 
-    private fun setDataRotationVector(coreGraph: LineChart, orientationGraph: LineChart, newData: RotationVectorGraphData) {
+    private fun setDataRotationVector(
+        coreGraph: LineChart,
+        orientationGraph: LineChart,
+        newData: RotationVectorGraphData
+    ) {
         coreGraph.apply {
             val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
             val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
@@ -313,11 +316,6 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
             y.values = newData.yAxis
             z.values = newData.zAxis
             scalar.values = newData.scalar
-//        x.notifyDataSetChanged()
-//        y.notifyDataSetChanged()
-//        z.notifyDataSetChanged()
-//        scalar.notifyDataSetChanged()
-//        data.notifyDataChanged()
             notifyDataSetChanged()
             invalidate()
         }
@@ -338,8 +336,6 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     private fun LineChart.setData(newData: HeartRateGraphData) {
         val x: LineDataSet = data.getDataSetByIndex(HEART_RATE_INDEX) as LineDataSet
         x.values = newData.heartRate
-//        x.notifyDataSetChanged()
-//        data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
@@ -347,8 +343,6 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     private fun LineChart.setData(newData: EcgGraphData) {
         val x: LineDataSet = data.getDataSetByIndex(ECG_INDEX) as LineDataSet
         x.values = newData.ecg
-//        x.notifyDataSetChanged()
-//        data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
