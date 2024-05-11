@@ -16,6 +16,7 @@ import com.dv.comfortly.domain.models.GpsData
 import com.dv.comfortly.ui.base.BaseActivity
 import com.dv.comfortly.ui.base.viewBinding
 import com.dv.comfortly.ui.ext.configureForApp
+import com.dv.comfortly.ui.trip.ChartTab
 import com.dv.comfortly.ui.trip.recordtrip.EcgGraphData
 import com.dv.comfortly.ui.trip.recordtrip.GraphData
 import com.dv.comfortly.ui.trip.recordtrip.GyroscopeGraphData
@@ -185,13 +186,13 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
     }
 
     private fun ActivityTripDetailsBinding.initGraphs() {
-        ChartTab.values().forEach {
+        ChartTab.entries.forEach {
             chartTabs.addTab(chartTabs.newTab().setText(it.stringRes))
         }
         chartTabs.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    val chartTab = ChartTab.values().first { getString(it.stringRes).equals(tab?.text.toString(), true) }
+                    val chartTab = ChartTab.entries.first { getString(it.stringRes).equals(tab?.text.toString(), true) }
                     vmState?.let { setGraph(chartTab, it) }
                 }
 
@@ -374,20 +375,6 @@ class TripDetailsActivity : BaseActivity<TripDetailsState, TripDetailsEvent>(), 
         data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
-    }
-
-    private enum class ChartTab(
-        @StringRes val stringRes: Int,
-    ) {
-        HEART_RATE(R.string.heart_rate),
-        ECG(R.string.ecg),
-        ACCELEROMETER(R.string.accelerometer),
-        GRAVITY(R.string.gravity),
-        GYROSCOPE(R.string.gyroscope),
-        GYROSCOPE_ORIENTATION(R.string.gyroscope_orientation),
-        LINEAR_ACCELERATION(R.string.linear_acceleration),
-        ROTATION_VECTOR(R.string.rotation_vector),
-        ROTATION_VECTOR_ORIENTATION(R.string.rotation_vector_orientation),
     }
 
     private fun exportTripDataZipCreateDocument(name: String) {

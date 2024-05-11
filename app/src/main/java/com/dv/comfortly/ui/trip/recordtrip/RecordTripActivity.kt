@@ -18,6 +18,7 @@ import com.dv.comfortly.ui.base.extensions.setThrottleClickListener
 import com.dv.comfortly.ui.base.viewBinding
 import com.dv.comfortly.ui.ext.configureForApp
 import com.dv.comfortly.ui.ext.showDialog
+import com.dv.comfortly.ui.trip.ChartTab
 import com.dv.comfortly.ui.trip.questionnaire.QuestionnaireActivity
 import com.dv.comfortly.ui.utils.SimpleLineDataSet
 import com.github.mikephil.charting.charts.LineChart
@@ -36,7 +37,17 @@ import kotlin.time.Duration.Companion.minutes
 @AndroidEntryPoint
 class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapReadyCallback {
     companion object {
-        const val FAST_MODE = true
+        val includedCharts = setOf(
+            ChartTab.HEART_RATE,
+//            ChartTab.ECG,
+            ChartTab.ACCELEROMETER,
+//            ChartTab.GRAVITY,
+//            ChartTab.GYROSCOPE,
+//            ChartTab.GYROSCOPE_ORIENTATION,
+//            ChartTab.LINEAR_ACCELERATION,
+//            ChartTab.ROTATION_VECTOR,
+//            ChartTab.ROTATION_VECTOR_ORIENTATION,
+        )
 
         private val HEART_RATE_LABEL = R.string.heart_rate
         private val ECG_LABEL = R.string.ecg
@@ -86,9 +97,13 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
 
     override fun renderState(state: NewTripState) {
         with(viewBinding) {
-            if (!FAST_MODE) {
+            if (includedCharts.contains(ChartTab.ACCELEROMETER) && accelerometerChart != null) {
                 state.accelerometer?.let { accelerometerChart.setData(it) }
+            }
+            if (includedCharts.contains(ChartTab.GRAVITY) && gravityChart != null) {
                 state.gravity?.let { gravityChart.setData(it) }
+            }
+            if (includedCharts.contains(ChartTab.GYROSCOPE) && gyroscopeChart != null) {
                 state.gyroscope?.let {
                     setDataGyroscope(
                         coreGraph = gyroscopeChart,
@@ -96,7 +111,15 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                         newData = it
                     )
                 }
+            }
+            if (includedCharts.contains(ChartTab.GYROSCOPE_ORIENTATION) && gyroscopeOrientationChart != null) {
+
+            }
+            if (includedCharts.contains(ChartTab.LINEAR_ACCELERATION) && linearAccelerationChart != null) {
                 state.linearAcceleration?.let { linearAccelerationChart.setData(it) }
+            }
+
+            if (includedCharts.contains(ChartTab.ROTATION_VECTOR) && rotationVectorChart != null) {
                 state.rotationVector?.let {
                     setDataRotationVector(
                         coreGraph = rotationVectorChart,
@@ -105,9 +128,21 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                     )
                 }
             }
-            state.ecgData?.let { ecgChart.setData(it) }
+
+
+            if (includedCharts.contains(ChartTab.ROTATION_VECTOR_ORIENTATION) && rotationVectorOrientationChart != null) {
+
+            }
+
+            if (includedCharts.contains(ChartTab.ECG) && ecgChart != null) {
+                state.ecgData?.let { ecgChart.setData(it) }
+            }
+
+            if (includedCharts.contains(ChartTab.ROTATION_VECTOR_ORIENTATION) && hearRateChart != null) {
+                state.heartRate?.let { hearRateChart.setData(it) }
+            }
+
             setMapData(state.locations)
-            state.heartRate?.let { hearRateChart.setData(it) }
             progress.isVisible =
                 state.recordTripType == RecordTripType.CALIBRATE || state.recordTripType == RecordTripType.RECORD
             progress.text =
@@ -225,13 +260,32 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     }
 
     private fun ActivityRecordTripBinding.initGraphs() {
-        if (!FAST_MODE) {
+        if (includedCharts.contains(ChartTab.ACCELEROMETER)) {
             accelerometerChart.initData(R.string.accelerometer)
+        } else {
+            accelerometerChart.isVisible = false
+        }
+        if (includedCharts.contains(ChartTab.GRAVITY)) {
             gravityChart.initData(R.string.gravity)
+        } else {
+            gravityChart.isVisible = false
+        }
+        if (includedCharts.contains(ChartTab.GYROSCOPE)) {
             gyroscopeChart.initData(R.string.gyroscope)
+        } else {
+            gyroscopeChart.isVisible = false
+        }
+        if (includedCharts.contains(ChartTab.GYROSCOPE_ORIENTATION)) {
             gyroscopeOrientationChart.initData(R.string.gyroscope_orientation)
+        } else {
+            gyroscopeOrientationChart.isVisible = false
+        }
+        if (includedCharts.contains(ChartTab.LINEAR_ACCELERATION)) {
             linearAccelerationChart.initData(R.string.linear_acceleration)
-
+        } else {
+            linearAccelerationChart.isVisible = false
+        }
+        if (includedCharts.contains(ChartTab.ROTATION_VECTOR)) {
             rotationVectorChart.apply {
                 val x = SimpleLineDataSet(dataLabel = getString(X_LABEL), lineColor = Color.RED)
                 val y = SimpleLineDataSet(dataLabel = getString(Y_LABEL), lineColor = Color.GREEN)
@@ -240,18 +294,31 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 configureForApp(getString(R.string.rotation_vector))
                 data = LineData(x, y, z, scalar)
             }
+        } else {
+            rotationVectorChart.isVisible = false
+        }
+        if (includedCharts.contains(ChartTab.ROTATION_VECTOR_ORIENTATION)) {
             rotationVectorOrientationChart.initData(R.string.rotation_vector_orientation)
+        } else {
+            rotationVectorOrientationChart.isVisible = false
         }
-        ecgChart.apply {
-            val x = SimpleLineDataSet(dataLabel = getString(ECG_LABEL), lineColor = Color.RED)
-            configureForApp(getString(R.string.ecg))
-            data = LineData(x)
+        if (includedCharts.contains(ChartTab.ECG)) {
+            ecgChart.apply {
+                val x = SimpleLineDataSet(dataLabel = getString(ECG_LABEL), lineColor = Color.RED)
+                configureForApp(getString(R.string.ecg))
+                data = LineData(x)
+            }
+        } else {
+            ecgChart.isVisible = false
         }
-
-        hearRateChart.apply {
-            val x = SimpleLineDataSet(dataLabel = getString(HEART_RATE_LABEL), lineColor = Color.RED)
-            configureForApp(getString(R.string.heart_rate))
-            data = LineData(x)
+        if (includedCharts.contains(ChartTab.HEART_RATE)) {
+            hearRateChart.apply {
+                val x = SimpleLineDataSet(dataLabel = getString(HEART_RATE_LABEL), lineColor = Color.RED)
+                configureForApp(getString(R.string.heart_rate))
+                data = LineData(x)
+            }
+        } else {
+            hearRateChart.isVisible = false
         }
     }
 

@@ -7,6 +7,7 @@ import com.dv.comfortly.domain.usecases.RecordEcgSensorDataUseCase
 import com.dv.comfortly.domain.usecases.RecordSensorDataUseCase
 import com.dv.comfortly.domain.usecases.params.RecordSensorDataParams
 import com.dv.comfortly.ui.base.BaseViewModel
+import com.dv.comfortly.ui.trip.ChartTab
 import com.github.mikephil.charting.data.Entry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -89,10 +90,10 @@ constructor(
             delay(INITIAL_DELAY)
             launch {
                 sensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO).collect {
-                    sensorDataIndex = heartRateData.heartRate.size
-                    val currentIndex = sensorDataIndex.toFloat()
                     val currentSensorData = it.sensorData
-                    if (!RecordTripActivity.FAST_MODE) {
+                    if (RecordTripActivity.includedCharts.contains(ChartTab.ACCELEROMETER)) {
+                        sensorDataIndex = accelerometerData.xAxis.size
+                        val currentIndex = sensorDataIndex.toFloat()
                         accelerometerData = accelerometerData.copy(
                             xAxis = accelerometerData.xAxis.appendWithLimitSize(
                                 Entry(
@@ -113,6 +114,10 @@ constructor(
                                 ),
                             ),
                         )
+                    }
+                    if (RecordTripActivity.includedCharts.contains(ChartTab.GRAVITY)) {
+                        sensorDataIndex = gravityData.xAxis.size
+                        val currentIndex = sensorDataIndex.toFloat()
                         gravityData = gravityData.copy(
                             xAxis = gravityData.xAxis.appendWithLimitSize(
                                 Entry(
@@ -133,6 +138,10 @@ constructor(
                                 )
                             ),
                         )
+                    }
+                    if (RecordTripActivity.includedCharts.contains(ChartTab.GYROSCOPE)) {
+                        sensorDataIndex = gyroscopeData.xAxis.size
+                        val currentIndex = sensorDataIndex.toFloat()
                         gyroscopeData = gyroscopeData.copy(
                             xAxis = gyroscopeData.xAxis.appendWithLimitSize(
                                 Entry(
@@ -171,6 +180,10 @@ constructor(
                                 ),
                             ),
                         )
+                    }
+                    if (RecordTripActivity.includedCharts.contains(ChartTab.LINEAR_ACCELERATION)) {
+                        sensorDataIndex = linearAccelerationData.xAxis.size
+                        val currentIndex = sensorDataIndex.toFloat()
                         linearAccelerationData = linearAccelerationData.copy(
                             xAxis = linearAccelerationData.xAxis.appendWithLimitSize(
                                 Entry(
@@ -191,6 +204,10 @@ constructor(
                                 ),
                             ),
                         )
+                    }
+                    if (RecordTripActivity.includedCharts.contains(ChartTab.ROTATION_VECTOR)) {
+                        sensorDataIndex = rotationVectorData.xAxis.size
+                        val currentIndex = sensorDataIndex.toFloat()
                         rotationVectorData = rotationVectorData.copy(
                             xAxis = rotationVectorData.xAxis.appendWithLimitSize(
                                 Entry(
@@ -246,57 +263,51 @@ constructor(
                     } else {
                         gpsData.appendWithLimitSize(it.gpsData)
                     }
-                    heartRateData = heartRateData.copy(
-                        heartRate =
-                        heartRateData.heartRate.appendWithLimitSize(
-                            Entry(
-                                currentIndex,
-                                it.heartRateData.heartRate.toFloat(),
+                    if (RecordTripActivity.includedCharts.contains(ChartTab.HEART_RATE)) {
+                        sensorDataIndex = heartRateData.heartRate.size
+                        val currentIndex = sensorDataIndex.toFloat()
+                        heartRateData = heartRateData.copy(
+                            heartRate =
+                            heartRateData.heartRate.appendWithLimitSize(
+                                Entry(
+                                    currentIndex,
+                                    it.heartRateData.heartRate.toFloat(),
+                                ),
                             ),
-                        ),
-                    )
-
-                    if (!RecordTripActivity.FAST_MODE) {
-                        viewState = viewState.copy(
-                            accelerometer = accelerometerData,
-                            gravity = gravityData,
-                            gyroscope = gyroscopeData,
-                            linearAcceleration = linearAccelerationData,
-                            rotationVector = rotationVectorData,
-                            locations = gpsData.distinct(),
-                            heartRate = heartRateData,
-                            ecgData = ecgData,
-                            totalElapsedTime = Clock.System.now() - startDateTime,
                         )
-                    } else {
-                        viewState = viewState.copy(
-                            locations = gpsData.distinct(),
-                            heartRate = heartRateData,
-                            ecgData = ecgData,
-                            totalElapsedTime = Clock.System.now() - startDateTime,
+                    }
+                    viewState = viewState.copy(
+                        accelerometer = accelerometerData,
+                        gravity = gravityData,
+                        gyroscope = gyroscopeData,
+                        linearAcceleration = linearAccelerationData,
+                        rotationVector = rotationVectorData,
+                        locations = gpsData.distinct(),
+                        heartRate = heartRateData,
+                        ecgData = ecgData,
+                        totalElapsedTime = Clock.System.now() - startDateTime,
+                    )
+                }
+            }
+        }
+        launch {
+            ecgSensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO)
+                .collect { ecg ->
+                    if (RecordTripActivity.includedCharts.contains(ChartTab.ECG)) {
+                        ecgSensorDataIndex = ecgData.ecg.size
+                        val currentIndex = ecgSensorDataIndex.toFloat()
+                        ecgData = ecgData.copy(
+                            ecg = ecgData.ecg.appendWithLimitSize(
+                                ecg.mapIndexed { index, value ->
+                                    Entry(
+                                        currentIndex + index,
+                                        value.value.toFloat(),
+                                    )
+                                },
+                            ),
                         )
                     }
                 }
-            }
-            launch {
-                ecgSensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO)
-                    .collect { ecg ->
-//                        if (!RecordTripActivity.FAST_MODE) {
-                            ecgSensorDataIndex = ecgData.ecg.size
-                            val currentIndex = ecgSensorDataIndex.toFloat()
-                            ecgData = ecgData.copy(
-                                ecg = ecgData.ecg.appendWithLimitSize(
-                                    ecg.mapIndexed { index, value ->
-                                        Entry(
-                                            currentIndex + index,
-                                            value.value.toFloat(),
-                                        )
-                                    },
-                                ),
-                            )
-//                        }
-                    }
-            }
         }
     }
 
