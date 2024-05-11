@@ -87,6 +87,7 @@ constructor(
             RecordTripType.RECORD -> Unit
 
             RecordTripType.CALIBRATE -> calibrationCountDownTimer.start()
+            RecordTripType.DEMO -> Unit
         }
         launch {
             delay(INITIAL_DELAY)
@@ -320,6 +321,7 @@ constructor(
     fun onStopAction() {
         emitEvent(
             when (recordTripType) {
+                RecordTripType.DEMO -> RecordTripEvent.NavigateBack
                 RecordTripType.TEST -> RecordTripEvent.NavigateToCalibrateTrip(tripId)
                 RecordTripType.CALIBRATE -> RecordTripEvent.NavigateToRecordTrip(tripId)
                 RecordTripType.RECORD -> RecordTripEvent.NavigateToQuestionnaire(tripId)

@@ -68,6 +68,7 @@ interface RecordSensorDataUseCase : BaseFlowUseCase.InputOutput<RecordSensorData
                         heartRateData = data[6] as HeartRateData,
                     ).also { tripDatapoint ->
                         when (input.recordTripType) {
+                            RecordTripType.DEMO -> Unit
                             RecordTripType.TEST -> Unit
                             RecordTripType.CALIBRATE -> tripCalibrationDatapointRepository.insert(tripDatapoint)
                             RecordTripType.RECORD -> tripDatapointRepository.insert(tripDatapoint)

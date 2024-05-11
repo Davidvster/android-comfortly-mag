@@ -62,6 +62,7 @@
     <string name="require_permissions_message">Aplikacija za delovanje potrebuje dovoljenje za dostop do lokacije in Bluetooth-a.</string>
     <string name="retry">Poskusite ponovno</string>
     <string name="close_app">Zapri aplikacijo</string>
+    <string name="back">Nazaj</string>
     <string name="_continue">Naprej</string>
     <string name="turn_on_gps">Vključi GPS</string>
     <string name="turn_on_bluetooth">Vključi Bluetooth</string>

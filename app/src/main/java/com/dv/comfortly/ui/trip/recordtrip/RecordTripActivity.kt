@@ -38,15 +38,15 @@ import kotlin.time.Duration.Companion.minutes
 class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapReadyCallback {
     companion object {
         val includedCharts = setOf(
-            ChartTab.HEART_RATE,
+//            ChartTab.HEART_RATE,
 //            ChartTab.ECG,
             ChartTab.ACCELEROMETER,
-//            ChartTab.GRAVITY,
-//            ChartTab.GYROSCOPE,
-//            ChartTab.GYROSCOPE_ORIENTATION,
-//            ChartTab.LINEAR_ACCELERATION,
-//            ChartTab.ROTATION_VECTOR,
-//            ChartTab.ROTATION_VECTOR_ORIENTATION,
+            ChartTab.GRAVITY,
+            ChartTab.GYROSCOPE,
+            ChartTab.GYROSCOPE_ORIENTATION,
+            ChartTab.LINEAR_ACCELERATION,
+            ChartTab.ROTATION_VECTOR,
+            ChartTab.ROTATION_VECTOR_ORIENTATION,
         )
 
         private val HEART_RATE_LABEL = R.string.heart_rate
@@ -138,7 +138,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 state.ecgData?.let { ecgChart.setData(it) }
             }
 
-            if (includedCharts.contains(ChartTab.ROTATION_VECTOR_ORIENTATION) && hearRateChart != null) {
+            if (includedCharts.contains(ChartTab.HEART_RATE) && hearRateChart != null) {
                 state.heartRate?.let { hearRateChart.setData(it) }
             }
 
@@ -147,6 +147,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 state.recordTripType == RecordTripType.CALIBRATE || state.recordTripType == RecordTripType.RECORD
             progress.text =
                 when (state.recordTripType) {
+                    RecordTripType.DEMO -> null
                     RecordTripType.TEST -> null
                     RecordTripType.CALIBRATE ->
                         getString(
@@ -167,6 +168,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
 
     override fun handleEvent(event: RecordTripEvent) {
         when (event) {
+            is RecordTripEvent.NavigateBack -> onBackPressed()
             is RecordTripEvent.NavigateToCalibrateTrip -> {
                 startActivity(newIntent(this, event.tripId, RecordTripType.CALIBRATE))
                 finish()
@@ -195,6 +197,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         setToolbar(
             viewBinding.toolbar,
             when (recordTripType) {
+                RecordTripType.DEMO -> R.string.test_trip
                 RecordTripType.TEST -> R.string.test_trip
                 RecordTripType.CALIBRATE -> R.string.calibrating_trip
                 RecordTripType.RECORD -> R.string.recording_trip_data
@@ -203,6 +206,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
 
         viewBinding.stopTripButton.setText(
             when (recordTripType) {
+                RecordTripType.DEMO -> R.string.back
                 RecordTripType.TEST -> R.string._continue
                 RecordTripType.CALIBRATE -> R.string.skip_calibration
                 RecordTripType.RECORD -> R.string.stop_recording

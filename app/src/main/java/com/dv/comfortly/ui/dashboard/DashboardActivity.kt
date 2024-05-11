@@ -79,7 +79,7 @@ class DashboardActivity : BaseActivity<DashboardState, DashboardEvent>() {
             }
 
             testButton.setThrottleClickListener {
-                startActivity(RecordTripActivity.newIntent(this@DashboardActivity,null, RecordTripType.TEST))
+                startActivity(RecordTripActivity.newIntent(this@DashboardActivity,null, RecordTripType.DEMO))
             }
 
             tripsList.layoutManager = LinearLayoutManager(this@DashboardActivity, RecyclerView.VERTICAL, false)

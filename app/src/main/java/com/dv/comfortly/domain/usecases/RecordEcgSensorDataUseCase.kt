@@ -31,6 +31,7 @@ interface RecordEcgSensorDataUseCase : BaseFlowUseCase.InputOutput<RecordSensorD
                                 value = value.voltage,
                             )
                         when (input.recordTripType) {
+                            RecordTripType.DEMO -> Unit
                             RecordTripType.TEST -> Unit
                             RecordTripType.CALIBRATE -> tripEcgCalibrationDataRepository.insert(sample)
                             RecordTripType.RECORD -> tripEcgDataRepository.insert(sample)

@@ -53,6 +53,7 @@ data class EcgGraphData(
 )
 
 enum class RecordTripType {
+    DEMO,
     TEST,
     CALIBRATE,
     RECORD,
