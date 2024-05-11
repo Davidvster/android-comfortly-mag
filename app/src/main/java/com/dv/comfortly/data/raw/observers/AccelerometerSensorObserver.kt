@@ -1,6 +1,5 @@
 package com.dv.comfortly.data.raw.observers
 
-import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import com.dv.comfortly.data.raw.models.SensorEventWithAccuracy
 import com.dv.comfortly.data.raw.sources.sensor.SensorSource

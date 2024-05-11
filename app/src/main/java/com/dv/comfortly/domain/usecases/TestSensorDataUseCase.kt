@@ -44,7 +44,7 @@ interface TestSensorDataUseCase : BaseFlowUseCase.Output<TripDatapoint> {
                     gyroscopeSensorRepository.observeData(),
                     linearAccelerometerSensorRepository.observeData(),
                     rotationVectorSensorRepository.observeData(),
-                    gpsRepository.observeData()
+                    gpsRepository.observeData(),
                 ) { data ->
                     TripDatapoint(
                         tripId = 1,
@@ -57,7 +57,7 @@ interface TestSensorDataUseCase : BaseFlowUseCase.Output<TripDatapoint> {
                                 linearAccelerometerData = data[3] as LinearAccelerometerData,
                                 rotationVectorData = data[4] as RotationVectorData,
                             ),
-                        gpsData =data[5] as GpsData,
+                        gpsData = data[5] as GpsData,
                         heartRateData = HeartRateData(1),
                     )
                 }.debounce(DATA_DEBOUNCE)

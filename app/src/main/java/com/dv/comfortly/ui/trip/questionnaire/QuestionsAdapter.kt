@@ -96,7 +96,10 @@ class QuestionsAdapter(
                     question.possibleAnswers?.map { answer ->
                         MaterialCheckBox(root.context).apply {
                             setTextAppearance(R.style.Comfortly_BodyLarge_Medium)
-                            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
                             setText(answer)
                             isChecked = question.answer?.contains(text.toString(), true) ?: false
                         }
@@ -104,7 +107,10 @@ class QuestionsAdapter(
                 val noneCheckbox =
                     MaterialCheckBox(root.context).apply {
                         setTextAppearance(R.style.Comfortly_BodyLarge_Medium)
-                        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
                         setText(R.string.checkbox_none)
                         isChecked = question.answer?.contains(text.toString(), true) ?: false
                         setOnCheckedChangeListener { _, isChecked ->
@@ -146,7 +152,10 @@ class QuestionsAdapter(
                         val radioButton =
                             MaterialRadioButton(root.context).apply {
                                 setTextAppearance(R.style.Comfortly_BodyLarge_Medium)
-                                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                                layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                )
                                 setText(answer)
                                 setOnCheckedChangeListener { buttonView, isChecked ->
                                     if (isChecked) {

@@ -167,27 +167,27 @@ object QuestionnaireSource {
 
     private val PRE_BSSS by lazy {
         listOf(
-           R.string.bsss_1_question,
-           R.string.bsss_2_question,
-           R.string.bsss_3_question,
-           R.string.bsss_4_question,
-           R.string.bsss_5_question,
-           R.string.bsss_6_question,
-           R.string.bsss_7_question,
-           R.string.bsss_8_question,
+            R.string.bsss_1_question,
+            R.string.bsss_2_question,
+            R.string.bsss_3_question,
+            R.string.bsss_4_question,
+            R.string.bsss_5_question,
+            R.string.bsss_6_question,
+            R.string.bsss_7_question,
+            R.string.bsss_8_question,
         ).map {
             QuestionnaireData(
                 id = nextId(),
                 question = it,
                 type = QuestionType.SINGLE_CHOICE,
                 possibleAnswers =
-                listOf(
-                    R.string.bsss_1_answer,
-                    R.string.bsss_2_answer,
-                    R.string.bsss_3_answer,
-                    R.string.bsss_4_answer,
-                    R.string.bsss_5_answer,
-                )
+                    listOf(
+                        R.string.bsss_1_answer,
+                        R.string.bsss_2_answer,
+                        R.string.bsss_3_answer,
+                        R.string.bsss_4_answer,
+                        R.string.bsss_5_answer,
+                    ),
             )
         }
     }
@@ -205,12 +205,12 @@ object QuestionnaireSource {
             QuestionnaireData(
                 id = nextId(),
                 question = R.string.post_1_question,
-                type = QuestionType.NUMBER
+                type = QuestionType.NUMBER,
             ),
             QuestionnaireData(
                 id = nextId(),
                 question = R.string.post_6_question,
-                type = QuestionType.NUMBER
+                type = QuestionType.NUMBER,
             ),
             QuestionnaireData(
                 id = nextId(),
@@ -285,13 +285,13 @@ object QuestionnaireSource {
                 question = title,
                 type = QuestionType.SINGLE_CHOICE,
                 possibleAnswers =
-                listOf(
-                    R.string.mssq_1_answer,
-                    R.string.mssq_2_answer,
-                    R.string.mssq_3_answer,
-                    R.string.mssq_4_answer,
-                    R.string.mssq_5_answer,
-                ),
+                    listOf(
+                        R.string.mssq_1_answer,
+                        R.string.mssq_2_answer,
+                        R.string.mssq_3_answer,
+                        R.string.mssq_4_answer,
+                        R.string.mssq_5_answer,
+                    ),
             )
         }
 

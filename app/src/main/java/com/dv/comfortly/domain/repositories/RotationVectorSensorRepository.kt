@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-
 class RotationVectorSensorRepository
     @Inject
     constructor(
@@ -29,7 +28,7 @@ class RotationVectorSensorRepository
                     orientationX = Math.toDegrees(orientations[0].toDouble()).toFloat(),
                     orientationY = Math.toDegrees(orientations[1].toDouble()).toFloat(),
                     orientationZ = Math.toDegrees(orientations[2].toDouble()).toFloat(),
-                    accuracy = d.accuracy
+                    accuracy = d.accuracy,
                 )
             }
     }

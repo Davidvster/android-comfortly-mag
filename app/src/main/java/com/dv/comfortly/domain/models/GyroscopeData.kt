@@ -7,5 +7,5 @@ data class GyroscopeData(
     val orientationX: Float,
     val orientationY: Float,
     val orientationZ: Float,
-    val accuracy: Int?
+    val accuracy: Int?,
 )

@@ -17,7 +17,7 @@ class LinearAccelerometerSensorRepository
                     xAxisLinearAcceleration = d.event.values[0],
                     yAxisLinearAcceleration = d.event.values[1],
                     zAxisLinearAcceleration = d.event.values[2],
-                    accuracy = d.accuracy
+                    accuracy = d.accuracy,
                 )
             }
     }

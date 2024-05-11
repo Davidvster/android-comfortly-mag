@@ -32,9 +32,10 @@ fun observeSensor(
                         sensor: Sensor?,
                         accuracy: Int,
                     ) {
-                        if (sensor?.name == observedSensor.name){
-                            observedAccuracy = accuracy
-                        }
+                        if (sensor?.name == observedSensor.name)
+                            {
+                                observedAccuracy = accuracy
+                            }
                     }
                 }
 

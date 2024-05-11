@@ -4,5 +4,5 @@ data class GravityData(
     val xAxisGravity: Float,
     val yAxisGravity: Float,
     val zAxisGravity: Float,
-    val accuracy: Int?
+    val accuracy: Int?,
 )

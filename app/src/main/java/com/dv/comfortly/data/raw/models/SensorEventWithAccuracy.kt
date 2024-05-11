@@ -4,5 +4,5 @@ import android.hardware.SensorEvent
 
 data class SensorEventWithAccuracy(
     val event: SensorEvent,
-    val accuracy: Int?
+    val accuracy: Int?,
 )

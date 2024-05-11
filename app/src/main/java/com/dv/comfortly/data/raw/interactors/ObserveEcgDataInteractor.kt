@@ -33,11 +33,14 @@ interface ObserveEcgDataInteractor {
                     flow {
                         val availableSettingsEcg =
                             runCatching {
-                                heartRateSource.polarApi.requestStreamSettings(hrDevice.deviceId, PolarBleApi.PolarDeviceDataType.ECG).await()
+                                heartRateSource.polarApi.requestStreamSettings(
+                                    identifier = hrDevice.deviceId,
+                                    feature = PolarBleApi.PolarDeviceDataType.ECG
+                                ).await()
                             }.getOrNull()
                         val sampleRate =
-                            availableSettingsEcg?.settings?.get(PolarSensorSetting.SettingType.SAMPLE_RATE)?.firstOrNull()
-                                ?: DEFAULT_ECG_SAMPLE_RATE_HZ
+                            availableSettingsEcg?.settings?.get(PolarSensorSetting.SettingType.SAMPLE_RATE)
+                                ?.firstOrNull() ?: DEFAULT_ECG_SAMPLE_RATE_HZ
                         if (availableSettingsEcg != null) {
                             heartRateSource.polarApi.setLocalTime(hrDevice.deviceId, Calendar.getInstance(TimeZone.getTimeZone(UTC_TIMEZONE)))
                                 .await()

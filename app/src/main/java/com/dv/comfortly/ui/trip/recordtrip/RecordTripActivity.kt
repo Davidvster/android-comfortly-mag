@@ -37,17 +37,18 @@ import kotlin.time.Duration.Companion.minutes
 @AndroidEntryPoint
 class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapReadyCallback {
     companion object {
-        val includedCharts = setOf(
+        val includedCharts =
+            setOf(
 //            ChartTab.HEART_RATE,
 //            ChartTab.ECG,
-            ChartTab.ACCELEROMETER,
-            ChartTab.GRAVITY,
-            ChartTab.GYROSCOPE,
-            ChartTab.GYROSCOPE_ORIENTATION,
-            ChartTab.LINEAR_ACCELERATION,
-            ChartTab.ROTATION_VECTOR,
-            ChartTab.ROTATION_VECTOR_ORIENTATION,
-        )
+                ChartTab.ACCELEROMETER,
+                ChartTab.GRAVITY,
+                ChartTab.GYROSCOPE,
+                ChartTab.GYROSCOPE_ORIENTATION,
+                ChartTab.LINEAR_ACCELERATION,
+                ChartTab.ROTATION_VECTOR,
+                ChartTab.ROTATION_VECTOR_ORIENTATION,
+            )
 
         private val HEART_RATE_LABEL = R.string.heart_rate
         private val ECG_LABEL = R.string.ecg
@@ -108,12 +109,11 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                     setDataGyroscope(
                         coreGraph = gyroscopeChart,
                         orientationGraph = gyroscopeOrientationChart,
-                        newData = it
+                        newData = it,
                     )
                 }
             }
             if (includedCharts.contains(ChartTab.GYROSCOPE_ORIENTATION) && gyroscopeOrientationChart != null) {
-
             }
             if (includedCharts.contains(ChartTab.LINEAR_ACCELERATION) && linearAccelerationChart != null) {
                 state.linearAcceleration?.let { linearAccelerationChart.setData(it) }
@@ -124,14 +124,12 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                     setDataRotationVector(
                         coreGraph = rotationVectorChart,
                         orientationGraph = rotationVectorOrientationChart,
-                        newData = it
+                        newData = it,
                     )
                 }
             }
 
-
             if (includedCharts.contains(ChartTab.ROTATION_VECTOR_ORIENTATION) && rotationVectorOrientationChart != null) {
-
             }
 
             if (includedCharts.contains(ChartTab.ECG) && ecgChart != null) {
@@ -347,7 +345,11 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
         invalidate()
     }
 
-    private fun setDataGyroscope(coreGraph: LineChart, orientationGraph: LineChart, newData: GyroscopeGraphData) {
+    private fun setDataGyroscope(
+        coreGraph: LineChart,
+        orientationGraph: LineChart,
+        newData: GyroscopeGraphData,
+    ) {
         coreGraph.apply {
             val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet
             val y: LineDataSet = data.getDataSetByIndex(Y_LABEL_INDEX) as LineDataSet
@@ -376,7 +378,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     private fun setDataRotationVector(
         coreGraph: LineChart,
         orientationGraph: LineChart,
-        newData: RotationVectorGraphData
+        newData: RotationVectorGraphData,
     ) {
         coreGraph.apply {
             val x: LineDataSet = data.getDataSetByIndex(X_LABEL_INDEX) as LineDataSet

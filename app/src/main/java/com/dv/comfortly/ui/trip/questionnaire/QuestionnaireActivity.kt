@@ -104,11 +104,13 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
             QuestionnaireType.PRE_SPECIFIC,
             QuestionnaireType.PRE_MSSQ_1,
             QuestionnaireType.PRE_MSSQ_2,
-            QuestionnaireType.PRE_BSSS -> menuInflater.inflate(R.menu.questionnaire_menu, menu)
+            QuestionnaireType.PRE_BSSS,
+            -> menuInflater.inflate(R.menu.questionnaire_menu, menu)
 
             QuestionnaireType.PRE_TRIP_PANAS,
             QuestionnaireType.POST_TRIP_PANAS,
-            QuestionnaireType.POST_SPECIFIC -> Unit
+            QuestionnaireType.POST_SPECIFIC,
+            -> Unit
         }
         return super.onCreateOptionsMenu(menu)
     }
