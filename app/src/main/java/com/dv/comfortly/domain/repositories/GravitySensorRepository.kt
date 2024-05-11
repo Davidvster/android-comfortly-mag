@@ -13,11 +13,12 @@ constructor(
 ) : SensorRepository.Gravity {
 
     override fun observeData(): Flow<GravityData> =
-        gravitySensorObserver.observe().map { event ->
+        gravitySensorObserver.observe().map { d ->
             GravityData(
-                xAxisGravity = event.values[0],
-                yAxisGravity = event.values[1],
-                zAxisGravity = event.values[2],
+                xAxisGravity = d.event.values[0],
+                yAxisGravity = d.event.values[1],
+                zAxisGravity = d.event.values[2],
+                accuracy = d.accuracy
             )
         }
 }

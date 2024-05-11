@@ -18,7 +18,7 @@ constructor(
 ) : SensorRepository.Gyroscope {
 
     companion object {
-        private const val EPSILON = 0.00001f
+        private const val EPSILON = 0.00000001f
 
         // Create a constant to convert nanoseconds to seconds.
         private const val NS2S = 1.0f / 1000000000.0f
@@ -30,15 +30,15 @@ constructor(
     override fun observeData(): Flow<GyroscopeData> =
         gyroscopeSensorObserver.observe().onStart {
             timestamp = 0f
-        }.map { event ->
+        }.map { d ->
             // This timestep's delta rotation to be multiplied by the current rotation
             // after computing it from the gyro sample data.
             if (timestamp != 0f) {
-                val dT = (event.timestamp - timestamp) * NS2S
+                val dT = (d.event.timestamp - timestamp) * NS2S
                 // Axis of the rotation sample, not normalized yet.
-                var axisX: Float = event.values[0]
-                var axisY: Float = event.values[1]
-                var axisZ: Float = event.values[2]
+                var axisX: Float = d.event.values[0]
+                var axisY: Float = d.event.values[1]
+                var axisZ: Float = d.event.values[2]
 
                 // Calculate the angular speed of the sample
                 val omegaMagnitude: Float = sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ)
@@ -63,7 +63,7 @@ constructor(
                 deltaRotationVector[2] = sinThetaOverTwo * axisZ
                 deltaRotationVector[3] = cosThetaOverTwo
             }
-            timestamp = event.timestamp.toFloat()
+            timestamp = d.event.timestamp.toFloat()
             val deltaRotationMatrix = FloatArray(9) { 0f }
             SensorManager.getRotationMatrixFromVector(
                 deltaRotationMatrix,
@@ -76,12 +76,13 @@ constructor(
             val orientations = FloatArray(3)
             SensorManager.getOrientation(deltaRotationMatrix, orientations)
             GyroscopeData(
-                xAxisRotationRate = event.values[0],
-                yAxisRotationRate = event.values[1],
-                zAxisRotationRate = event.values[2],
+                xAxisRotationRate = d.event.values[0],
+                yAxisRotationRate = d.event.values[1],
+                zAxisRotationRate = d.event.values[2],
                 orientationX = Math.toDegrees(orientations[0].toDouble()).toFloat(),
                 orientationY = Math.toDegrees(orientations[1].toDouble()).toFloat(),
                 orientationZ = Math.toDegrees(orientations[2].toDouble()).toFloat(),
+                accuracy = d.accuracy
             )
         }
 }

@@ -2,6 +2,7 @@ package com.dv.comfortly.data.raw.observers
 
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
+import com.dv.comfortly.data.raw.models.SensorEventWithAccuracy
 import com.dv.comfortly.data.raw.sources.sensor.SensorSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -17,10 +18,10 @@ interface GyroscopeSensorObserver : BaseSensorObserver {
                 private const val GYROSCOPE_SENSOR_NAME = "Gyroscope"
             }
 
-            override fun observe(): Flow<SensorEvent> =
+            override fun observe(): Flow<SensorEventWithAccuracy> =
                 observeSensor(
                     sensorManager = sensorManager,
-                    sensor = sensorSource.gyroscopeSensor?.sensor,
+                    observedSensor = sensorSource.gyroscopeSensor?.sensor,
                     sensorName = GYROSCOPE_SENSOR_NAME,
                 )
         }

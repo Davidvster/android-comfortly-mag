@@ -39,6 +39,7 @@ data class SensorData(
     @ColumnInfo(name = "x_axis") val xAxis: Float,
     @ColumnInfo(name = "y_axis") val yAxis: Float,
     @ColumnInfo(name = "z_axis") val zAxis: Float,
+    @ColumnInfo(name = "accuracy") val accuracy: Int?,
 )
 
 data class GyroscopeData(
@@ -48,6 +49,7 @@ data class GyroscopeData(
     @ColumnInfo(name = "orientation_x") val orientationX: Float,
     @ColumnInfo(name = "orientation_y") val orientationY: Float,
     @ColumnInfo(name = "orientation_z") val orientationZ: Float,
+    @ColumnInfo(name = "accuracy") val accuracy: Int?,
 )
 
 data class RotationVectorSensorData(
@@ -58,6 +60,7 @@ data class RotationVectorSensorData(
     @ColumnInfo(name = "orientation_x") val orientationX: Float,
     @ColumnInfo(name = "orientation_y") val orientationY: Float,
     @ColumnInfo(name = "orientation_z") val orientationZ: Float,
+    @ColumnInfo(name = "accuracy") val accuracy: Int?,
 )
 
 data class GpsData(

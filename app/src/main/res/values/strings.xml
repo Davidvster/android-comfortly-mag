@@ -210,4 +210,9 @@ V ZADNJIH 10 LETIH kako pogosto ste imeli občutek slabosti ali bruhali pri nasl
     <string name="panas_3_answer">Zmerno</string>
     <string name="panas_4_answer">Kar veliko</string>
     <string name="panas_5_answer">Zelo</string>
+    <string name="accelerometer_accuracy">accelerometer_accuracy</string>
+    <string name="gravity_accuracy">gravity_accuracy</string>
+    <string name="gyroscope_accuracy">gyroscope_accuracy\n</string>
+    <string name="linear_acceleration_accuracy">linear_acceleration_accuracy</string>
+    <string name="rotation_vector_accuracy">rotation_vector_accuracy</string>
 </resources>

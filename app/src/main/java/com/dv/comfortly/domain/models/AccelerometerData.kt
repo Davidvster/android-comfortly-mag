@@ -4,4 +4,5 @@ data class AccelerometerData(
     val xAxisAcceleration: Float,
     val yAxisAcceleration: Float,
     val zAxisAcceleration: Float,
+    val accuracy: Int?,
 )

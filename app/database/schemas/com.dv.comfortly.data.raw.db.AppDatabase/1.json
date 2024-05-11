@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "60f3516593fa9437016a84ba9b4988e7",
+    "identityHash": "3227a0207729253ba23fccfc48051c67",
     "entities": [
       {
         "tableName": "trip",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "trip_datapoint",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `trip_id` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `accelerometer_x_axis` REAL NOT NULL, `accelerometer_y_axis` REAL NOT NULL, `accelerometer_z_axis` REAL NOT NULL, `gravity_x_axis` REAL NOT NULL, `gravity_y_axis` REAL NOT NULL, `gravity_z_axis` REAL NOT NULL, `gyroscope_x_axis` REAL NOT NULL, `gyroscope_y_axis` REAL NOT NULL, `gyroscope_z_axis` REAL NOT NULL, `gyroscope_orientation_x` REAL NOT NULL, `gyroscope_orientation_y` REAL NOT NULL, `gyroscope_orientation_z` REAL NOT NULL, `linear_accelerometer_x_axis` REAL NOT NULL, `linear_accelerometer_y_axis` REAL NOT NULL, `linear_accelerometer_z_axis` REAL NOT NULL, `rotation_vector_x_axis` REAL NOT NULL, `rotation_vector_y_axis` REAL NOT NULL, `rotation_vector_z_axis` REAL NOT NULL, `rotation_vector_scalar` REAL NOT NULL, `rotation_vector_orientation_x` REAL NOT NULL, `rotation_vector_orientation_y` REAL NOT NULL, `rotation_vector_orientation_z` REAL NOT NULL, `gps_latitude` REAL NOT NULL, `gps_longitude` REAL NOT NULL, `gps_altitude` REAL NOT NULL, `gps_accuracy` REAL NOT NULL, `gps_bearing` REAL NOT NULL, `gps_bearingAccuracyDegrees` REAL NOT NULL, `gps_speed` REAL NOT NULL, `gps_speedAccuracyMetersPerSecond` REAL NOT NULL, `hr_heart_rate` INTEGER NOT NULL, FOREIGN KEY(`trip_id`) REFERENCES `trip`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `trip_id` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `accelerometer_x_axis` REAL NOT NULL, `accelerometer_y_axis` REAL NOT NULL, `accelerometer_z_axis` REAL NOT NULL, `accelerometer_accuracy` INTEGER, `gravity_x_axis` REAL NOT NULL, `gravity_y_axis` REAL NOT NULL, `gravity_z_axis` REAL NOT NULL, `gravity_accuracy` INTEGER, `gyroscope_x_axis` REAL NOT NULL, `gyroscope_y_axis` REAL NOT NULL, `gyroscope_z_axis` REAL NOT NULL, `gyroscope_orientation_x` REAL NOT NULL, `gyroscope_orientation_y` REAL NOT NULL, `gyroscope_orientation_z` REAL NOT NULL, `gyroscope_accuracy` INTEGER, `linear_accelerometer_x_axis` REAL NOT NULL, `linear_accelerometer_y_axis` REAL NOT NULL, `linear_accelerometer_z_axis` REAL NOT NULL, `linear_accelerometer_accuracy` INTEGER, `rotation_vector_x_axis` REAL NOT NULL, `rotation_vector_y_axis` REAL NOT NULL, `rotation_vector_z_axis` REAL NOT NULL, `rotation_vector_scalar` REAL NOT NULL, `rotation_vector_orientation_x` REAL NOT NULL, `rotation_vector_orientation_y` REAL NOT NULL, `rotation_vector_orientation_z` REAL NOT NULL, `rotation_vector_accuracy` INTEGER, `gps_latitude` REAL NOT NULL, `gps_longitude` REAL NOT NULL, `gps_altitude` REAL NOT NULL, `gps_accuracy` REAL NOT NULL, `gps_bearing` REAL NOT NULL, `gps_bearingAccuracyDegrees` REAL NOT NULL, `gps_speed` REAL NOT NULL, `gps_speedAccuracyMetersPerSecond` REAL NOT NULL, `hr_heart_rate` INTEGER NOT NULL, FOREIGN KEY(`trip_id`) REFERENCES `trip`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -83,6 +83,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "accelerometerData.accuracy",
+            "columnName": "accelerometer_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "gravityData.xAxis",
             "columnName": "gravity_x_axis",
             "affinity": "REAL",
@@ -99,6 +105,12 @@
             "columnName": "gravity_z_axis",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "gravityData.accuracy",
+            "columnName": "gravity_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "gyroscopeData.xAxis",
@@ -137,6 +149,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "gyroscopeData.accuracy",
+            "columnName": "gyroscope_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "linearAccelerometerData.xAxis",
             "columnName": "linear_accelerometer_x_axis",
             "affinity": "REAL",
@@ -153,6 +171,12 @@
             "columnName": "linear_accelerometer_z_axis",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "linearAccelerometerData.accuracy",
+            "columnName": "linear_accelerometer_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "rotationVectorData.xAxis",
@@ -195,6 +219,12 @@
             "columnName": "rotation_vector_orientation_z",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "rotationVectorData.accuracy",
+            "columnName": "rotation_vector_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "gpsData.latitude",
@@ -324,7 +354,7 @@
       },
       {
         "tableName": "trip_calibration_datapoint",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `trip_id` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `accelerometer_x_axis` REAL NOT NULL, `accelerometer_y_axis` REAL NOT NULL, `accelerometer_z_axis` REAL NOT NULL, `gravity_x_axis` REAL NOT NULL, `gravity_y_axis` REAL NOT NULL, `gravity_z_axis` REAL NOT NULL, `gyroscope_x_axis` REAL NOT NULL, `gyroscope_y_axis` REAL NOT NULL, `gyroscope_z_axis` REAL NOT NULL, `gyroscope_orientation_x` REAL NOT NULL, `gyroscope_orientation_y` REAL NOT NULL, `gyroscope_orientation_z` REAL NOT NULL, `linear_accelerometer_x_axis` REAL NOT NULL, `linear_accelerometer_y_axis` REAL NOT NULL, `linear_accelerometer_z_axis` REAL NOT NULL, `rotation_vector_x_axis` REAL NOT NULL, `rotation_vector_y_axis` REAL NOT NULL, `rotation_vector_z_axis` REAL NOT NULL, `rotation_vector_scalar` REAL NOT NULL, `rotation_vector_orientation_x` REAL NOT NULL, `rotation_vector_orientation_y` REAL NOT NULL, `rotation_vector_orientation_z` REAL NOT NULL, `gps_latitude` REAL NOT NULL, `gps_longitude` REAL NOT NULL, `gps_altitude` REAL NOT NULL, `gps_accuracy` REAL NOT NULL, `gps_bearing` REAL NOT NULL, `gps_bearingAccuracyDegrees` REAL NOT NULL, `gps_speed` REAL NOT NULL, `gps_speedAccuracyMetersPerSecond` REAL NOT NULL, `hr_heart_rate` INTEGER NOT NULL, FOREIGN KEY(`trip_id`) REFERENCES `trip`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `trip_id` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `accelerometer_x_axis` REAL NOT NULL, `accelerometer_y_axis` REAL NOT NULL, `accelerometer_z_axis` REAL NOT NULL, `accelerometer_accuracy` INTEGER, `gravity_x_axis` REAL NOT NULL, `gravity_y_axis` REAL NOT NULL, `gravity_z_axis` REAL NOT NULL, `gravity_accuracy` INTEGER, `gyroscope_x_axis` REAL NOT NULL, `gyroscope_y_axis` REAL NOT NULL, `gyroscope_z_axis` REAL NOT NULL, `gyroscope_orientation_x` REAL NOT NULL, `gyroscope_orientation_y` REAL NOT NULL, `gyroscope_orientation_z` REAL NOT NULL, `gyroscope_accuracy` INTEGER, `linear_accelerometer_x_axis` REAL NOT NULL, `linear_accelerometer_y_axis` REAL NOT NULL, `linear_accelerometer_z_axis` REAL NOT NULL, `linear_accelerometer_accuracy` INTEGER, `rotation_vector_x_axis` REAL NOT NULL, `rotation_vector_y_axis` REAL NOT NULL, `rotation_vector_z_axis` REAL NOT NULL, `rotation_vector_scalar` REAL NOT NULL, `rotation_vector_orientation_x` REAL NOT NULL, `rotation_vector_orientation_y` REAL NOT NULL, `rotation_vector_orientation_z` REAL NOT NULL, `rotation_vector_accuracy` INTEGER, `gps_latitude` REAL NOT NULL, `gps_longitude` REAL NOT NULL, `gps_altitude` REAL NOT NULL, `gps_accuracy` REAL NOT NULL, `gps_bearing` REAL NOT NULL, `gps_bearingAccuracyDegrees` REAL NOT NULL, `gps_speed` REAL NOT NULL, `gps_speedAccuracyMetersPerSecond` REAL NOT NULL, `hr_heart_rate` INTEGER NOT NULL, FOREIGN KEY(`trip_id`) REFERENCES `trip`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -363,6 +393,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "accelerometerData.accuracy",
+            "columnName": "accelerometer_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "gravityData.xAxis",
             "columnName": "gravity_x_axis",
             "affinity": "REAL",
@@ -379,6 +415,12 @@
             "columnName": "gravity_z_axis",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "gravityData.accuracy",
+            "columnName": "gravity_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "gyroscopeData.xAxis",
@@ -417,6 +459,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "gyroscopeData.accuracy",
+            "columnName": "gyroscope_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "linearAccelerometerData.xAxis",
             "columnName": "linear_accelerometer_x_axis",
             "affinity": "REAL",
@@ -433,6 +481,12 @@
             "columnName": "linear_accelerometer_z_axis",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "linearAccelerometerData.accuracy",
+            "columnName": "linear_accelerometer_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "rotationVectorData.xAxis",
@@ -475,6 +529,12 @@
             "columnName": "rotation_vector_orientation_z",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "rotationVectorData.accuracy",
+            "columnName": "rotation_vector_accuracy",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "gpsData.latitude",
@@ -706,7 +766,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '60f3516593fa9437016a84ba9b4988e7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3227a0207729253ba23fccfc48051c67')"
     ]
   }
 }

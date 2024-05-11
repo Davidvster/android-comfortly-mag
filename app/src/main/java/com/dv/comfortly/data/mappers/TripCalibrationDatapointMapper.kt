@@ -25,12 +25,14 @@ object TripCalibrationDatapointMapper {
                             xAxisAcceleration = data.accelerometerData.xAxis,
                             yAxisAcceleration = data.accelerometerData.yAxis,
                             zAxisAcceleration = data.accelerometerData.zAxis,
+                            accuracy = data.accelerometerData.accuracy
                         ),
                     gravityData =
                         GravityData(
                             xAxisGravity = data.gravityData.xAxis,
                             yAxisGravity = data.gravityData.yAxis,
                             zAxisGravity = data.gravityData.zAxis,
+                            accuracy = data.gravityData.accuracy
                         ),
                     gyroscopeData = GyroscopeData(
                         xAxisRotationRate = data.gyroscopeData.xAxis,
@@ -39,12 +41,14 @@ object TripCalibrationDatapointMapper {
                         orientationX = data.gyroscopeData.orientationX,
                         orientationY = data.gyroscopeData.orientationY,
                         orientationZ = data.gyroscopeData.orientationZ,
+                        accuracy = data.gyroscopeData.accuracy
                     ),
                     linearAccelerometerData =
                         LinearAccelerometerData(
                             xAxisLinearAcceleration = data.linearAccelerometerData.xAxis,
                             yAxisLinearAcceleration = data.linearAccelerometerData.yAxis,
                             zAxisLinearAcceleration = data.linearAccelerometerData.zAxis,
+                            accuracy = data.linearAccelerometerData.accuracy
                         ),
                     rotationVectorData =
                     RotationVectorData(
@@ -55,6 +59,7 @@ object TripCalibrationDatapointMapper {
                         orientationX = data.rotationVectorData.orientationX,
                         orientationY = data.rotationVectorData.orientationY,
                         orientationZ = data.rotationVectorData.orientationZ,
+                        accuracy = data.rotationVectorData.accuracy
                     ),
                 ),
             gpsData =
@@ -83,12 +88,14 @@ object TripCalibrationDatapointMapper {
                     xAxis = data.sensorData.accelerometerData.xAxisAcceleration,
                     yAxis = data.sensorData.accelerometerData.yAxisAcceleration,
                     zAxis = data.sensorData.accelerometerData.zAxisAcceleration,
+                    accuracy = data.sensorData.accelerometerData.accuracy
                 ),
             gravityData =
                 DbSensorData(
                     xAxis = data.sensorData.gravityData.xAxisGravity,
                     yAxis = data.sensorData.gravityData.yAxisGravity,
                     zAxis = data.sensorData.gravityData.zAxisGravity,
+                    accuracy = data.sensorData.gravityData.accuracy
                 ),
             gyroscopeData = DbGyroscopeData(
                 xAxis = data.sensorData.gyroscopeData.xAxisRotationRate,
@@ -97,12 +104,14 @@ object TripCalibrationDatapointMapper {
                 orientationX = data.sensorData.gyroscopeData.orientationX,
                 orientationY = data.sensorData.gyroscopeData.orientationY,
                 orientationZ = data.sensorData.gyroscopeData.orientationZ,
+                accuracy = data.sensorData.gyroscopeData.accuracy
             ),
             linearAccelerometerData =
                 DbSensorData(
                     xAxis = data.sensorData.linearAccelerometerData.xAxisLinearAcceleration,
                     yAxis = data.sensorData.linearAccelerometerData.yAxisLinearAcceleration,
                     zAxis = data.sensorData.linearAccelerometerData.zAxisLinearAcceleration,
+                    accuracy = data.sensorData.linearAccelerometerData.accuracy
                 ),
             rotationVectorData =
             DbRotationVectorSensorData(
@@ -113,6 +122,7 @@ object TripCalibrationDatapointMapper {
                 orientationX = data.sensorData.rotationVectorData.orientationX,
                 orientationY = data.sensorData.rotationVectorData.orientationY,
                 orientationZ = data.sensorData.rotationVectorData.orientationZ,
+                accuracy = data.sensorData.rotationVectorData.accuracy
             ),
             gpsData =
                 DbGpsData(

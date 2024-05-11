@@ -12,11 +12,12 @@ class LinearAccelerometerSensorRepository
         private val linearAccelerationSensorObserver: LinearAccelerationSensorObserver,
     ) : SensorRepository.LinearAcceleration {
         override fun observeData(): Flow<LinearAccelerometerData> =
-            linearAccelerationSensorObserver.observe().map { event ->
+            linearAccelerationSensorObserver.observe().map { d ->
                 LinearAccelerometerData(
-                    xAxisLinearAcceleration = event.values[0],
-                    yAxisLinearAcceleration = event.values[1],
-                    zAxisLinearAcceleration = event.values[2],
+                    xAxisLinearAcceleration = d.event.values[0],
+                    yAxisLinearAcceleration = d.event.values[1],
+                    zAxisLinearAcceleration = d.event.values[2],
+                    accuracy = d.accuracy
                 )
             }
     }
