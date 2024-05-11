@@ -74,7 +74,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
 
         fun newIntent(
             context: Context,
-            tripId: Long,
+            tripId: Long?,
             type: RecordTripType,
         ) = Intent(context, RecordTripActivity::class.java).apply {
             putExtra(ARG_TRIP_ID, tripId)

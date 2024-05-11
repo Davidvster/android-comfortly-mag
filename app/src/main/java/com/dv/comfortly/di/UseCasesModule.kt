@@ -14,6 +14,7 @@ import com.dv.comfortly.domain.usecases.RecordEcgSensorDataUseCase
 import com.dv.comfortly.domain.usecases.RecordSensorDataUseCase
 import com.dv.comfortly.domain.usecases.SearchForHeartRateDevicesUseCase
 import com.dv.comfortly.domain.usecases.StoreAnswersUseCase
+import com.dv.comfortly.domain.usecases.TestSensorDataUseCase
 import com.dv.comfortly.domain.usecases.TurnOnLocationUseCase
 import dagger.Binds
 import dagger.Module
@@ -27,6 +28,10 @@ interface UseCasesModule {
     @Binds
     @Singleton
     fun provideSensorDataUseCase(sensorDataUseCase: RecordSensorDataUseCase.Default): RecordSensorDataUseCase
+
+    @Binds
+    @Singleton
+    fun provideTestSensorDataUseCase(sensorDataUseCase: TestSensorDataUseCase.Default): TestSensorDataUseCase
 
     @Binds
     @Singleton

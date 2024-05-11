@@ -16,6 +16,8 @@ import com.dv.comfortly.ui.base.viewBinding
 import com.dv.comfortly.ui.ext.showDialog
 import com.dv.comfortly.ui.trip.details.TripDetailsActivity
 import com.dv.comfortly.ui.trip.questionnaire.QuestionnaireActivity
+import com.dv.comfortly.ui.trip.recordtrip.RecordTripActivity
+import com.dv.comfortly.ui.trip.recordtrip.RecordTripType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -74,6 +76,10 @@ class DashboardActivity : BaseActivity<DashboardState, DashboardEvent>() {
 
             newTripButton.setThrottleClickListener {
                 startNewTrip()
+            }
+
+            testButton.setThrottleClickListener {
+                startActivity(RecordTripActivity.newIntent(this@DashboardActivity,null, RecordTripType.TEST))
             }
 
             tripsList.layoutManager = LinearLayoutManager(this@DashboardActivity, RecyclerView.VERTICAL, false)

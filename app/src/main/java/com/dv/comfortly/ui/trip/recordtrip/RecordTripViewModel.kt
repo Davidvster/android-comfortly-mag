@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.dv.comfortly.domain.models.GpsData
 import com.dv.comfortly.domain.usecases.RecordEcgSensorDataUseCase
 import com.dv.comfortly.domain.usecases.RecordSensorDataUseCase
+import com.dv.comfortly.domain.usecases.TestSensorDataUseCase
 import com.dv.comfortly.domain.usecases.params.RecordSensorDataParams
 import com.dv.comfortly.ui.base.BaseViewModel
 import com.dv.comfortly.ui.trip.ChartTab
@@ -25,6 +26,7 @@ class RecordTripViewModel
 @Inject
 constructor(
     private val sensorDataUseCase: RecordSensorDataUseCase,
+    private val testSensorDataUseCase: TestSensorDataUseCase,
     private val ecgSensorDataUseCase: RecordEcgSensorDataUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<NewTripState, RecordTripEvent>(NewTripState()) {
@@ -89,7 +91,11 @@ constructor(
         launch {
             delay(INITIAL_DELAY)
             launch {
-                sensorDataUseCase(RecordSensorDataParams(tripId, recordTripType)).flowOn(Dispatchers.IO).collect {
+                if (tripId == -1L) {
+                    testSensorDataUseCase()
+                } else {
+                    sensorDataUseCase(RecordSensorDataParams(tripId, recordTripType))
+                }.flowOn(Dispatchers.IO).collect {
                     val currentSensorData = it.sensorData
                     if (RecordTripActivity.includedCharts.contains(ChartTab.ACCELEROMETER)) {
                         sensorDataIndex = accelerometerData.xAxis.size
