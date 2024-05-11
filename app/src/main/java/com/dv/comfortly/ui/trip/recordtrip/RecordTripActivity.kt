@@ -39,15 +39,15 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
     companion object {
         val includedCharts =
             setOf(
-//            ChartTab.HEART_RATE,
-//            ChartTab.ECG,
+            ChartTab.HEART_RATE,
+            ChartTab.ECG,
                 ChartTab.ACCELEROMETER,
-                ChartTab.GRAVITY,
-                ChartTab.GYROSCOPE,
-                ChartTab.GYROSCOPE_ORIENTATION,
-                ChartTab.LINEAR_ACCELERATION,
-                ChartTab.ROTATION_VECTOR,
-                ChartTab.ROTATION_VECTOR_ORIENTATION,
+//                ChartTab.GRAVITY,
+//                ChartTab.GYROSCOPE,
+//                ChartTab.GYROSCOPE_ORIENTATION,
+//                ChartTab.LINEAR_ACCELERATION,
+//                ChartTab.ROTATION_VECTOR,
+//                ChartTab.ROTATION_VECTOR_ORIENTATION,
             )
 
         private val HEART_RATE_LABEL = R.string.heart_rate
@@ -241,7 +241,7 @@ class RecordTripActivity : BaseActivity<NewTripState, RecordTripEvent>(), OnMapR
                 LatLng(first.latitude, first.longitude),
                 LatLng(second.latitude, second.longitude),
             )
-            if (locations.size % 20 == 0) {
+            if (locations.size % 10 == 0) {
                 currentPolyLine?.remove()
                 currentPolyLine = map.addPolyline(polylinePoints)
                 map.animateCamera(

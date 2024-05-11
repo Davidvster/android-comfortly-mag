@@ -10,7 +10,11 @@ import com.dv.comfortly.domain.models.HeartRateData
 import com.dv.comfortly.domain.models.HeartRateDevice
 import com.polar.sdk.api.model.PolarDeviceInfo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onErrorResume
+import timber.log.Timber
 import javax.inject.Inject
 
 interface HeartRateRepository {
@@ -48,6 +52,10 @@ interface HeartRateRepository {
                     //                val diff = current - timestamp
                     //                Timber.d("COMFORTLY ECG: Got timestamp: $timestamp, current time: $current, diff: $diff")
                     //            }
+                    .catch {
+                        Timber.e(it)
+                        emitAll(observeEcgDataInteractor.observeEcgData())
+                    }
                     .map { (ecg, sampleRate) ->
                         EcgData(
                             samples = ecg.samples,

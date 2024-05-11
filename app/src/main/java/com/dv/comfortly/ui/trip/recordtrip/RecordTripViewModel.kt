@@ -35,7 +35,7 @@ class RecordTripViewModel
             private val CALIBRATION_TIME = 2.minutes
             private val CALIBRATION_INTERVAL = 1.seconds
             private val INITIAL_DELAY = 2.seconds
-            private val GPS_DIFFERENCE_THRESHOLD = 0.000002
+            private const val GPS_DIFFERENCE_THRESHOLD = 0.000002
         }
 
         private var tripId: Long = 0
@@ -389,4 +389,9 @@ class RecordTripViewModel
             ).mapIndexes()
 
         private fun List<Entry>.mapIndexes() = this.mapIndexed { index, value -> Entry(index.toFloat(), value.y) }
+
+    override fun onCleared() {
+        super.onCleared()
+        ecgSensorDataUseCase
+    }
     }

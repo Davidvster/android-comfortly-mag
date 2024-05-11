@@ -30,7 +30,6 @@ interface TestSensorDataUseCase : BaseFlowUseCase.Output<TripDatapoint> {
             private val linearAccelerometerSensorRepository: SensorRepository.LinearAcceleration,
             private val rotationVectorSensorRepository: SensorRepository.RotationVector,
             private val gpsRepository: GpsRepository,
-            private val heartRateRepository: HeartRateRepository,
         ) : TestSensorDataUseCase {
             companion object {
                 private val DATA_DEBOUNCE = 5.milliseconds

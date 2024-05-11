@@ -4,9 +4,11 @@ import com.dv.comfortly.data.raw.sources.sensor.HeartRateSource
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.model.PolarEcgData
 import com.polar.sdk.api.model.PolarSensorSetting
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
@@ -28,6 +30,7 @@ interface ObserveEcgDataInteractor {
                 private const val UTC_TIMEZONE = "UTC"
             }
 
+            @OptIn(ExperimentalCoroutinesApi::class)
             override fun observeEcgData(): Flow<Pair<PolarEcgData, Int>> =
                 heartRateSource.polarState.value.connectedDevice?.let { hrDevice ->
                     flow {
@@ -41,16 +44,13 @@ interface ObserveEcgDataInteractor {
                         val sampleRate =
                             availableSettingsEcg?.settings?.get(PolarSensorSetting.SettingType.SAMPLE_RATE)
                                 ?.firstOrNull() ?: DEFAULT_ECG_SAMPLE_RATE_HZ
-                        if (availableSettingsEcg != null) {
+                        requireNotNull(availableSettingsEcg)
                             heartRateSource.polarApi.setLocalTime(hrDevice.deviceId, Calendar.getInstance(TimeZone.getTimeZone(UTC_TIMEZONE)))
                                 .await()
-                            emitAll(
-                                heartRateSource.polarApi.startEcgStreaming(hrDevice.deviceId, availableSettingsEcg).asFlow()
-                                    .map { it to sampleRate },
-                            )
-                        } else {
-                            emitAll(emptyFlow())
-                        }
+                        emit(availableSettingsEcg to sampleRate)
+                    }.flatMapConcat { (settings, sampleRate) ->
+                        heartRateSource.polarApi.startEcgStreaming(hrDevice.deviceId, settings).asFlow()
+                            .map { it to sampleRate }
                     }
                 } ?: emptyFlow()
         }
