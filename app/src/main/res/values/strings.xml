@@ -128,8 +128,8 @@
     <string name="specific_3_answer_5">Razpoznavanje prometnih znakov</string>
     <string name="specific_3_answer_6">Samodejna sprememba voznega pasu na večpasovnici</string>
     <string name="specific_3_answer_7">Avtonomna vožnja (pod nadzorom voznika)</string>
-    <string name="specific_4_question">4. Koliko kilometriov prevozite povprečno na mesec kot voznik?</string>
-    <string name="specific_5_question">5. Koliko kilometriov se prevažate povprečno na mesec kot sopotnik?</string>
+    <string name="specific_4_question">4. Koliko kilometrov prevozite povprečno na mesec kot voznik?</string>
+    <string name="specific_5_question">5. Koliko kilometrov se prevažate povprečno na mesec kot sopotnik?</string>
     <string name="specific_6_question">6. Ali ste se že kdaj vozili v avtonomnem vozilu?</string>
     <string name="specific_6_answer_1">Da</string>
     <string name="specific_6_answer_2">Ne</string>

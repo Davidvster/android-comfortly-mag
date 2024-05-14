@@ -99,10 +99,11 @@ class TripDetailsViewModel
 
         fun onExportTrip() {
             trip?.let {
-                val date =
-                    tripDateFormat.format(
-                        it.data.first().timestamp.toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime(),
-                    )
+                val dateString = it.data.firstOrNull()
+                    ?.timestamp
+                    ?.toLocalDateTime(TimeZone.currentSystemDefault())
+                    ?.toJavaLocalDateTime()
+                val date = dateString?.let { tripDateFormat.format(it) }.orEmpty()
                 val name = String.format(EXPORT_NAME_FORMAT, it.id, it.name, date)
                 emitEvent(TripDetailsEvent.AskForDocument(name))
             }

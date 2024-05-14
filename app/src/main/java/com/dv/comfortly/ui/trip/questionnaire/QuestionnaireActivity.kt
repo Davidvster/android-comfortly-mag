@@ -16,6 +16,7 @@ import com.dv.comfortly.domain.models.TripSummary
 import com.dv.comfortly.ui.base.BaseActivity
 import com.dv.comfortly.ui.base.extensions.setThrottleClickListener
 import com.dv.comfortly.ui.base.viewBinding
+import com.dv.comfortly.ui.ext.showDialog
 import com.dv.comfortly.ui.trip.setup.SetupTripActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -160,4 +161,14 @@ class QuestionnaireActivity : BaseActivity<QuestionnaireState, QuestionnaireEven
             QuestionnaireType.POST_TRIP_PANAS -> R.string.panas_instructions
             QuestionnaireType.POST_SPECIFIC -> R.string.post_specific_instructions
         }
+
+    override fun onBackPressed() {
+        showDialog(
+            title = R.string.stop_recording_trip_title,
+            message = R.string.stop_recording_trip_message,
+            positiveButtonText = R.string.stop_recording,
+            negativeButtonText = R.string.cancel,
+            positiveButtonListener = { super.onBackPressed() },
+        )
+    }
 }
