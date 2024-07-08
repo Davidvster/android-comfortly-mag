@@ -137,7 +137,6 @@
     <string name="specific_7_answer_1">Da</string>
     <string name="specific_7_answer_2">Ne</string>
     <string name="specific_7_answer_3">Mogoče</string>
-    <string name="mssq_1_question_1">Kako pogosto ste kot otrok (pred 12. letom starosti) imeli slabost ali bruhali pri naslednji aktivnosti: </string>
     <string name="mssq_1_instructions">Ta vprašalnik je namenjen ugotavljanju, kako dovzetni ste za "morsko bolezen" (kinetozo) in katere vrste gibanja jo najbolj povzročajo. Bolezen tu pomeni občutek slabosti, slabosti ali bruhanje.\n\n
 Kako pogosto ste kot OTROK (pred 12. letom starosti) imeli občutek slabosti ali ste bruhali pri naslednjih vrstah prevoza ali aktivnosti:</string>
     <string name="mssq_2_instructions">Ta vprašalnik je namenjen ugotavljanju, kako dovzetni ste za "morsko bolezen" (kinetozo) in katere vrste gibanja jo najbolj povzročajo. Bolezen tu pomeni občutek slabosti, slabosti ali bruhanje.\n\n
@@ -160,12 +159,12 @@ V ZADNJIH 10 LETIH kako pogosto ste imeli občutek slabosti ali bruhali pri nasl
     <string name="bsss_2_question">Postanem nemiren/na, če preveč časa preživim doma</string>
     <string name="bsss_3_question">Rad/a počnem shrljive stvari (stvari ki vzbujajo strah)</string>
     <string name="bsss_4_question">Rad/a imam nore in divje zabave</string>
-    <string name="bsss_5_question">Rad/a bi se odpravil/a na potovanje brez vnaprej načrtovane poti.</string>
-    <string name="bsss_6_question">Rad/a imam prijatelje, ki so vzemerljivo nepredvidljivi.</string>
-    <string name="bsss_7_question">Rad/a bi šel/šla na skok z elastiko (bungee jumping).</string>
-    <string name="bsss_8_question">Rad/a bi doživel/a nove in vznemirljive izkušnje, tudi če so nezakonite.</string>
+    <string name="bsss_5_question">Rad/a bi se odpravil/a na potovanje brez vnaprej načrtovane poti</string>
+    <string name="bsss_6_question">Rad/a imam prijatelje, ki so vzemerljivo nepredvidljivi</string>
+    <string name="bsss_7_question">Rad/a bi šel/šla na skok z elastiko (bungee jumping)</string>
+    <string name="bsss_8_question">Rad/a bi doživel/a nove in vznemirljive izkušnje, tudi če so nezakonite</string>
     <string name="bsss_1_answer">Sploh se ne strinjam</string>
-    <string name="bsss_2_answer">Ne strinjam se</string>
+    <string name="bsss_2_answer">Se ne strinjam</string>
     <string name="bsss_3_answer">Niti se ne strinjam, niti se strinjam</string>
     <string name="bsss_4_answer">Strinjam se</string>
     <string name="bsss_5_answer">Popolnoma se strinjam</string>
